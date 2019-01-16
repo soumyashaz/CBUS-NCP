@@ -1,0 +1,68 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>CBUSA</title>
+
+    <!-- Stylesheet -->
+    <link href="../content/css/style.css" rel="stylesheet">
+    <link href="../content/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../content/css/font-awesome.min.css" rel="stylesheet">
+
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body>
+    <!-- Start Header -->
+    <header class="head-wrapper">
+        <div class="container">
+            <div class="col-md-4"><a href="#" title="CBUSA"><img src="../content/images/logo.png" class="logo" alt="CBUSA"></a></div>
+            <div class="col-md-8"></div>
+        </div>
+    </header>
+    <!-- End Header -->
+    <!-- Start Body -->
+    <div class="main-body-wrapper">
+        <div class="container">
+            <!-- Start Enrollment Survey Thank You -->
+            <h3 class="text-center"><u>Tankless Water Heater Enrollment Survey</u></h3>
+            <div class="row">
+                <div class="centerAlignPosition btm-top-margin50">
+                    <label>Thank you for taking the time to complete the CBUSA National Contract Rebate Report survey.</label>
+                    <label>Should you have any questions, please contact April Gray at 601-307-2503 or april@cbusa.us.</label>
+                    <div class="col-md-12 margin-top20">
+                        <button type="button" class="btn btn-info">Close Window</button>
+                    </div>
+                </div>
+            </div>
+            <!-- End Enrollment Survey Thank You -->
+
+        </div>
+    </div>
+    <!-- End Body -->
+    <!-- Start Footer -->
+    <footer class="footer-wrapper">
+        <div class="container"></div>
+    </footer>
+    <!-- End Footer -->
+    <!-- Jquery Library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="../scripts/bootstrap.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $("div.bhoechie-tab-menu>div.list-group>a").click(function (e) {
+                e.preventDefault();
+                $(this).siblings('a.active').removeClass("active");
+                $(this).addClass("active");
+                var index = $(this).index();
+                $("div.bhoechie-tab>div.bhoechie-tab-content").removeClass("active");
+                $("div.bhoechie-tab>div.bhoechie-tab-content").eq(index).addClass("active");
+            });
+        });
+    </script>
+</body>
+</html>

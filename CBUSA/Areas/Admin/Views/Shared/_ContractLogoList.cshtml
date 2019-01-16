@@ -1,0 +1,55 @@
+﻿<div class="title-bar">
+    @*<h2>CONTRACT CONTENT ADMINISTRATION</h2>*@
+    @*<ul class="title-sub-menu">
+        <li>
+            <a href="#" id="lnkSelectAContract">
+                <span>Select a Contract</span>
+                <i class="fa fa-caret-down" aria-hidden="true"></i>
+            </a>
+            <ul id="ulContractList" style="display:none">
+                @for (int i = 0; i < ViewBag.AllActiveContractLogos.Count; i++)
+                {
+                    <li><a href="@Url.Action("ContractContent", "AdminContractCentral", new { Area = "Admin", ContractId = ViewBag.AllActiveContractLogos[i].ContractId })">@ViewBag.AllActiveContractLogos[i].ContractName</a></li>
+                }
+            </ul>
+        </li>
+    </ul>*@
+</div>
+
+<div class="wrapper-body">
+    <div class="wrapper-top">
+        <h3>SELECT A CONTRACT</h3>
+    </div>
+
+    <div class="wrapper-content">
+        @for (int i = 0; i < ViewBag.TotalPages; i++)
+        {
+            <ul class="multi-link-area">
+                @for (int j = 0; j < 5; j++)
+                {
+                    int k = (i * 5) + j;
+
+                    if (k < ViewBag.TotalContracts)
+                    {
+                        string LogoImageBase64 = "";
+                        if (ViewBag.AllActiveContractLogos[(i * 5) + j].ContractIcon != null)
+                        {
+                            LogoImageBase64 = Convert.ToBase64String(ViewBag.AllActiveContractLogos[(i * 5) + j].ContractIcon);
+                            LogoImageBase64 = string.Format("data:image/png;base64,{0}", LogoImageBase64);
+                        }
+
+                        <li class="contract-logo">
+                            <a href="@Url.Action("ContractContent", "AdminContractCentral", new { Area = "Admin", ContractId = ViewBag.AllActiveContractLogos[(i * 5) + j].ContractId })">
+                                <span><img src="@LogoImageBase64"></span>
+                            </a>
+                            <i class="image-caption">@ViewBag.AllActiveContractLogos[(i * 5) + j].ContractName</i>
+                            <span class="contract-details">
+                                <a href="@Url.Action("ContractContent", "AdminContractCentral", new { Area = "Admin", ContractId = ViewBag.AllActiveContractLogos[(i * 5) + j].ContractId })" class="more-info-button">Click to Edit Contract Content</a>
+                            </span>
+                        </li>
+                    }
+                }
+            </ul>
+        }
+    </div>
+</div>

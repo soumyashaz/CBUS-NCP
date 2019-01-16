@@ -1,0 +1,103 @@
+﻿@using CBUSA.Models;
+
+<div class="row margin-top20 btm-top-padding15">
+    <div class="col-md-6">
+        <div class="wayne-dalton-title">
+            <h3 class="text-upper">NCP Rebate Report History</h3>
+        </div>
+    </div>
+    <div class="col-md-2 col-md-offset-4 maginTop5">
+        <a href="@Url.Action("AddProject","Project")" class="pull-right" title="Add Projects"><i class="fa fa-plus-circle editPreSarvyIcon pull-left" aria-hidden="true"></i> <div class="pull-left marginTop2">Manage Projects</div></a>
+    </div>
+</div>
+<div class="table-responsive">
+    <table class="table">
+        @*<thead class="thead-bg">
+                <tr>
+                    <th width="15%"></th>
+                    <th width="50%"></th>
+                    <th width="15%"></th>
+                    <th width="20%"></th>
+                </tr>
+            </thead>*@
+        @(Html.Kendo().ListView<CBUSA.Areas.Admin.Models.ActiveContractViewModel>()
+.Name("listViewContractActiveAsc")
+.TagName("tbody")
+.ClientTemplateId("TemplateActiveContract")
+
+.DataSource(dataSource =>
+{
+    dataSource.Read(read => read.Action("ActiveContractListViewAscCon", "Builder"));
+    dataSource.PageSize(21);
+})
+//.Pageable()
+.AutoBind(true)
+        )
+    </table>
+</div>
+
+<!-- Start popup -->
+<div id="reportFirstTime" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Report for NCP Quarterly Rebate Report</h4>
+            </div>
+            <div class="modal-body">
+                <div class="block-div centerAlignPosition">
+                    <div><img src="../content/images/logo.png" class="logo" style="display:inline;" alt="CBUSA" /></div>
+                    <h5>You do NOT have any projects to report for.</h5>
+                    <h5>Please click the 'Add Projects' link to add projects.</h5>
+                    <div class="clearfix"></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-info">Okay</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- End popup -->
+
+@section scripts
+{
+    <script src="@Url.Content("~/Scripts/Custom/CbusaBuilderNcpRebateReport.js?v="+@DateTime.Now.ToFileTime().ToString())"></script>
+    <script type="text/javascript">
+
+    var AjaxCallUrl =
+            {
+                InsertQuaterAdminReport: '@Url.Action("InsertQuaterAdminReport", "Project", new { Area = "CbusaBuilder" })',
+                RedirectContractUrl: '@Url.Action("ReportHistory", "Builder", new { Area = "CbusaBuilder", ContractId = "****ContractId****" })',
+
+            };
+    </script>
+    <script type="text/x-kendo-tmpl" id="TemplateActiveContract">
+        <tr>
+            <td width="2%">
+                <span id="spnRowNumber">#:rowcount#</span>
+            </td>
+            <td width="7%">
+                #if (ContractIcon!="")
+                {#
+                <span>
+                    @*@Html.ShowLogo('#:ContractIcon#', new { @class = "wayne-dalton-logo" })*@
+                    @*#:Icon#*@
+                </span>
+                #}else{#
+                <img src="@Url.Content("~/content/images/default.png")" id="ContractLogo" class="wayne-dalton-logo2" />
+
+                #}#
+            </td>
+            <td width="60%">#:ConractName#</td>
+            @* <td width="17%">
+                <div>#:Estimated#</div>
+                <div class="status online pull-left"></div>
+                <div class="pull-left">(#:Percentage#%)</div>
+                        </td>*@
+            <td width="17%"><a id="report" onclick="redirecttohistory('#:ConractId#')">View Historical reports</a></td>
+        </tr>
+
+    </script>
+}

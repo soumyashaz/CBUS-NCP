@@ -1,0 +1,86 @@
+﻿
+<div id="DivActiveContract" style="margin-top:15px;">
+
+    @(Html.Kendo().Grid<CBUSA.Areas.Admin.Models.ActiveContractViewModel>()
+                                .Name("ActiveContractGrid").HtmlAttributes(new { style = "height:300px" })
+                        .Columns(columns =>
+                        {
+                            columns.Bound(c => c.ConractName).Width(50).Title("Contract");
+                            columns.Bound(c => c.ConractName).Width(50).Title("Builder Name");
+                            columns.Bound(c => c.ContractStatus).Width(50).Title("Status");
+                            // columns.Bound(c => c.).Width(50).Title("Contract Term");
+                            columns.Template(command => { }).ClientTemplate(@"
+                                <span>#=ContractFrom#</span> <span>to</span></br>
+                                <span>#=ContractTo#</span>
+                                ")
+                            .Width(50).Title("ContractTerm");
+                        })
+            // .Editable(editing => editing.Mode(GridEditMode.InLine))
+              .Scrollable()
+                        .Sortable()
+            //  .Filterable()
+            //             .Events(events => { events.Edit("onContractResourceCategoryEdit"); })
+            //.Events(e => e.Edit("onEdit"))
+                        .DataSource(dataSource => dataSource
+                        .Ajax()
+                                .Model(model => model.Id(p => p.ConractId))
+                            // .Events(events => events.RequestEnd("onRequestEndContractResourceCategory"))
+                                                            .Read(read => read.Action("ActiveContract_Read", "Contract"))
+            //   .Update("ContractResourceCategory_Edit", "Contract")
+            //  .Destroy("ContractResourceCategory_Delete", "Contract")
+                        )
+    )
+
+
+</div>
+
+@section style{
+
+    <style type="text/css">
+        .k-grid-header-wrap {
+            /*height: 70px;*/
+        }
+
+        .k-grid thead tr {
+            /*height: 70px;*/
+        }
+
+        .k-widget k-grid {
+            border: none;
+        }
+
+        .k-filter-row th, .k-grid-header th.k-header {
+            border: none;
+        }
+
+        .k-grid {
+            border: none;
+        }
+
+            .k-grid td {
+                border: none;
+            }
+
+        .k-grid-header {
+            border: none;
+            border-bottom-style: none !important;
+           background-image:none;
+        }
+
+        .k-grid tr:hover {
+            background-color: transparent;
+        }
+
+        k-grid-header th.k-header > .k-link {
+            text-align: center;
+        }
+
+        .k-header {
+            background-color: #123052;
+            color: #fff;
+        }
+        .k-grid-header th.k-header > .k-link {
+    color: #fff;
+}
+    </style>
+}

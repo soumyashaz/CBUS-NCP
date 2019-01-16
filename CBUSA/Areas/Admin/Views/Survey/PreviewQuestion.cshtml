@@ -1,0 +1,172 @@
+﻿<h3>@Session["ContractName"] : @Session["SurveyName"]</h3>
+@Html.Partial("_SurveyStepHeader", (Int64)ViewBag.SurveyId)
+
+@*@(ViewBag.IsSurveyPublish == true ? "disabledDiv" : "")*@
+
+<section class="create_survey-step-body ">
+    <div class="row">
+        <div class="col-md-offset-10 col-md-2">
+
+            @*@if (!ViewBag.IsSurveyPublish)
+                {*@
+
+            <div class="row">
+
+                @if (!ViewBag.IsSurveyPublish)
+                {
+                    <div class="col-md-3"><a id="btn_Edit"><i class="fa fa-pencil editPreSarvyIcon" aria-hidden="true"></i></a></div>
+                }
+                else
+                {
+                    <div class="col-md-3"><i class="fa fa-pencil editPreSarvyIcon" aria-hidden="true"></i></div>
+                }
+                <div class="col-md-3"> <a id="btn_Copy"><i class="fa fa-files-o editPreSarvyIcon" aria-hidden="true"></i></a></div>
+                <div class="col-md-3"><a id="btn_delete"><i class="fa fa-trash-o editPreSarvyIcon" aria-hidden="true"></i></a> </div>
+                <div class="col-md-3"><a id="btn_preview"><i class="fa fa-eye editPreSarvyIcon" aria-hidden="true"></i></a></div>
+            </div>
+            @*}
+                else
+                {
+                    <div class="row">
+                        <div class="col-md-3"><i class="fa fa-pencil editPreSarvyIcon" aria-hidden="true"></i></div>
+                        <div class="col-md-3"> <i class="fa fa-files-o editPreSarvyIcon" aria-hidden="true"></i></div>
+                        <div class="col-md-3"><i class="fa fa-trash-o editPreSarvyIcon" aria-hidden="true"></i></div>
+                        <div class="col-md-3"><i class="fa fa-eye editPreSarvyIcon" aria-hidden="true"></i></div>
+                    </div>
+                }*@
+
+
+        </div>
+    </div>
+    <div class="btm-top-padding15">
+        <div class="table-responsive">
+            <table class="table">
+                <thead class="thead-bg">
+                    <tr style="width:100%">
+                        <th width="10%" class="text-center"></th>
+                        <th width="75%" class="text-center">Question text</th>
+                        <th width="15%" class="text-center">Question type</th>
+                        <th width="10%" class="text-center">Select</th>
+                    </tr>
+                </thead>
+
+                @(Html.Kendo().ListView<CBUSA.Areas.Admin.Models.SurveyQuestionViewModel>()
+                         .Name("PreviewQuestionList")
+                     .TagName("tbody")
+                             .ClientTemplateId("PreviewQuestionTemplate")
+                                 .Events(x => x.DataBound("PreviewQuestionListDataBound"))
+                 .DataSource(dataSource =>
+                {
+                    dataSource.Read(read => read.Action("PreviewQuestionList_Read", "Survey").Data("SendSurveyIdAsParameter"));
+                    // dataSource.PageSize(21);
+                })
+                        // .Pageable()
+                )
+            </table>
+        </div>
+    </div>
+</section>
+<!-- End number Step Body -->
+@Html.Hidden("HdnSurveyId", (Int64)(@ViewBag.SurveyId))
+
+@Html.Hidden("HdnIsSurveyPublished", (bool)@ViewBag.IsSurveyPublish)
+
+@section scripts
+{
+
+
+
+    <script type="text/javascript">
+        var IsSurveyPublished = $("#HdnIsSurveyPublished").val();
+        var AjaxCallUrl =
+                {
+                    DeleteSurveyQuestionUrl: '@Url.Action("DeleteSurveQuestion", "Survey", new { Area = "Admin" })',
+                    UpdateQuestionTextUrl: '@Url.Action("UpdateQuestionText", "Survey", new { Area = "Admin" })',
+                    PreviewSurveyQuestionUrl: '@Url.Action("PreviewSurvey", "Survey", new { Area = "Admin",id="****id****" })',
+                    OrderingUpQuestionUrl: '@Url.Action("OrderingUpQuestion", "Survey", new { Area = "Admin" })',
+                    OrderingDownQuestionUrl: '@Url.Action("OrderingDownQuestion", "Survey", new { Area = "Admin" })',
+                    EditQuestionUrl: '@Url.Action("AddQuestion", "Survey", new { Area = "Admin", SurveyId = "****SurveyId****", QuestionId = "****QuestionId****"})',
+                    CopyQuestionUrl: '@Url.Action("AddQuestion", "Survey", new { Area = "Admin", SurveyId = "****SurveyId****", QuestionId = "****QuestionId****", IsCopy = "****IsCopy****" })'
+                };
+    </script>
+
+    <script type="text/x-kendo-tmpl" id="PreviewQuestionTemplate">
+        <tr>
+            <td width="10%" class="text-center">
+                <ul class="upDownArrow">
+                    #if (OrderUp)
+                    {#
+                    <li>
+                        #if (IsSurveyPublished)
+                        {#
+
+                        <a title="Up" id="a_question_up_#:QuestionId#">
+                            <i class="fa fa-sort-asc editPreSarvyIcon" aria-hidden="true">
+                            </i>
+                            <input type="hidden" value="#:QuestionId#" />
+                        </a>
+
+
+                        #}else{#
+
+                        <a title="Up" id="a_question_up_#:QuestionId#">
+                            <i class="fa fa-sort-asc editPreSarvyIcon" aria-hidden="true">
+                            </i>
+                            <input type="hidden" value="#:QuestionId#" />
+                        </a>
+                        #}#
+
+                    </li>
+                    #}else{#
+                    <li><i class="fa fa-sort-asc editPreSarvyIcon" aria-hidden="true"></i></li>
+                    #}#
+
+                    #if (OrderDown)
+                    {#
+                    <li>
+                        #if (IsSurveyPublished)
+                        {#
+
+                        <a title="Down" id="a_question_down_#:QuestionId#">
+                            <i class="fa fa-sort-desc editPreSarvyIcon" aria-hidden="true"></i>
+                            <input type="hidden" value="#:QuestionId#" />
+                        </a>
+                        #}else{#
+                        <a title="Down" id="a_question_down_#:QuestionId#">
+                            <i class="fa fa-sort-desc editPreSarvyIcon" aria-hidden="true"></i>
+                            <input type="hidden" value="#:QuestionId#" />
+                        </a>
+                        #}#
+
+                    </li>
+                    #}else{#
+                    <li><i class="fa fa-sort-desc editPreSarvyIcon" aria-hidden="true"></i></li>
+                    #}#
+                </ul>
+            </td>
+            <td width="75%" class="text-center">
+                #if (IsSurveyPublished)
+                {#
+                <input class="form-control" type="text" value="#:Question#" disabled="disabled">
+                #}else{#
+                <input class="form-control" type="text" value="#:Question#" name="TxtQuestionValue_#:QuestionId#">
+                <span class="k-invalid-msg" data-for="TxtQuestionValue_#:QuestionId#"></span>
+                <input type="hidden" name="HdnQuestionHistory" value="#:Question#" />
+                #}#
+            </td>
+            <td width="15%" class="text-center">#:QuestionType#</td>
+            <td width="10%" class="text-center">
+                #if (IsSurveyPublished)
+                {#
+                <input type="radio" name="RadSurbeyQuestion">
+                #}else{#
+                <input type="radio" name="RadSurbeyQuestion">
+                #}#
+                <input type="hidden" name="HdnListQuestionId" value="#:QuestionId#" />
+            </td>
+        </tr>
+
+    </script>
+
+    <script src="@Url.Content("~/Scripts/Custom/AdminSurveyPreviewQuestion.js?v="+@DateTime.Now.ToFileTime().ToString())"></script>
+}

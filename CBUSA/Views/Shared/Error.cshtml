@@ -1,0 +1,44 @@
+﻿@model System.Web.Mvc.HandleErrorInfo
+
+@{
+    Layout = "~/Views/Shared/_TakeSurveyLayout.cshtml";
+    ViewBag.Title = "Error";
+}
+
+<div class="globalError">
+    @*<h1 class="text-danger">Error.</h1>
+    <h2 class="text-danger">An error occurred while processing your request.</h2>*@
+    <div class="notify errorbox">
+        <h1>Error!</h1>
+        <span class="alerticon"><img src="~/Content/images/error.png" alt="error" width="40" height="40" /></span>
+        <p>An error occurred while processing your request.</p>
+        <div class="col-md-12 maginTop10">
+            <button type="button" class="btn btn-info" id="SaveContract">Back to home page</button>
+            @*<button type="button" class="btn btn-default new-btn">Cancel</button>*@
+        </div>
+    </div>
+</div>
+
+@section scripts{
+
+
+
+    <script type="text/javascript">
+
+        var AjaxCallUrl =
+            {
+                HomePageUrl: '@Url.Action("Index", "Home",new { Area = "" })',
+
+            };
+        $(document).ready(function () {
+            $("#SaveContract").on("click", function () {
+                window.location.href = AjaxCallUrl.HomePageUrl;
+            });
+        });
+    </script>
+
+
+}
+
+
+

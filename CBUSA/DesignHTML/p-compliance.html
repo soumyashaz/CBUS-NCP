@@ -1,0 +1,336 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>CBUSA</title>
+
+    <!-- Stylesheet -->
+    <link href="../content/css/style.css" rel="stylesheet">
+    <link href="../content/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../content/css/font-awesome.min.css" rel="stylesheet">
+
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body>
+    <!-- Start Header -->
+    <header class="head-wrapper">
+        <div class="container">
+            <div class="col-md-4"><a href="#" title="CBUSA"><img src="../content/images/logo.png" class="logo" alt="CBUSA"></a></div>
+            <div class="col-md-8">
+                <div class="pull-right">
+                    <div class="user-accnt-name">
+                        <ul>
+                            <li>Welcome Gordan Miller</li>
+                            <li><a href="#">Sign Out</a></li>
+                        </ul>
+                    </div>
+                    <div class="head-nav">
+                        <ul>
+                            <li class="active"><a href="index.html">Home</a></li>
+                            <li>
+                                <a href="#">My Contracts</a>
+                                <ul>
+                                    <li><a href="#">Add Contract</a></li>
+                                    <li><a href="#">Manage Contracts</a></li>
+                                </ul>
+                            </li>
+                            <li>
+                                <a href="#">Surveys</a>
+                                <ul>
+                                    <li><a href="#">Create Surveys</a></li>
+                                    <li><a href="#">Mangage Surveys</a></li>
+                                </ul>
+                            </li>
+                            <li><a href="#">Npc Quarterly Rebate Report</a></li>
+                        </ul>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+    <!-- End Header -->
+    <!-- Start Body -->
+    <div class="main-body-wrapper">
+        <div class="container">
+            <div class="row btm-top-padding15">
+                <div class="table-responsive btm-top-padding15">
+                    <table class="table">
+                        <thead class="thead-bg">
+                            <tr>
+                                <th class="text-center"><i class="fa fa-caret-down" aria-hidden="true"></i> Contract</th>
+                                <th class="text-center">Manage compliance factors</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="text-center">Paint contract</td>
+                                <td class="text-center">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <a href="javascript:void(0)" title="Configure compliance factor" data-toggle="modal" data-target="#configureComplianceFactor">Configure compliance factor</a>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <a href="javascript:void(0)" title="Override compliance factor" data-toggle="modal" data-target="#overrideComplianceFactor">Override compliance factor</a>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="text-center">Mainstream appliances</td>
+                                <td class="text-center">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <a href="javascript:void(0)" title="Configure compliance factor">Configure compliance factor</a>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <a href="javascript:void(0)" title="Override compliance factor">Override compliance factor</a>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- End Body -->
+
+    <!-- Start Popup -->
+    <!-- Start Configure compliance factor -->
+    <div id="configureComplianceFactor" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Configure compliance factor  -  Paint Contract</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="block-div">
+                        <div class="confForTabTile"><label class="control-label">Configure for:</label></div>
+                        <ul class="nav nav-tabs pull-right">
+                            <li class="active"><a data-toggle="tab" href="#ConfEstimatvalue"><input type="radio"> Configure Estimated value</a></li>
+                            <li><a data-toggle="tab" href="#ConfActualvalue"><input type="radio"> Configure Actual value</a></li>
+                        </ul>
+                        <div class="clearfix"></div>
+                        <div class="tab-content maginTop10">
+                            <div id="ConfEstimatvalue" class="tab-pane fade in active">
+                                <div class="form-group">
+                                    <label class="col-sm-4 control-label">Select Survey:</label>
+                                    <div class="col-sm-8">
+                                        <select class="form-control">
+                                            <option value="1">Select Survey</option>
+                                            <option value="2">Paint contract Enrolment survey</option>
+                                            <option value="3">Paint contract Follow up survey</option>
+                                        </select>
+                                    </div>
+                                    <div class="clearfix"></div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-4 control-label">Select Question or Configure Formula:</label>
+                                    <div class="col-sm-8">
+                                        <input type="radio"> Select direct question
+                                        <select class="form-control">
+                                            <option value="1">Select Question</option>
+                                            <option value="2">(1) - How many houses are you going to build this year?</option>
+                                            <option value="3">(2) - How many doors per house do you build approx?</option>
+                                        </select>
+                                    </div>
+                                    <div class="clearfix"></div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-4 control-label"></label>
+                                    <div class="col-sm-8">
+                                        <input type="radio"> Compose Formula
+                                        <textarea class="form-control" rows="3" placeholder="(question id) (opr) (question id) (opr) (1340) "></textarea>
+                                    </div>
+                                    <div class="clearfix"></div>
+                                </div>
+                            </div>
+                            <div id="ConfActualvalue" class="tab-pane fade">
+                                <div class="form-group">
+                                    <label class="col-sm-4 control-label">Select Survey:</label>
+                                    <div class="col-sm-8">
+                                        <select class="form-control">
+                                            <option value="1">Select Survey</option>
+                                            <option value="2">Paint contract Enrolment survey</option>
+                                            <option value="3">Paint contract Follow up survey</option>
+                                        </select>
+                                    </div>
+                                    <div class="clearfix"></div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-4 control-label">Select Question or Configure Formula:</label>
+                                    <div class="col-sm-8">
+                                        <input type="radio"> Select direct question
+                                        <select class="form-control">
+                                            <option value="1">Select Question</option>
+                                            <option value="2">(1) - How many houses are you going to build this year?</option>
+                                            <option value="3">(2) - How many doors per house do you build approx?</option>
+                                        </select>
+                                    </div>
+                                    <div class="clearfix"></div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="col-sm-4 control-label"></label>
+                                    <div class="col-sm-8">
+                                        <input type="radio"> Compose Formula
+                                        <textarea class="form-control" rows="3" placeholder="(question id) (opr) (question id) (opr) (1340) "></textarea>
+                                    </div>
+                                    <div class="clearfix"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-info">Save</button>
+                    <button type="button" class="btn btn-info">Edit</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- End Configure compliance factor -->
+
+    <!-- Start Override compliance factor -->
+    <div id="overrideComplianceFactor" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Override compliance factor  -  Paint Contract</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="table-responsive">
+                        <table class="table">
+                            <tbody>
+                                <tr>
+                                    <td width="30%"></td>
+                                    <td width="35%" class="text-center">Original Values</td>
+                                    <td width="35%" class="text-center">New Values</td>
+                                </tr>
+                                <tr>
+                                    <td>Builder</td>
+                                    <td>
+                                        <div class="row">
+                                            <div class="col-md-6">Estimated</div>
+                                            <div class="col-md-6">Actuals</div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="row">
+                                            <div class="col-md-6">Estimated</div>
+                                            <div class="col-md-6">Actuals</div>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <select class="form-control">
+                                            <option value="1">Select Builder</option>
+                                            <option value="2">Michigan builders</option>
+                                            <option value="3">ABC builder</option>
+                                            <option value="4">Prime builder</option>
+                                        </select>
+                                    </td>
+                                    <td class="text-center">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <input class="form-control" id="disabledInput" type="text" placeholder="1111" disabled>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <input class="form-control" id="disabledInput" type="text" placeholder="201" disabled>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="text-center">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <input class="form-control" type="text" value="22">
+                                            </div>
+                                            <div class="col-md-6">
+                                                <input class="form-control" type="text" value="301">
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <select class="form-control">
+                                            <option value="1">Select Builder</option>
+                                            <option value="2">Michigan builders</option>
+                                            <option value="3">ABC builder</option>
+                                            <option value="4">Prime builder</option>
+                                        </select>
+                                    </td>
+                                    <td class="text-center">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <input class="form-control" id="disabledInput" type="text" placeholder="1111" disabled>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <input class="form-control" id="disabledInput" type="text" placeholder="201" disabled>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="text-center">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <input class="form-control" type="text" value="22">
+                                            </div>
+                                            <div class="col-md-6">
+                                                <input class="form-control" type="text" value="301">
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td></td>
+                                    <td class="text-right"><a href="#" title="Add More Rows">Add More Rows...</a></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-info">Save</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- End Override compliance factor -->
+    <!-- End Popup -->
+
+    <!-- Start Footer -->
+    <footer class="footer-wrapper">
+        <div class="container"></div>
+    </footer>
+    <!-- End Footer -->
+    <!-- Jquery Library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="../scripts/bootstrap.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $("div.bhoechie-tab-menu>div.list-group>a").click(function (e) {
+                e.preventDefault();
+                $(this).siblings('a.active').removeClass("active");
+                $(this).addClass("active");
+                var index = $(this).index();
+                $("div.bhoechie-tab>div.bhoechie-tab-content").removeClass("active");
+                $("div.bhoechie-tab>div.bhoechie-tab-content").eq(index).addClass("active");
+            });
+        });
+    </script>
+</body>
+</html>

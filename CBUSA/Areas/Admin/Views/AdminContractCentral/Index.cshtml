@@ -1,0 +1,14 @@
+﻿<div id="divContractCentral">
+
+</div>
+
+@section scripts
+{
+    <script type="text/javascript">
+    var AjaxCallUrl =
+        {
+            ContractLogoListUrl: '@Url.Action("LoadContractLogoList", "AdminContractCentral", new { Area = "Admin" })'
+        };
+    </script>
+    <script src="@Url.Content("~/Scripts/Custom/Admin/ContractCentral/ContractCentralIndex.js?v="+@DateTime.Now.ToFileTime().ToString())"></script>
+}

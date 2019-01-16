@@ -1,0 +1,41 @@
+﻿<div class="">
+    <table class="table">
+        <thead class="thead-bg theadBuilderList">
+            <tr style="width:100%">
+                <th width="300px" class="text-center">Company Name</th>
+                <th width="200px" class="text-center">Market</th>
+            </tr>
+        </thead>
+
+
+        @(Html.Kendo().ListView<CBUSA.Areas.Admin.Models.ActiveContractViewModel>()
+    .Name("listofbuilder")
+    .TagName("tbody")
+            .ClientTemplateId("TemplateBuilder")
+
+    .DataSource(dataSource =>
+    {
+        dataSource.Read(read => read.Action("ListOfBuilders", "Contract", new { Area = "Admin" }));
+        //dataSource.PageSize(21);
+    })
+
+    .AutoBind(true))
+    </table>
+</div>
+
+@*<script>
+    function SendBuilderData() {
+        return { ContractId: @ViewBag.ContractId };
+    }
+</script>*@
+
+<script>
+    $(document).ready(function () {
+        $('.theadBuilderList').css('display', 'inline-block');
+        $('.theadBuilderList').css('width', '570');
+
+        $('#listofbuilder').css('display', 'inline-block');
+        $('#listofbuilder').css('height', '300px');
+        $('#listofbuilder').css('width', '570');
+});
+</script>

@@ -1,0 +1,105 @@
+﻿@if (@ViewBag.SurveyId != null)
+{
+    <h3>@Session["ContractName"] : @Session["SurveyName"]</h3>
+    @Html.Partial("_SurveyStepHeader", (Int64)ViewBag.SurveyId);
+}
+
+
+<div class="clearfix"></div>
+@(Html.Kendo().Window().Width(400)
+    .Name("DataSuccessMessage")
+    .Title("Survey Status")
+    .Content(@<text>
+        <p>
+
+        </p>
+        <p></p>
+    </text>)
+                                                                           .Visible(false)
+                                                                        .Modal(true)
+                                                                           .Draggable()
+                                                                           .Resizable()
+                                                                           .Events(ev => { ev.Close("onCloseSaveMessage"); ev.Open("centerWindowSaveMessage"); })
+)
+<!-- Start number Step Body -->
+@*@(ViewBag.IsSurveyPublish == true ? "disabledDiv" : "")*@
+<section class="create_survey-step-body " id="DivPublishSurvey">
+    <div class="row">
+        <div class="form-group">
+            <label class="col-sm-3 control-label">Configure Publish options</label>
+            <div class="col-sm-9">
+                <div class="row">
+                    <div class="form-group">
+                        <div class="col-md-8">
+                            <h4>
+                                @if (ViewBag.IsSurveyPublish == true)
+                                {
+                                    <input type="radio" name="SurveyAction" value="PublishSurvey" checked >
+                                }
+                                else
+                                {
+                                    <input type="radio" name="SurveyAction" value="PublishSurvey" checked>
+                                }
+                                &nbsp; &nbsp; Publish survey now
+                            </h4>
+                            <p style="margin-left:37px;">Select this option to Go Live now. Your survey will be sent out to all the Invites you have selected. Please note that once the survey is Live , you will not be able to modify it. Overrides the start date.</p>
+                        </div>
+                        <div class="col-md-4"></div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-8">
+                            <h4>
+                                @if (ViewBag.IsSurveyPublish == true)
+                                {
+                                    <input type="radio" name="SurveyAction" value="CloseExist" >
+                                }
+                                else
+                                {
+                                    <input type="radio" name="SurveyAction" value="CloseExist">
+                                }
+                                &nbsp; &nbsp; Save survey &amp; exit
+                            </h4>
+                            <p style="margin-left:37px;">Select this option to simply Save the survey. You can come back later to modify questions Invites and/or publish it.</p>
+                        </div>
+                        <div class="col-md-4"></div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-md-8">
+                            @if (ViewBag.IsSurveyPublish == true)
+                            {
+                                <button style="margin-left:37px;" type="button" class="btn btn-info margin-top20" id="BtnDone" >Done</button>
+                            }
+                            else
+                            {
+                                <button style="margin-left:37px;" type="button" class="btn btn-info margin-top20" id="BtnDone">Done</button>
+                            }
+                        </div>
+                        <div class="col-md-4"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+    </div>
+</section>
+<!-- End number Step Body -->
+@Html.Hidden("HdnSurveyId", (Int64)(@ViewBag.SurveyId))
+@Html.Hidden("HdnIsNcpSurvey", (bool)@ViewBag.IsNcpSurvey)
+@section scripts
+{
+
+    <script type="text/javascript">
+
+        var AjaxCallUrl =
+                {
+                    SendSurveyUrl: '@Url.Action("SendSurveyToBuilders", "Survey", new { Area = "Admin" })',
+                    DeleteSurveyQuestionUrl: '@Url.Action("DeleteSurveQuestion", "Survey", new { Area = "Admin" })',
+                    EmailPublishSurvey: '@Url.Action("ManageSurvey", "Survey", new { Area = "Admin" })',
+                    RedirectToSurveyListingUrl: '@Url.Action("ManageSurvey", "Survey", new { Area = "Admin" })',
+                    RedirectToNcpSurveyListingUrl: '@Url.Action("ManageReport", "NCPRebateReport", new { Area = "Admin" })',
+                };
+    </script>
+
+    <script src="@Url.Content("~/Scripts/Custom/AdminSurveyPublishSurvey.js?v="+@DateTime.Now.ToFileTime().ToString())"></script>
+}

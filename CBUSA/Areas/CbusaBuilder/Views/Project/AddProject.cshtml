@@ -1,0 +1,258 @@
+﻿@model IEnumerable<CBUSA.Areas.CbusaBuilder.Models.ProjectViewModel>
+
+<input type="hidden" id="hdnPageName" value="OpenProjects" />
+<div id="addproject">
+    <div class="block-div btm-top-padding15">
+        <div class="mang-cont-head">
+            <ul id="ulTask">
+                <li class="active-mang-cont" id="acli"><a href="@Url.Action("AddProject", "Project")" title="Open Projects">Open Projects</a></li>
+                <li><a href="@Url.Action("ManageClosedProject", "Project")" title="Closed Projects">Closed Projects</a></li>
+            </ul>
+            <div class="clearfix"></div>
+        </div>
+        <div class="clearfix"></div>
+    </div>
+    <div class="row btm-top-padding15">
+        <div class="col-md-6"></div>
+        <div class="col-md-5 col-md-offset-1">
+            <div class="pull-right mangProjRigtLink">
+                <div class="pull-left maginRight20"><a href="javascript:void(0)" title="Add Projects" data-toggle="modal" data-target="#addMoreMangPro"><i class="fa fa-plus-circle editPreSarvyIcon pull-left" aria-hidden="true"></i> <div class="pull-left marginTop2">Add Project</div></a></div>
+                <div class="pull-left maginRight20"><a href="javascript:void(0)" title="Close" id="BtnClose"><i class="fa fa-times-circle-o editPreSarvyIcon pull-left" aria-hidden="true"></i> <div class="pull-left marginTop2">Close</div></a></div>
+                <div class="pull-left"><a href="javascript:void(0)" title="Copy" id="BtnCopy"><i class="fa fa-files-o editPreSarvyIcon pull-left" aria-hidden="true"></i> <div class="pull-left marginTop2">Copy</div></a></div>
+            </div>
+        </div>
+    </div>
+    <div class="marginbtm20">
+        <div class="table-responsive addManageProTd">
+            <table class="table" id="project_table">
+                <thead class="thead-bg">
+                    <tr>
+                        <th width="2%" class="text-center">#</th>
+                        <th width="2%" class="text-right"></th>
+                        <th width="21%" class="text-center">Project Name</th>
+                        <th width="9%" class="text-center">Lot No.</th>
+                        <th width="20%" class="text-center">Address</th>
+                        <th width="14%" class="text-center">City</th>
+                        <th width="18%" class="text-center">State</th>
+                        <th width="12%" class="text-center">Zip</th>
+                        <th width="2%" class="text-left"></th>
+                    </tr>
+                </thead>
+                @(Html.Kendo().ListView<CBUSA.Areas.Admin.Models.ActiveContractViewModel>()
+                            .Name("listViewProject")
+                            .TagName("tbody")
+                                                .ClientTemplateId("TemplateBuilderProject").Events(x => x.DataBound("tablerowexist"))
+                            .DataSource(dataSource =>
+                            {
+                                dataSource.Read(read => read.Action("ActiveProjectList", "Project").Data("SendContractIdAsParameterOrder"));
+                                        // dataSource.PageSize(21);
+                                    })
+                            //.Pageable()
+                            .AutoBind(true)
+                )
+            </table>
+            <input type="hidden" id="redirect" value="@ViewBag.redirect" />
+            <input type="hidden" value="@ViewBag.ContractId" id="redcon" />
+            <div id="addprojectload"></div>
+        </div>
+        <div class="block-div pull-right maginTop10">
+            <button class="btn btn-info" type="button" id="btnSave">Save</button>
+            <button class="btn btn-default new-btn" type="button" id="BtnCancel">Cancel</button>
+        </div>
+    </div>
+
+    <!-- Start popup -->
+    <div id="addMoreMangPro" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"> x </button>
+                    <h4 class="modal-title">Add More Projects</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="form-group">
+                            <label class="col-sm-5 control-label">Enter the number of Projects to add:</label>
+                            <div class="col-sm-7">
+
+                                @Html.Action("RowCount", "Project")
+
+                                @*@Html.Kendo().NumericTextBoxFor(cltr => cltr.rowcount).Format("#").Decimals(0).Min(0).Value(Model.rowcount)*@
+
+
+                                @*@Html.Kendo().NumericTextBoxFor(@ViewBag.rowcount).Format("#").Decimals(0).Min(0).Value(@ViewBag.rowcount)*@
+
+                                @*<select class="form-control"></select>*@
+                            </div>
+                            <div class="clearfix"></div>
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-info" id="SaveTable">Add</button>
+                        <button type="button" class="btn btn-default new-btn" onclick="CancelModalPopup()">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- End popup -->
+    <!-- Start popup -->
+    <div id="divConfirmReportedProjectStatus" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"> x </button>
+                    <h4 class="modal-title">Set Project Status</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="form-group">
+                            <div class="col-sm-12">
+                                You have already completed reporting for the following Contracts:<br />
+                                <div id="divReportedContractList"></div>
+                                Do you want to mark these new Project(s) as Nothing to Report for the above listed Contracts?
+                            </div>
+                            <div class="clearfix"></div>
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-info" onclick="SaveProject('true');">YES</button>
+                        <button type="button" class="btn btn-info" onclick="SaveProject('false');">NO</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- End popup -->
+    <input type="hidden" id="hdnReportedContracts" value="@ViewBag.ReportedContractList" />
+</div>
+
+@section scripts
+{
+    <script type="text/javascript">
+        var ImagePath = '@Url.Content("~/Content/images/active-row.png")';
+        var ImagePathDeActive = '@Url.Content("~/Content/images/deactivate-row.png")';
+        var ContractLogoPath = '@Url.Content("~/content/images/help-icon.png")';
+        var AjaxCallUrl =
+                {
+                    PreviewQustionUrl: '@Url.Action("PreviewQuestion", "Survey", new { Area = "Admin", SurveyId = "****SurveyId****" })',
+                    GetStateUrl: '@Url.Action("GetState", "Project", new { Area = "CbusaBuilder"})',
+                    SaveProjectData: '@Url.Action("SaveProject", "Project", new { Area = "CbusaBuilder" })',
+                    GetCityUrl: '@Url.Action("GetCity", "Project", new { Area = "CbusaBuilder" })',
+                    GetCityBindUrl: '@Url.Action("FillCity", "Project", new { Area = "CbusaBuilder" })',
+                    GetCityBindUrlByState: '@Url.Action("FillCityByState", "Project", new { Area = "CbusaBuilder" })',
+                    CopyProject: '@Url.Action("CopyProject", "Project", new { Area = "CbusaBuilder" })',
+                    CloseProject: '@Url.Action("CloseProject", "Project", new { Area = "CbusaBuilder" })',
+                    ReopenProject: '@Url.Action("ReopenProject", "Project", new { Area = "CbusaBuilder" })',
+                    RedirectAddprojectStatus: '@Url.Action("AddProjectStatus", "Builder", new { Area = "CbusaBuilder", ContractId="****ContractId****" })',
+                    RedirectSubmitReport: '@Url.Action("SubmitReport", "BuilderReport", new { Area = "CbusaBuilder", ContractId = "****ContractId****" })',
+                    PreviewQustionUrl: '@Url.Action("createtable", "Project", new { Area = "CbusaBuilder", RowId = "****RowId****" })',
+                    RegularReportingUrl: '@Url.Action("RegularReporting", "Builder", new { Area = "CbusaBuilder" })'
+                };
+
+    </script>
+
+    <script src="@Url.Content("~/Scripts/Custom/CbusaBuilderProject.js?v="+@DateTime.Now.ToFileTime().ToString())"></script>
+
+    <script type="text/x-kendo-tmpl" id="TemplateBuilderProject">
+        <tr class="tbody-row">
+            <td width="2%" class="text-center">
+                <span id="spnRowNumber123">#:rowNum#</span>
+            </td>
+            <td width="2%" class="text-center">
+                #if (RowStatusId==1)
+                {#
+                <img src="#:ImagePath#" />
+                #}else{#
+                <img src="#:ImagePathDeActive#" />
+                #}#
+            </td>
+            @*<td width="7%">
+                    #if (IconList!="")
+                    {#
+                        <span>
+                            <img src="#:IconList[0]#" class="wayne-dalton-logo2" />
+                        </span>
+                    #}
+                    else
+                    {#
+                        <img src="@Url.Content("~/content/images/default.png")" id="ContractLogo" class="wayne-dalton-logo2" alt="CBUSA" />
+                    #}#
+                </td>*@
+            <td width="21%" class="text-center">
+                <input class="form-control" type="text" id="projectname#:ProjectId#" name="projectname#:ProjectId#" value="#:ProjectName#">
+                <span class="k-invalid-msg" data-for="projectname#:ProjectId#"></span>
+            </td>
+            <td width="9%" class="text-center">
+                <input class="form-control" type="text" id="lotno#:ProjectId#" name="lotno#:ProjectId#" value="#:LotNo#">
+                <span class="k-invalid-msg" data-for="lotno#:ProjectId#"></span>
+            </td>
+            <td width="20%" class="text-center">
+                <input class="form-control" type="text" id="Address#:ProjectId#" name="Address#:ProjectId#" value="#:Address#">
+                <span class="k-invalid-msg" data-for="Address#:ProjectId#"></span>
+            </td>
+            <td width="14%" class="text-center">
+                <input class="form-control" type="text" id="Txt_City#:ProjectId#" name="Txt_City#:ProjectId#" value="#:City#">
+                <span class="k-invalid-msg" data-for="Txt_City#:ProjectId#"></span>
+            </td>
+            <td width="18%" class="text-center">
+                <span class="selectRightIcon"><select class="form-control ddlState1" id="ddlState#:ProjectId#"></select></span>
+                #renderDDLStates(StateId,'ddlState'+ProjectId)#
+            </td>
+            <td width="12%" class="text-center">
+                <input class="form-control" type="text" id="Zip#:ProjectId#" name="Zip#:ProjectId#" value="#:Zip#">
+                <span class="k-invalid-msg" data-for="Zip#:ProjectId#"></span>
+            </td>
+            <td width="2%" class="text-center">
+                <input type="hidden" name="HdnProject" value="#:ProjectId#">
+                <input type="radio" name="RadProject" />
+                <input type="hidden" id="HdnContract" value="@ViewBag.ContractId" />
+            </td>
+
+        </tr>
+
+        #if (IconList.length > 0)
+        {#
+        <tr class="tbody-row">
+            <td colspan="2" width="4%" class="text-center">
+                @*Contract*@
+            </td>
+            <td colspan="6">
+                <div>
+                    #for (var i = 0; i < IconList.length; i++)
+                    {#
+                    #if (IconList[i]!="" ) @*&& IconList[i].includes("data:image") == true*@
+                    {#
+                    <span>
+                        <img src="#:IconList[i]#" class="wayne-dalton-logo2" /> &nbsp;&nbsp;
+                    </span>
+                    #}
+                    else
+                    {#
+                    <span>
+                        <b>#:IconList[i]#</b> &nbsp;&nbsp;
+                    </span>
+                    #}#
+                    #}#
+                </div>
+            </td>
+        </tr>
+        #}#
+
+        @*<tr>
+                <td><a onclick="RedirecttoContract('#:ConractId#')" id="view">#:ConractName#</a></td>
+                <td class="text-center">#:ManuFacturerName#</td>
+                <td class="text-center">#:ProductList#</td>
+
+                <td class="text-center"><a>0</a></td>
+                <td class="text-center">#:ContractStatus#</td>
+                <td class="text-center">#:ContractFrom# to #:ContractTo#</td>
+
+
+
+            </tr>*@
+    </script>
+
+}

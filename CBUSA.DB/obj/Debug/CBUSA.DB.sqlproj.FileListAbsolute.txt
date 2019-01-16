@@ -1,0 +1,9 @@
+C:\Soumya_Medullus\CBUSA-NCP\CBUSA-NCP-PROD\CBUSA.DB\bin\Debug\CBUSA.DB.dacpac
+C:\Soumya_Medullus\CBUSA-NCP\CBUSA-NCP-PROD\CBUSA.DB\bin\Debug\CBUSA.DB.dll
+C:\Soumya_Medullus\CBUSA-NCP\CBUSA-NCP-PROD\CBUSA.DB\bin\Debug\CBUSA.DB.pdb
+C:\Soumya_Medullus\CBUSA-NCP\CBUSA-NCP-PROD\CBUSA.DB\obj\Debug\Model.xml
+C:\Soumya_Medullus\CBUSA-NCP\CBUSA-NCP-PROD\CBUSA.DB\obj\Debug\refactor.xml
+C:\Soumya_Medullus\CBUSA-NCP\CBUSA-NCP-PROD\CBUSA.DB\obj\Debug\postdeploy.sql
+C:\Soumya_Medullus\CBUSA-NCP\CBUSA-NCP-PROD\CBUSA.DB\obj\Debug\predeploy.sql
+C:\Soumya_Medullus\CBUSA-NCP\CBUSA-NCP-PROD\CBUSA.DB\obj\Debug\CBUSA.DB.dll
+C:\Soumya_Medullus\CBUSA-NCP\CBUSA-NCP-PROD\CBUSA.DB\obj\Debug\CBUSA.DB.pdb

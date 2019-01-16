@@ -1,0 +1,55 @@
+﻿<div class="resourceLibraryPop">   
+    @*<div class="modalHead">
+        <h4 class="modal-title">Resource Library</h4>
+    </div>*@
+    <div class="modalBodyCont">
+        <div class="block-div popupTabs">
+            <div class="width235p pull-left">
+                <div class="list-group">
+                    <table>
+                        @(Html.Kendo().ListView<CBUSA.Areas.Admin.Models.ActiveContractViewModel>()
+                        .Name("listViewContractActiveAsc12")
+                        .TagName("tbody")
+                        .ClientTemplateId("TemplateResourceCategory")
+                        .DataSource(dataSource =>
+                        {
+                            dataSource.Read(read => read.Action("ContractResourceCategory", "Builder", new { Area = "CbusaBuilder" }).Data("SendResourceContract"));
+                            dataSource.PageSize(21);
+                        })                        
+                        .AutoBind(true))
+                    </table>
+                </div>
+            </div>
+            <div class="width765p pull-left">
+                <!-- flight section -->
+                <div class="bhoechie-tab-content padding0 text-left active">
+                    <div>
+                        <table class="table">
+                            @(Html.Kendo().ListView<CBUSA.Areas.Admin.Models.ActiveContractViewModel>()
+    .Name("listViewResource")
+    .TagName("tbody")
+                    .ClientTemplateId("TemplateResource")
+
+    .DataSource(dataSource =>
+    {
+        dataSource.Read(read => read.Action("ContractResourceListview_Read", "Builder", new { Area = "CbusaBuilder" }).Data("SendResourceData"));
+        dataSource.PageSize(21);
+    })
+
+    .AutoBind(true))
+
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+    </div>
+    <div class="clearfix"></div>
+</div>
+
+
+@section scripts
+{
+    <script src="@Url.Content("~/Scripts/Custom/CbusaBuilderContractBuilder.js?v=" + System.Configuration.ConfigurationManager.AppSettings["JsVersion"])"></script>
+}

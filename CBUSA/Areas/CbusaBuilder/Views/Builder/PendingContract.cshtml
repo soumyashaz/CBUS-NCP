@@ -1,0 +1,39 @@
+﻿@using CBUSA.Models;
+@model CBUSA.Areas.CbusaBuilder.Models.ContractBuilderViewModel
+
+@{
+    Layout = null;
+}
+
+<div class="table-responsive">
+    <table class="table">
+        <thead class="thead-bg">
+            <tr>
+                <th width="2%" class="text-center">#</th>
+                <th width="10%" class="text-center"><a href="javascript:void(0)" id="ascpcon"><span id="ascpicon"><i class="fa fa-caret-down" aria-hidden="true"></i></span></a><a href="javascript:void(0)" id="descpcon"><span id="descpicon" hidden="hidden"><i class="fa fa-caret-up" aria-hidden="true"></i></span></a> Contract</th>
+                <th width="19%" class="text-center"><a href="javascript:void(0)" id="ascpncp"><span id="ascpincp"><i class="fa fa-caret-down" aria-hidden="true"></i></span></a><a href="javascript:void(0)" id="descpncp"><span id="descpincp" hidden="hidden"><i class="fa fa-caret-up" aria-hidden="true"></i></span></a> Manufacturers Invited</th>
+                <th width="18%" class="text-center"><a href="javascript:void(0)" id="ascppc"><span id="ascippc"><i class="fa fa-caret-down" aria-hidden="true"></i></span></a><a href="javascript:void(0)" id="descppc"><span id="descippc" hidden="hidden"><i class="fa fa-caret-up" aria-hidden="true"></i></span></a> Product</th>
+                <th width="13%" class="text-center"><a href="javascript:void(0)" id="ascpst"><span id="ascpist"><i class="fa fa-caret-down" aria-hidden="true"></i></span></a><a href="javascript:void(0)" id="descpst"><span id="descpist" hidden="hidden"><i class="fa fa-caret-up" aria-hidden="true"></i></span></a>Estimated Start</th>
+                <th width="15%" class="text-center"><a href="javascript:void(0)" id="ascpct"><span id="ascpict"><i class="fa fa-caret-down" aria-hidden="true"></i></span></a><a href="javascript:void(0)" id="descpct"><span id="descpict" hidden="hidden"><i class="fa fa-caret-up" aria-hidden="true"></i></span></a>Status</th>
+                <th width="13%" class="text-center"> Action</th>
+                <th width="10%" class="text-center">Resources</th>
+            </tr>
+        </thead>
+        @(Html.Kendo().ListView<CBUSA.Areas.CbusaBuilder.Models.ContractBuilderViewModel>()
+            .Name("listViewContractPendingAsc")
+            .TagName("tbody")
+                    .ClientTemplateId("TemplatePendingContract")
+                            .Events(x => x.DataBound("SurveyMarketBuilderLlistDataBound"))
+
+            .DataSource(dataSource =>
+            {
+                dataSource.Read(read => read.Action("PendingContractList", "Builder").Data("SendContractIdAsParameterPending"));
+        // dataSource.PageSize(21);
+    })
+                       .Events(e => e.DataBound("listViewContractPendingAsc_dataBound"))
+            .AutoBind(true)
+        )
+    </table>
+    <input type="hidden" id="HdnResourcePageValue3" value="1" />
+</div>
+

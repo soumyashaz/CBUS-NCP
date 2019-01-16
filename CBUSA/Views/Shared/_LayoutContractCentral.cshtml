@@ -1,0 +1,87 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title  CBUSA-NCP</title>
+    <link rel="shortcut icon" href="@Url.Content("~/Content/images/favicon.ico")" type="image/x-icon" />
+
+    <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="@Url.Content("~/Content/css/font-awesome.min.css")" type="text/css">
+    <link href="@Url.Content("~/Content/kendo/2016.2.607/kendo.common.min.css")" rel="stylesheet" type="text/css" />
+    <link href="@Url.Content("~/Content/kendo/2016.2.607/kendo.mobile.all.min.css")" rel="stylesheet" type="text/css" />
+    <link href="@Url.Content("~/Content/kendo/2016.2.607/kendo.dataviz.min.css")" rel="stylesheet" type="text/css" />
+    <link href="@Url.Content("~/Content/kendo/2016.2.607/kendo.default.min.css")" rel="stylesheet" type="text/css" />
+    <link href="@Url.Content("~/Content/kendo/2016.2.607/kendo.dataviz.default.min.css")" rel="stylesheet" type="text/css" />
+
+    @Scripts.Render("~/bundles/modernizr")
+    @Scripts.Render("~/bundles/jquery")
+
+    <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+
+    @Scripts.Render("~/bundles/kendo")
+    @Scripts.Render("~/bundles/kendoOther")
+    @Styles.Render("~/Content/css/style")
+
+    @RenderSection("style", required: false)
+    @RenderSection("scripts", required: false)
+</head>
+<body class="mainbody" style="min-width:1000px;">
+    <div class="bdywrpr">
+        <!-- Start Header -->
+        <div class="hdrwrpr" style="z-index:2;">
+            <div class="hdrlogo"><a href="/"><img src="https://dev.custombuilders-usa.com/images/global/hdr-logo.gif" style="width:223px; height:70px; border-style:none;" alt="CBUSA" /></a><br /></div>
+
+            <div style="position:absolute;text-align:right;padding-top:10px;">
+                <ul class="hdrhelplnk headLogout">
+                    <li><span id="spnCompanyName" runat="server">@ViewBag.BuilderName</span>: <span id="spnAccountUser" runat="server">@ViewBag.AccountName</span></li>
+                    <li><a href="https://dev.custombuilders-usa.com/directory/Gotodashboard.aspx" title="Go To Dashboard"><i class="fa fa-tachometer graydarktext"></i></a></li>
+                    <li><a href="https://dev.custombuilders-usa.com/directory/logout.aspx" title="Logout"><i class="fa fa-sign-out graydarktext"></i></a></li>
+                </ul>
+            </div>
+
+            <ul id="ulBuilderLinks" runat="server" class="hdrnav">
+                <li><a target="_blank" href="https://dev.custombuilders-usa.com/directory/" class="disabled">DIRECTORY</a></li>
+                <li><a target="_blank" href="https://dev.custombuilders-usa.com/builder/twoprice/">COMMITTED PURCHASES</a></li>
+                <li><a target="_blank" href="https://dev.custombuilders-usa.com/catalog/">CATALOG</a></li>
+                <li><a target="_blank" href="https://dev.custombuilders-usa.com/takeoffs/">TAKE-OFFS</a></li>
+                <li><a target="_blank" href="https://dev.custombuilders-usa.com/order/history.aspx">ORDERS</a></li>
+                <li><a target="_blank" href="https://dev.custombuilders-usa.com/projects/">PROJECTS</a></li>
+                <li><a target="_blank" href="https://dev.custombuilders-usa.com/rebates/builder-purchases.aspx">REPORTING</a></li>
+                <li><a target="_blank" href="https://dev.custombuilders-usa.com/builder/plansonline/">PLANS ONLINE</a></li>
+                <li id="liNationalContracts">
+                    <a href="#">NATIONAL CONTRACTS</a>
+                    <div id="divNCPMenu" style="display:none;width:235px;height:100px;border:solid 1px black;background-color:#f7f7f7;position:absolute;">
+                        <ul style="list-style:none;list-style-position:inside;padding-left:5px;">
+                            <li style="padding-top:5px;padding-bottom:5px;"><a href="#">CONTRACTS CENTRAL</a></li>
+                            <li style="padding-top:5px;padding-bottom:5px;"><a href="#">NCP QUARTERLY REBATE REPORT</a></li>
+                            <li style="padding-top:5px;padding-bottom:5px;"><a href="#">HELP</a></li>
+                        </ul>
+                    </div>
+                </li>
+            </ul>
+        </div>
+        <!-- End Header -->
+        <!-- Start Body -->
+        <div class="corwrpr">
+            <div class="cormargin">
+                @RenderBody()
+            </div>
+        </div>
+        <!-- End Body -->
+        <!-- Start Footer -->
+        <footer class="footer-wrapper">
+            <div class="container"></div>
+        </footer>
+        <!-- End Footer -->
+        <!-- Jquery Library -->
+    </div>
+    @Scripts.Render("~/bundles/bootstrap")
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+        });
+    </script>
+</body>
+</html>

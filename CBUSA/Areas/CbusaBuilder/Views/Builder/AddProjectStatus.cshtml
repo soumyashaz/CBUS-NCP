@@ -1,0 +1,214 @@
+﻿@using CBUSA.Models;
+@model CBUSA.Areas.CbusaBuilder.Models.AddProjectStatusViewModel
+
+<div id="AddProjectStatus">
+    @if (Model.ContractIcon != null)
+    {
+        <div class="margin-top20 btm-top-padding15">
+            <div class="wayne-dalton-Img">
+                @Html.ShowLogo(Model.ContractIcon, new { @class = "wayne-dalton-logo" })
+            </div>
+            <div class="wayne-dalton-title">
+                <h3 class="text-upper">NCP Quarterly Rebate Report -@Model.QuaterName @Model.Year</h3>
+                <h4>@Model.ContractName</h4>
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="margin-top20">
+            <div class="wayne-dalton-Img">
+                <h3>@Model.ManuFacturerName</h3>
+            </div>
+        </div>
+        <div class="wayne-dalton-title">
+            <h3 class="text-upper">NCP Quarterly Rebate Report -@Model.QuaterName @Model.Year</h3>
+            <h4>@Model.ContractName</h4>
+        </div>
+    }
+    <div class="marginbtm20">
+        <div class="row block-div btm-top-padding15">
+            <div class="col-md-5 margin-top5">Enter the status for each project on this screen. You will be able to report units for this quarter in the next section.</div>
+            <div class="col-md-7">
+                Did not find the project?
+                <button type="button" class="btn btn-default new-btn" id="addproj">Add Project</button>
+                <button type="button" class="btn btn-default new-btn" id="prevreportedProj">Previously Reported Projects Only</button>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+        <div class="table-responsive marginbtm20">
+            <table class="table" id="project_table">
+                <thead class="thead-bg">
+                    <tr style="width:1140px">
+                        <th width="2%" class="text-center verticalAlignMiddle">#</th>
+                        <th width="5%" class="text-center verticalAlignMiddle"><input type="checkbox" id="ckbCheckAll"></th>
+                        <th width="35%" class="text-center verticalAlignMiddle">
+                            <a href="javascript:void(0);" id="asccon"><span id="ascicon"><i class="fa fa-caret-down" aria-hidden="true"></i></span></a><a href="javascript:void(0);" id="desccon"><span id="descicon" hidden="hidden"><i class="fa fa-caret-up" aria-hidden="true"></i></span></a>
+                            @(Html.Kendo().DropDownList()
+                                    .Name("ContractManufacturer")
+                                                      .DataTextField("ProjectName")
+                                                             .DataValueField("ProjectId")
+                                                              .Events(e =>
+                                                              {
+                                                                  e.Select("onSelectProjectStatus");
+                                                              })
+                                       .DataSource(source =>
+                                       {
+                                           source.Read(read =>
+                                           {
+                                                           //read.Action("FillProjectDropDown", "Project", new { Area = "CbusaBuilder" }).Data("SendBuilderIdAsParameter");
+                                                           read.Action("FillProjectDropDown", "Project", new { Area = "CbusaBuilder" }).Data("SendParameterToLoadGrid");
+                                           })
+                                           .ServerFiltering(true);
+                                       })
+                                                                          .SelectedIndex(0)
+                                                                                  .HtmlAttributes(new
+                                                                                  {
+
+                                                                                      width = "100%"
+
+                                                                                  })
+
+                            )
+                        </th>
+                        <th width="20%" class="text-center">Project Status</th>
+                        <th width="20%" class="text-center">&nbsp;</th>
+                        <th width="20%" class="text-center">&nbsp;</th>
+                    </tr>
+                </thead>
+                @(Html.Kendo().ListView<CBUSA.Areas.Admin.Models.ActiveContractViewModel>()
+                                    .Name("listViewActiveProject")
+                                    .TagName("tbody")
+                                    .ClientTemplateId("TemplateActiveProject")
+                                    //  .Events(x => x.DataBound("GetList"))
+                                    .DataSource(dataSource =>
+                                    {
+                                        dataSource.Read(read => read.Action("listViewActiveProject_read", "Project", new { Area = "CbusaBuilder" }).Data("SendParameterToLoadGrid"));
+                                        //dataSource.PageSize(21);
+                                    })
+                                    //.Pageable()
+                                    .AutoBind(true)
+                )
+            </table>
+        </div>
+        <div class="row">
+            <div class="col-md-4">
+                <button type="button" class="btn btn-default new-btn" id="changeStatus">Change Status</button>
+            </div>
+            <div class="col-md-offset-4 col-md-4">
+                @if (ViewBag.IsSurveyPublish == 1)
+                {
+                    <button type="button" class="btn btn-info" id="btnSave">Save &amp; Next</button>
+                }
+                else
+
+                {
+                    <button type="button" class="btn btn-info" disabled>Save &amp; Next</button>
+                }
+                <button type="button" class="btn btn-default new-btn" id="btnCancel">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
+<input type="hidden" name="Hdnquaterid" id="HdnQuaterId" value="@Model.QuaterId" />
+<input type="hidden" name="HdnContractId" id="HdnContractId" value="@Model.ContractId" />
+<input type="hidden" name="HdnBuilderId" id="HdnBuilderId" value="@Model.BuilderId" />
+
+<input type="hidden" name="HdnIsSurveyPublish" id="HdnIsSurveyPublish" value="@ViewBag.IsSurveyPublish" />
+
+
+@(Html.Kendo().Window()
+                                .Name("ProjectStatus")
+                                .Title("Status")
+                                .Actions(actions => actions
+                                    .Close()
+                                )
+                                .Visible(false)
+                                .Draggable()
+                                        .Resizable()
+                                        .Width(600)
+
+                                        .Modal(true)
+                                        .Events(e => e.Open("OnOpenContactResource").Refresh("OnRefreshContractResource"))
+
+
+
+)
+
+@(Html.Kendo().Window()
+                                .Name("PrevRptProj")
+                                .Title("Select Previously Reported Projects")
+                                .Actions(actions => actions
+                                    .Close()
+                                )
+                                .Visible(false)
+                                .Height(400)
+                                        .Draggable()
+                                        .Resizable()
+                                        .Width(600)
+                                        .Modal(true)
+                                         .Events(e => e.Open("OnOpenPrevRptProj").Refresh("OnRefreshPrevRptProj"))
+
+    //     .LoadContentFrom("LoadManageStatus", "Contract", new { Area = "Admin" })
+
+)
+
+
+
+@section scripts
+{
+    <script src="@Url.Content("~/Scripts/Custom/CbusaBuilderProjectStatus.js?v="+@DateTime.Now.ToFileTime().ToString())"></script>
+    <script type="text/javascript">
+
+        var AjaxCallUrl =
+            {
+                ProjectStatusUrl: '@Url.Action("ProjectStatus", "Project", new { Area = "CbusaBuilder" })',
+                SaveProjectData: '@Url.Action("SaveProjectStatus", "Project", new { Area = "CbusaBuilder" })',
+                CancelUrl: '@Url.Action("RegularReporting", "Builder", new { Area = "CbusaBuilder" })',
+                AddProjectRedirectUrl: '@Url.Action("AddProject", "Project", new { Area = "CbusaBuilder",ContractId=@ViewBag.Contract,status = 1})',
+                SubmitReportUrl: '@Url.Action("SubmitReport", "BuilderReport", new { Area = "CbusaBuilder", ContractId = "****ContractId****" })',
+                PrevRprPrjUrl: '@Url.Action("LoadPrevRprPrj", "Project", new { Area = "CbusaBuilder", ContractId = @ViewBag.Contract})',
+                GetPrevRprProjectData: '@Url.Action("GetActiveProjectWithPrevRptPrj", "Project", new { Area = "CbusaBuilder" })',
+            };
+
+    </script>
+
+    <script type="text/x-kendo-tmpl" id="TemplateActiveProject">
+
+        <tr id="tr#=ProjectId#">
+            <td width="2%" class="text-center verticalAlignMiddle">
+                <span id="spnRowNumber">#:rowcount#</span>
+            </td>
+            <td width="5%" class="text-center verticalAlignMiddle checkBoxClass">
+                <input type="checkbox" class="checkBoxClass" name="ChkProject">
+                <input type="hidden" name="HdnProject" value="#:ProjectId#" />
+            </td>
+            <td width="35%" class="text-center verticalAlignMiddle">#:ProjectName#</td>
+            <td width="20%" class="text-center">
+                #if(ProjectStatus==1){#
+                <input type="radio" name="ProjectStatus_#:ProjectId#" value="1" checked="checked">&nbsp; Report units for this quarter
+                #}else{#
+                <input type="radio" name="ProjectStatus_#:ProjectId#" value="1">&nbsp; Report units for this quarter
+                #}#
+            </td>
+            <td width="20%" class="text-center">
+                #if(ProjectStatus==2){#
+                <input type="radio" name="ProjectStatus_#:ProjectId#" value="2" checked="checked">&nbsp; Nothing to report this quarter
+                #}else{#
+                <input type="radio" name="ProjectStatus_#:ProjectId#" value="2">&nbsp; Nothing to report this quarter
+                #}#
+
+            </td>
+            <td width="20%" class="text-center">
+                #if(ProjectStatus==3){#
+                <input type="radio" name="ProjectStatus_#:ProjectId#" value="3" checked="checked">&nbsp; Never report for this project
+                #}else{#
+                <input type="radio" name="ProjectStatus_#:ProjectId#" value="3">&nbsp; Never report for this project
+                #}#
+
+            </td>
+        </tr>
+
+    </script>
+
+}

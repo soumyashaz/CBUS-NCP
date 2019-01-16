@@ -1,0 +1,362 @@
+﻿@{
+    ViewBag.Title = "";
+}
+
+<div id="CreateContract">
+    <h4 class="text-upper btm-top-padding15 blue">Contract Details</h4>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                <label class="col-sm-3 control-label">Contract Name:</label>
+                <div class="col-sm-9" id="TdContractName">
+                    @(Html.Kendo().TextBox().Name("ContractName")
+                                             .HtmlAttributes(new
+                                             {
+                                                     // validationmessage = "*",
+                                                     //@class = "width50",
+                                                     required = "required",
+                                                 data_contractnameavailable = true,
+                                                 @class = "form-control"
+
+                                             })
+                    )
+                    <span class="k-invalid-msg" id="rr" data-for="ContractName"></span>
+                    <input type="hidden" id="HdnValidationContractName" />
+                </div>
+                <div class="clearfix"></div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">
+                    <i class="fa fa-info-circle" aria-hidden="true" style="color:#dadee2; font-size:20px; margin-right:3px;"></i><span class="">Label:</span>
+                </label>
+                <div class="col-sm-9" id="TdContractLabel">
+                    @(Html.Kendo().TextBox().Name("ContractLabel")
+                                             .HtmlAttributes(new
+                                             {
+                                                     // validationmessage = "*",
+                                                     //@class = "width50",
+                                                     required = "required",
+                                                     // type = "email"
+                                                     data_contractlabelavailable = true,
+                                                 @class = "form-control"
+
+                                             })
+                    )
+                    <span class="k-invalid-msg" data-for="ContractLabel"></span>
+                    <input type="hidden" id="HdnValidationContractLabel" />
+                </div>
+                <div class="clearfix"></div>
+            </div>
+            <div class="form-group">
+                <label data-role="Pending" class="col-sm-3 control-label">Estimated Start Date:</label>
+                <div data-role="Pending" class="col-sm-9">
+                    @(Html.Kendo().DatePicker().Name("EstimatedStartDate")
+                                                   .HtmlAttributes(new
+                                                   {
+                                                           // validationmessage = "*",
+                                                           //@class = "width50",
+                                                           required = "required",
+                                                       type = "date",
+                                                       data_futuredate = true,
+                                                       @class = "form-control"
+
+                                                   })
+                            // .Start(CalendarView.Year)
+                            //.Depth(CalendarView.Year)
+                    )
+                    <span class="k-invalid-msg" id="rr" data-for="EstimatedStartDate"></span>
+                </div>
+                <label data-role="Active" class="col-sm-3 control-label">Contract Term:</label>
+                <div data-role="Active" class="col-sm-9 datepicDubol">
+
+                    @(Html.Kendo().DatePicker().Name("ContractFrom")
+                                                   .HtmlAttributes(new
+                                                   {
+                                                           // validationmessage = "*",
+                                                           //@class = "width50",
+                                                           required = "required",
+                                                       type = "date",
+                                                       data_lesserdate = true,
+                                                       data_greaterfield = "ContractTo",
+                                                       @class = "form-control width45 floteLeft maginRight20"
+                                                   })
+                            // .Start(CalendarView.Year)
+                            //.Depth(CalendarView.Year)
+                    )
+
+                    @(Html.Kendo().DatePicker().Name("ContractTo")
+                                                   .HtmlAttributes(new
+                                                   {
+                                                           // validationmessage = "*",
+                                                           //@class = "width50",
+                                                           required = "required",
+                                                       type = "date",
+                                                       data_futuredate = true,
+                                                       data_greaterdate = true,
+                                                       data_lesserfield = "ContractFrom",
+                                                       @class = "form-control width45 floteLeft marginLeft12"
+
+
+                                                   })
+                            // .Start(CalendarView.Year)
+                            //.Depth(CalendarView.Year)
+                    )
+                    <span class="k-invalid-msg" data-for="ContractFrom"></span>
+                    <span class="k-invalid-msg" data-for="ContractTo"></span>
+
+
+                </div>
+
+
+
+                <div class="clearfix"></div>
+            </div>
+            <div class="form-group">
+                <label data-role="Pending" class="col-sm-3 control-label ma">Early Bird Entry Deadline:</label>
+                <div data-role="Pending" class="col-sm-9">
+
+                    @(Html.Kendo().DatePicker().Name("EntryDeadline")
+                                                   .HtmlAttributes(new
+                                                   {
+                                                           // validationmessage = "*",
+                                                           //@class = "width50",
+                                                           required = "required",
+                                                       type = "date",
+                                                       data_futuredate = true,
+                                                       @class = "form-control",
+                                                       data_lesserdatebirdentrydeadline = true,
+                                                       data_greaterfield = "EstimatedStartDate",
+
+                                                   })
+                            // .Start(CalendarView.Year)
+                            //.Depth(CalendarView.Year)
+                    )
+
+                    <span class="k-invalid-msg" data-for="EntryDeadline"></span>
+                </div>
+                <label data-role="Active" class="col-sm-3 control-label">Contract Deliverable</label>
+                <div data-role="Active" class="col-sm-9">
+                    @Html.TextArea("ContractDeliverables", new { data_ContractDeliverable = true, required = "required", @class = "form-control textareaForm" })
+                    <span class="k-invalid-msg" data-for="ContractDeliverables"></span>
+                </div>
+                <div class="clearfix"></div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                <label class="col-sm-3 control-label">Status:</label>
+                <div class="col-sm-9" id="TdContractLabel">
+
+                    @(Html.Kendo().DropDownList()
+                                                    .Name("ContractStatus")
+                                                      .DataTextField("ContractStatusName")
+                                                      .DataValueField("ContractStatusId")
+
+                                                    .Events(e =>
+                                                    {
+                                                        e.Select("onSelectContractStatus");
+                                                    })
+                                                       .DataSource(source =>
+                                                       {
+                                                           source.Read(read =>
+                                                           {
+                                                               read.Action("GetContractStatus", "Contract", new { Area = "Admin" });
+                                                           })
+                                                           .ServerFiltering(true);
+                                                       })
+                                                                  .SelectedIndex(0)
+                                                                 .HtmlAttributes(new
+                                                                 {
+                                                                     @class = "form-control"
+
+                                                                 })
+
+                    )
+
+
+                    <button type="button" id="a_manage_status" class="btn btn-default new-btn margin-top5">Manage Status</button>
+                </div>
+                <div class="clearfix"></div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">Icon:</label>
+                <div class="col-sm-9">
+
+                    @(Html.Kendo().Upload()
+                                                             .Name("ContractLogo")
+                                                             .Multiple(false)
+                                                         .HtmlAttributes(new
+                                                         {
+                                                                 // validationmessage = "Required",
+
+
+                                                             })
+                                                        .Events(events => events
+
+                                                            .Select("onSelect")
+                                                        )
+                    )
+                </div>
+                <div class="clearfix"></div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label"></label>
+                <div class="col-sm-9">
+                    <a id="a_ContractResource" title="Upload Resources" style="text-decoration:underline;">Upload Resources</a>
+                </div>
+                <div class="clearfix"></div>
+            </div>
+        </div>
+    </div>
+    <hr></hr>
+    <h4 class="text-upper btm-top-padding15 blue">Manufacturer &amp; Product</h4>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                <label class="col-sm-3 control-label">Manufacturer:</label>
+                <div data-role="Pending" class="col-sm-9">
+
+                    @Html.TextArea("Manufacturer", new { @class = "form-control textareaForm", required = "required" })
+                </div>
+                <div class="col-sm-9" data-role="Active">
+                    @(Html.Kendo().DropDownList()
+                                                    .Name("ContractManufacturer")
+                                                      .DataTextField("ManufacturerName")
+                                                             .DataValueField("ManufacturerId")
+                                                              .HtmlAttributes(new
+                                                              {
+                                                                  @class = "form-control"
+                                                              })
+                                                       .DataSource(source =>
+                                                       {
+                                                           source.Read(read =>
+                                                           {
+                                                               read.Action("GetManufacturer", "Contract", new { Area = "Admin" });
+                                                           })
+                                                           .ServerFiltering(true);
+                                                       })
+                                                                  .SelectedIndex(0)
+
+                    )
+                </div>
+                <div class="clearfix"></div>
+            </div>
+
+            @*Add by Rabi *@
+
+            <div class="form-group">
+                <label class="col-sm-3 control-label">Product:</label>
+                <div class="col-sm-9">
+
+                    @Html.TextArea("ProductList", new { data_productlist = true, @class = "form-control textareaForm", required = "required" })
+                    <span class="k-invalid-msg" data-for="ProductList"></span>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                <label class="col-sm-3 control-label">Websites:</label>
+                <div class="col-sm-9">
+                    @Html.TextArea("Website", new { data_validurl = true, required = "required", @class = "form-control textareaForm" })
+                </div>
+                <div class="clearfix"></div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <button type="button" class="btn btn-info pull-right" id="SaveContract">Save Contract</button>
+            <button type="button" class="btn btn-default new-btn" style="display:none">Cancel</button>
+            <div class="clearfix"></div>
+        </div>
+    </div>
+</div>
+@(Html.Kendo().Window()
+                                    .Name("ManageStatus")
+                                    .Title("Manage Contract Status")
+                                    .Actions(actions => actions
+                                        .Close()
+                                    )
+                                    .Visible(false)
+                                    .Height(400)
+                                            // .Content("Loading...")
+                                            .Draggable()
+                                            .Resizable()
+                                            .Width(600)
+                                            .Modal(true)
+                                             .Events(e => e.Open("OnOpenManageStatus").Refresh("OnRefreshManageStatus"))
+
+    //     .LoadContentFrom("LoadManageStatus", "Contract", new { Area = "Admin" })
+
+)
+
+
+@(Html.Kendo().Window()
+                                    .Name("ContractResource")
+                                    .Title("Upload Resource")
+                                    .Actions(actions => actions
+                                        .Close()
+                                    )
+                                    .Visible(false)
+                                    .Draggable()
+                                            .Resizable()
+                                            .Width(600)
+                                            .Height(410)
+                                            .Modal(true)
+                                            .Events(e => e.Open("OnOpenContactResource").Refresh("OnRefreshContractResource"))
+
+
+
+)
+
+
+@section scripts
+{
+    <script type="text/javascript">
+        var TreeControlUrl = '@Url.Action("ParseProductTreeViewControl", "Home", new { Area = "" })';
+        var AjaxCallUrl =
+            {
+                ManageStatusUrl: '@Url.Action("LoadManageStatus", "Contract",new { Area = "Admin" })',
+                SaveContractStatusUrl: '@Url.Action("ContractStatus_Create", "Contract", new { Area = "Admin" })',
+                ContractResourceUrl: '@Url.Action("LoadContractResource", "Contract", new { Area = "Admin" })',
+                ContractResourceCategoryUrl: '@Url.Action("LoadContractResourceCategory", "Contract", new { Area = "Admin" })',
+                SaveContractResourceCategoryUrl: '@Url.Action("ContractResourceCategory_Create", "Contract", new { Area = "Admin" })',
+                ResourceTitleUrl: '@Url.Action("IsResourceLableValid", "Contract", new { Area = "Admin" })',
+                SaveResourceUrl: '@Url.Action("SaveResource", "Contract", new { Area = "Admin" })',
+                CheckContractNameUrl: '@Url.Action("IsContractNameAvailable", "Contract", new { Area = "Admin" })',
+                CheckContractLabelUrl: '@Url.Action("IsContractLabelAvailable", "Contract", new { Area = "Admin" })',
+                SaveContractlUrl: '@Url.Action("SaveContract", "Contract", new { Area = "Admin" })',
+                RedirectActiveContractUrl: '@Url.Action("ManageActiveContracts", "Contract", new { Area = "Admin" })',
+                RedirectPendingontractUrl: '@Url.Action("ManagePendingContracts", "Contract", new { Area = "Admin" })'
+            };
+
+        $(document).ready(function () {
+            // TreeControlUrl = '@Url.Action("ParseProductTreeViewControl", "Home", new { Area = "" })';
+        });
+    </script>
+
+    <script src="@Url.Content("~/Scripts/Custom/CustomControl.js?v="+@DateTime.Now.ToFileTime().ToString())"></script>
+    <script src="@Url.Content("~/Scripts/Custom/AdminContractCreate.js?v="+@DateTime.Now.ToFileTime().ToString())"></script>
+    <script src="@Url.Content("~/Scripts/Custom/ContractResource.js?v="+@DateTime.Now.ToFileTime().ToString())"></script>
+
+    <script src="@Url.Content("~/Scripts/Custom/CustomContromProductList.js?v="+@DateTime.Now.ToFileTime().ToString())"></script>
+    <script src="@Url.Content("~/Scripts/Custom/CustomControlZoneStateList.js?v="+@DateTime.Now.ToFileTime().ToString())"></script>
+
+    <script type="text/javascript">
+
+
+        $(document).ready(function () {
+            // var TreeControlUrl = '@Url.Action("ParseProductTreeViewControl", "Home", new { Area = "" })';
+            //$("#DivProductCategoryDropdown").on("click", function () {
+            //    CustomControl($(this).parent().parent(), "CustomControlPoup", $(this).attr('id'));
+            //    // event.stopPropagation();
+            //});
+        });
+
+    </script>
+
+}
+
+@*<span class="k-widget k-tooltip k-tooltip-validation k-invalid-msg field-validation-error"
+     data-for="EstimatedStartDate" data-valmsg-for="EstimatedStartDate" id="rr"
+    role="alert"><span class="k-icon k-warning"> </span> *</span>*@

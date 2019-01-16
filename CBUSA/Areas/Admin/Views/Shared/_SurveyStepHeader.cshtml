@@ -1,0 +1,172 @@
+﻿@model Int64
+
+@{
+    string RawUrl = @Request.Url.AbsoluteUri;
+    bool IsNcpSurvey = ViewBag.IsNcpSurvey;
+}
+
+@if (Model == 0)
+{
+    <section class="create_survey-step">
+        <div class="col-md-2">
+            <div class="step-numbering active-step">1</div>
+            <div class="step-name">
+                <a>Survey Details</a>
+            </div>
+        </div>
+        <div class="col-md-2">
+
+            <div class="step-numbering">2</div>
+            <div class="step-name">
+                <a>Add Questions</a>
+            </div>
+        </div>
+        @if (ViewBag.IsNcpSurvey == false)
+        {
+            <div class="col-md-2">
+
+                <div class="step-numbering">3</div>
+                <div class="step-name"><a>Configure Invites</a></div>
+            </div>
+        }
+
+
+
+        <div class="col-md-2">
+
+            <div class="step-numbering">@(IsNcpSurvey == false ? 4 : 3)</div>
+            <div class="step-name"><a>Survey Settings</a></div>
+        </div>
+        <div class="col-md-2">
+
+            <div class="step-numbering">@(IsNcpSurvey == false ? 5 : 4)</div>
+            <div class="step-name"><a>Edit &amp; Preview</a></div>
+        </div>
+        <div class="col-md-2">
+            <div class="step-numbering">@(IsNcpSurvey == false ? 6 : 5)</div>
+            <div class="step-name"><a>Publish</a></div>
+        </div>
+        <div class="clearfix"></div>
+    </section>
+}
+else
+{
+   <!-- Start Header number Step Option -->
+    <section class="create_survey-step">
+        <div class="col-md-2">
+            @if (RawUrl.ToLower().Contains("survey/surveydetails"))
+            {
+                <div class="step-numbering active-step">1</div>
+                <div class="step-name">
+                    <a>Survey Details</a>
+                </div>
+            }
+            else
+            {
+                <div class="step-numbering">1</div>
+                <div class="step-name">
+                    @if (ViewBag.IsNcpSurvey == false)
+                    {
+
+                        <a href="@Url.Action("SurveyDetails", "Survey", new { Area = "Admin", SurveyId=Model })">Survey Details</a>
+                    }
+                    else
+                    {
+                        <a href="@Url.Action("SurveyDetails", "Survey", new { Area = "Admin", SurveyId = Model, IsNcpId = 1 })">Survey Details</a>
+                    }
+                </div>
+            }
+
+        </div>
+        <div class="col-md-2">
+            @if (RawUrl.ToLower().Contains("survey/addquestion"))
+            {
+                <div class="step-numbering active-step">2</div>
+                <div class="step-name">
+                    <a>Add Questions</a>
+                </div>
+            }
+            else
+            {
+                <div class="step-numbering">2</div>
+                <div class="step-name">
+
+                    <a href="@Url.Action("AddQuestion", "Survey", new { Area = "Admin", SurveyId=Model })">Add Questions</a>
+
+                </div>
+            }
+        </div>
+        @if (ViewBag.IsNcpSurvey == false)
+        {
+            <div class="col-md-2">
+                @if (RawUrl.ToLower().Contains("survey/configureinvites"))
+                {
+                    <div class="step-numbering active-step">3</div>
+                    <div class="step-name"><a>Configure Invites</a></div>
+                }
+                else
+                {
+                    <div class="step-numbering">3</div>
+                    <div class="step-name"><a href="@Url.Action("ConfigureInvites", "Survey", new { Area = "Admin", SurveyId = Model })">Configure Invites</a></div>
+
+                }
+            </div>
+        }
+        <div class="col-md-2">
+            @if (RawUrl.ToLower().Contains("survey/surveysettings"))
+            {
+                <div class="step-numbering active-step">@(IsNcpSurvey == false ? 4 : 3)</div>
+                <div class="step-name"><a>Survey Settings</a></div>
+            }
+            else
+            {
+
+                <div class="step-numbering">@(IsNcpSurvey == false ? 4 : 3)</div>
+
+
+                <div class="step-name"><a href="@Url.Action("SurveySettings", "Survey", new { Area = "Admin", SurveyId = Model })">Survey Settings</a></div>
+
+            }
+
+
+        </div>
+        <div class="col-md-2">
+            @if (RawUrl.ToLower().Contains("survey/previewquestion"))
+            {
+                <div class="step-numbering active-step">@(IsNcpSurvey == false ? 5 : 4)</div>
+                <div class="step-name"><a>Edit &amp; Preview</a></div>
+            }
+            else
+            {
+
+                <div class="step-numbering">@(IsNcpSurvey == false ? 5 : 4)</div>
+
+
+                <div class="step-name"><a href="@Url.Action("PreviewQuestion", "Survey", new { Area = "Admin", SurveyId = Model })">Edit &amp; Preview</a></div>
+
+            }
+
+
+        </div>
+        <div class="col-md-2">
+            @if (RawUrl.ToLower().Contains("survey/publishsurvey"))
+            {
+                <div class="step-numbering active-step">@(IsNcpSurvey == false ? 6 : 5)</div>
+                <div class="step-name"><a>Publish</a></div>
+            }
+            else
+            {
+                <div class="step-numbering">@(IsNcpSurvey == false ? 6 : 5)</div>
+                <div class="step-name"><a href="@Url.Action("PublishSurvey", "Survey", new { Area = "Admin", SurveyId = Model })">Publish</a></div>
+            }
+        </div>
+        <div class="clearfix"></div>
+    </section>
+}
+
+
+
+<!-- End Header number Step Option -->
+<div class="clearfix"></div>
+<hr></hr>
+<div class="clearfix"></div>

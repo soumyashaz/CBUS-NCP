@@ -1,0 +1,354 @@
+﻿@using CBUSA.Models;
+@model CBUSA.Areas.Admin.Models.ContractViewModel
+
+@{
+
+}
+
+<div class="color-upper-text margin-top20 blue">@Model.ContractName</div>
+<div class="color-border">
+    <div id="DivMainContractGenaralInformation">
+        @Html.Partial("_ViewContractGenaralInformation", Model)
+    </div>
+</div>
+<div class="clearfix"></div>
+<div class="row btm-top-padding15">
+    <div id="ContractMarketBuilder" class="col-md-7">
+        <div class="color-upper-text">
+            MARKETS &amp; BUILDERS&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <input type="text" id="txtSearchBuilder" style="height:20px;width:350px;font-size:11px" placeholder="Search Builder..."></input>
+            &nbsp; <a id="lnkSearchBuilder">SEARCH</a>
+        </div>
+        <div id="DivChildMarketBuilder">
+        </div>
+    </div>
+    <div id="ContractProduct" class="col-md-5">
+        <div class="color-upper-text">PRODUCTS</div>
+        <div id="DivChildProduct">
+        </div>
+    </div>
+</div>
+<div class="clearfix"></div>
+<div class="row marginbtm20">
+    <div class="color-upper-text margin-top20 blue">SURVEYS</div>
+    <div class="color-border">
+        <div class="table-responsive">
+            <table class="table">
+                @(Html.Kendo().ListView<CBUSA.Areas.Admin.Models.SurveyViewModel>()
+.Name("listViewContractSurvey")
+.TagName("tbody")
+            .ClientTemplateId("TemplateContractSurvey")
+            .Events(x => x.DataBound("ContractSurveyListViewDataBound"))
+.DataSource(dataSource =>
+{
+dataSource.Read(read => read.Action("ContractSurveyListview_Read", "Contract").Data("SendContractSurveyParameter"));
+                    //dataSource.PageSize(21);
+                })
+
+                )
+
+            </table>
+        </div>
+    </div>
+</div>
+<div class="clearfix"></div>
+<div class="row marginbtm20">
+    <div class="color-upper-text margin-top20 blue">
+        RESOURCES&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <input type="text" id="txtSearchResource" style="height:20px;width:350px;font-size:11px;padding:3px 15px 3px 6px;" placeholder="Search Resource..." />
+        &nbsp;&nbsp;
+        <a id="lnkSearchResource">Search</a>&nbsp;|&nbsp;<a id="lnkClearSearch">Clear</a>
+    </div>
+    <div class="color-border">
+        <div class="table-responsive">
+            <table id="tblResourceList" class="table">
+                @(Html.Kendo().ListView<CBUSA.Areas.Admin.Models.ContractResourceViewModel>()
+.Name("listViewContractResource")
+.TagName("tbody")
+.ClientTemplateId("TemplateResource")
+.Events(x => x.DataBound("ContractResourceListViewDataBound"))
+.DataSource(dataSource =>
+{
+dataSource.Read(read => read.Action("ContractResourceListview_Read", "Contract").Data("SendContractIdAsParameter"));
+                    //dataSource.PageSize(21);
+                })
+.AutoBind(true)
+                        // .Pageable()
+                )
+
+
+            </table>
+        </div>
+        <div class="row">
+            <div class="col-md-offset-9 col-md-3">
+                <button type="button" class="btn btn-info" id="a_ContractResource">Add More</button>
+                <a title="" id="a_ContactResourceViewMore">View All</a>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="clearfix"></div>
+
+<input type="hidden" id="HdnContractId" value="@Model.ContractId" />
+<input type="hidden" id="HdnResourcePageValue" value="1" />
+
+<div id="DivIframeContainer" style="display:none;">
+
+</div>
+
+@(Html.Kendo().Window()
+                                .Name("WndContractRebate")
+                            .Title("Enter CBUSA Volume Fee %")
+                            .Actions(actions => actions
+                                .Close()
+                            )
+                            .Visible(false)
+                                    // .Content("Loading...")
+                                    .Draggable()
+                                    .Resizable()
+                                    .Width(600)
+                                    .Height(500)
+                                    .Modal(true)
+                                     .Events(e => e.Open("OnOpenContractRebate").Refresh("OnRefreshContractRebate"))
+
+
+
+)
+
+
+@(Html.Kendo().Window()
+                            .Name("WndContractRebateOverride")
+                            .Title("Configure Rebate % for Builder")
+                            .Actions(actions => actions
+                                .Close()
+                            )
+                            .Visible(false)
+                                    // .Content("Loading...")
+                                    .Draggable()
+                                    .Resizable()
+                                    .Width(1024)
+                                    .Height(380)
+                                    .Modal(true)
+                                         .Events(e => e.Open("OnOpenContractRebateOverride").Refresh("OnRefreshContractRebateOverride"))
+
+    //     .LoadContentFrom("LoadManageStatus", "Contract", new { Area = "Admin" })
+
+)
+
+
+@(Html.Kendo().Window()
+                            .Name("WndAddContractProduct")
+                            .Title("Modify Product")
+                            .Actions(actions => actions
+                                .Close()
+                            )
+                            .Visible(false)
+                                    // .Content("Loading...")
+                                    .Draggable()
+                                    .Resizable()
+                                    .Width(600)
+                                    .Height(220)
+                                    .Modal(true)
+                                             .Events(e => e.Open("OnOpenModifyContractProduct").Refresh("OnRefreshModifyContractProduct"))
+
+    //     .LoadContentFrom("LoadManageStatus", "Contract", new { Area = "Admin" })
+
+)
+
+
+@(Html.Kendo().Window()
+     .Name("WndMarketBuilderViewDetails")
+                            .Title("Market and Builders")
+                            .Actions(actions => actions
+                                .Close()
+                            )
+                            .Visible(false)
+                                    // .Content("Loading...")
+                                    .Draggable()
+                                    .Resizable()
+                                    .Width(700)
+                                    .Height(450)
+                                    .Modal(true)
+     .Events(e => e.Open("OnOpenMarketBuilderViewDetails").Refresh("OnRefreshMarketBuilderViewDetails"))
+)
+
+@(Html.Kendo().Window()
+     .Name("WndProductViewDetails")
+                            .Title("Product Details")
+                            .Actions(actions => actions
+                                .Close()
+                            )
+                            .Visible(false)
+
+                                    .Draggable()
+                                    .Resizable()
+                                    .Width(600)
+                                    .Height(340)
+                                    .Modal(true)
+                                                     .Events(e => e.Open("OnOpenProductViewDetails").Refresh("OnRefreshProductViewDetails"))
+
+)
+
+
+@(Html.Kendo().Window()
+                            .Name("ContractResource")
+                            .Title("Upload Resource")
+                            .Actions(actions => actions
+                                .Close()
+                            )
+                            .Visible(false)
+                            .Draggable()
+                                    .Resizable()
+                                    .Width(600)
+                                    .Height(400)
+                                    .Modal(true)
+                                    .Events(e => e.Open("OnOpenContactResource").Refresh("OnRefreshContractResource"))
+
+
+
+)
+
+@(Html.Kendo().Window()
+                            .Name("WndContractResourceView")
+                            .Title("View Resource")
+                            .Actions(actions => actions
+                                .Close()
+                            )
+                            .Visible(false)
+                            .Draggable()
+                                    .Resizable()
+                                    .Width(600)
+                                    .Height(180)
+                                    .Modal(true)
+                                            .Events(e => e.Open("OnOpenContractResourceView").Refresh("OnRefreshContractResourceView"))
+)
+
+
+
+
+@section scripts
+{
+    <script type="text/javascript">
+    var TreeControlUrl = '@Url.Action("ParseProductTreeViewControl", "Home", new { Area = "" })';
+    var AjaxCallUrl =
+        {
+            ViewContractGenaralInformationUrl: '@Url.Action("LoadContractGenaralInformation", "Contract",new { Area = "Admin" })',
+            ViewMarketBuildersUrl: '@Url.Action("LoadContractBuilderInformation", "Contract", new { Area = "Admin" })',
+            ViewProductnUrl: '@Url.Action("LoadContractProductInformation", "Contract", new { Area = "Admin" })',
+            EditContractDetails: '@Url.Action("EditContract", "Contract", new { Area = "Admin" })',
+            ContractRebateUrl: '@Url.Action("LoadContractRebate", "Contract", new { Area = "Admin" })',
+            SaveContractRebateUrl: '@Url.Action("SaveContractRebate", "Contract", new { Area = "Admin" })',
+            LoadContractRebateOverrideUrl: '@Url.Action("LoadContractRebateOverride", "Contract", new { Area = "Admin" })',
+            BuilderRebateInformationUrl: '@Url.Action("GetBuilderRebateInformation", "Contract", new { Area = "Admin" })',
+            SaveContractBulderRebateUrl: '@Url.Action("SaveContractBuilderReabte", "Contract", new { Area = "Admin" })',
+            LoadContractBuilderUrl: '@Url.Action("LoadContractBuilderData", "Contract", new { Area = "Admin" })',
+            LoadContractProductUrl: '@Url.Action("LoadContractProductData", "Contract", new { Area = "Admin" })',
+            LoadAddContractProductPopupUrl: '@Url.Action("LoadAddContractProductPoup", "Contract", new { Area = "Admin" })',
+            AddContractProductPopupUrl: '@Url.Action("AddContractProductFromPopUp", "Contract", new { Area = "Admin" })',
+            UpdateContractProductPopupUrl: '@Url.Action("UpdateContractProduct", "Contract", new { Area = "Admin" })',
+            UpdateContractBuilder: '@Url.Action("UpdateContractBuilder", "Contract", new { Area = "Admin" })',
+            OpenMarketBuilderDetailsPopupUrl: '@Url.Action("OpenMarketBuilderDetailsPopup", "Contract", new { Area = "Admin" })',
+            OpenProductDetailsPopupUrl: '@Url.Action("OpenProductDetailsPopup", "Contract", new { Area = "Admin" })',
+            DownloadContractProductDetailsUrl: '@Url.Action("DownLoadContractProductView", "Contract", new { Area = "Admin" })',
+            DownloadContractMarketDetailsUrl: '@Url.Action("DownLoadContractMarketBuilderView", "Contract", new { Area = "Admin" })',
+            CopySurvey: '@Url.Action("CopySurvey", "Contract", new { Area = "Admin" })',
+            //Resource
+            ContractResourceUrl: '@Url.Action("LoadContractResource", "Contract", new { Area = "Admin" })',
+            SaveResourceUrl: '@Url.Action("SaveResource", "Contract", new { Area = "Admin" })',
+            ContractResourceCategoryUrl: '@Url.Action("LoadContractResourceCategory", "Contract", new { Area = "Admin" })',
+            SaveContractResourceCategoryUrl: '@Url.Action("ContractResourceCategory_Create", "Contract", new { Area = "Admin" })',
+            ContractResourceViewUrl: '@Url.Action("ViewResource", "Contract", new { Area = "Admin" })',
+            ContractResourceDeleteUrl: '@Url.Action("DeleteResource", "Contract", new { Area = "Admin" })',
+            ResourceTitleUrl: '@Url.Action("IsResourceLableValid", "Contract", new { Area = "Admin" })',
+            DownLaodResourceFile: '@Url.Action("DownloadResourceFile", "Contract", new { Area = "Admin" })',
+            //end
+
+            RedirectSurveyDeployUrl: '@Url.Action("PublishSurvey", "Survey", new { Area = "Admin", SurveyId = "****SurveyId****" })',
+            RedirectSurveyEditUrl: '@Url.Action("SurveyDetails", "Survey", new { Area = "Admin", SurveyId = "****SurveyId****" })',
+            RedirectSurveyNcpEditUrl: '@Url.Action("SurveyDetails", "Survey", new { Area = "Admin", SurveyId = "****SurveyId****", IsNcpId ="****IsNcpId****"})',
+            PreviewSurveyUrl: '@Url.Action("PreviewSurvey", "Survey", new { Area = "Admin", id = "****id****" })',
+            CheckContractNameUrl: '@Url.Action("IsContractNameAvailable", "Contract", new { Area = "Admin" })',
+            CheckContractLabelUrl: '@Url.Action("IsContractLabelAvailable", "Contract", new { Area = "Admin" })',
+            ManageContractPageUrl: '@Url.Action("ManageActiveContracts", "Contract", new { Area = "Admin" })',
+            RedirectResponsetUrl: '@Url.Action("ShowResponse", "SurveyResponse", new { Area = "Admin", SurveyId = "****SurveyId****", IsCompleted ="****IsCompleted****" })',
+        };
+    </script>
+
+
+    <script type="text/x-kendo-tmpl" id="TemplateResource">
+        <tr>
+            <td width="50%">
+                <div style="font-size:15px;">#:ResourceName#</div>
+                <div style="font-size:12px;"><i>#:ResourceTitle#</i></div>
+                <input type="hidden" name="HdnContactResourceListId" id="HdnContactResourceListId_#:ResourceId#" value="#:ResourceId#">
+            </td>
+            <td width="35%" class="text-center">#:ResourceMarketList#</td>
+            <td width="5%" class="text-center"><i class="fa fa-eye editPreSarvyIcon" aria-hidden="true" onclick="ViewContractResource('#:ResourceId#')"></i></td>
+            <td width="5%" class="text-center"><i class="fa fa-pencil editPreSarvyIcon" aria-hidden="true" onclick="EditResource('#:ResourceId#');"></i></td>
+            <td width="5%" class="text-center"><i class="fa fa-trash-o editPreSarvyIcon" aria-hidden="true" onclick="DeleteContractResource('#:ResourceId#')"></i></td>
+        </tr>
+    </script>
+    <script type="text/x-kendo-tmpl" id="TemplateContractSurvey">
+        <tr>
+            <td width="5%"><i class="fa fa-pencil-square-o editPreSarvyIcon" aria-hidden="true"></i></td>
+            <td width="45%">
+                <div style="font-size:15px;">#:SurveyName#</div>
+                <div style="font-size:12px;">
+                    <i>
+                        #if (IsPublished)
+                        {#
+                        Published on: #:PublishDate#
+                        #}else{#
+                        Created on: #:PublishDate#
+                        #}#
+
+
+                    </i>
+                </div>
+                <input type="hidden" value="#:SurveyId#" name="SurveyListContractId">
+                <input type="hidden" value="#:ContractId#" name="SurveyListSurveyId">
+                <input type="hidden" value="#:IsNcpSurvey#" name="SurveyListIsNcpSurvey">
+            </td>
+            #if (!IsPublished)
+            {#
+            <td width="5%" class="text-center"><i class="fa fa-cloud-upload editPreSarvyIcon" aria-hidden="true" onclick="Deploycontractsurvey('#:SurveyId#', '#:ContractId#')"></i></td>
+
+            #}else{#
+
+            <td width="5%" class="text-center">&nbsp;</td>
+
+            #}#
+            <td width="5%" class="text-center"><i class="fa fa-pencil editPreSarvyIcon" aria-hidden="true" onclick="EditContractSurvey('#:SurveyId#', '#:ContractId#', '#:IsNcpSurvey#')"></i></td>
+            <td width="5%" class="text-center"><i class="fa fa-eye editPreSarvyIcon" aria-hidden="true" onclick="ViewContractSurvey('#:SurveyId#','#:ContractId#')"></i></td>
+
+            <td width="5%" class="text-center"><i class="fa fa-clone editPreSarvyIcon" aria-hidden="true" onclick="CopyContractSurvey('#:SurveyId#','#:ContractId#','#:IsNcpSurvey#')"></i></td>
+
+            #if (IsPublished)
+            {#
+            <td width="15%" class="text-center"><a onclick="surveyresponse('#:SurveyId#')">Responses</a></td>
+            #}else{#
+            <td width="15%" class="text-center"><a>Not Published</a></td>
+            #}#
+            <td width="15%" class="text-center">
+                <!-- Develop Pending -->
+                @*<div class="nonClickShowBtn">#:SurveyStatus#</div>*@
+                #if (SurveyStatus.toLowerCase()=="live")
+                {#
+                <div><i class="fa fa-check StatusLiveCheck" aria-hidden="true"></i> #:SurveyStatus#</div>
+                #}else{#
+                <div><i class="fa fa-times StatusCloseTimes" aria-hidden="true"></i> #:SurveyStatus#</div>
+                #}#
+            </td>
+        </tr>
+    </script>
+
+    <script src="@Url.Content("~/Scripts/jquery.scrollTo.min.js")"></script>
+
+    <script src="@Url.Content("~/Scripts/Custom/AdminContractView.js?v="+@DateTime.Now.ToFileTime().ToString())"></script>
+    <script src="@Url.Content("~/Scripts/Custom/ContractResource.js?v="+@DateTime.Now.ToFileTime().ToString())"></script>
+
+    <script src="@Url.Content("~/Scripts/Custom/CustomControl.js?v="+@DateTime.Now.ToFileTime().ToString())"></script>
+    <script src="@Url.Content("~/Scripts/Custom/CustomContromProductList.js?v="+@DateTime.Now.ToFileTime().ToString())"></script>
+    <script src="@Url.Content("~/Scripts/Custom/CustomControlZoneStateList.js?v="+@DateTime.Now.ToFileTime().ToString())"></script>
+}
+

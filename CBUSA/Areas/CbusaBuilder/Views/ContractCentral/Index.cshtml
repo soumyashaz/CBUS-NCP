@@ -1,0 +1,15 @@
+﻿<div id="divContractCentral">
+
+</div>
+<input type="hidden" id="hdnBuilderId" value="@ViewBag.BuilderId" />
+
+@section scripts
+{
+    <script type="text/javascript">
+    var AjaxCallUrl =
+        {
+            ContractLogoListUrl: '@Url.Action("LoadContractLogoList", "ContractCentral", new { Area = "CbusaBuilder" })'
+        };
+    </script>
+    <script src="@Url.Content("~/Scripts/Custom/CbusaBuilder/ContractCentral/ContractCentralIndex.js?v="+@DateTime.Now.ToFileTime().ToString())"></script>
+}

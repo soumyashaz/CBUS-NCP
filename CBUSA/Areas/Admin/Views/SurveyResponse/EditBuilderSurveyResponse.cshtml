@@ -1,0 +1,146 @@
+﻿@using CBUSA.Models;
+@model CBUSA.Areas.Admin.Models.EditSurveyResponseViewModel
+<h3 class="text-center"><u>Edit Survey Response</u></h3>
+<div class="row" id="DivEditBuiderSurveyReponse">
+    <div class="color-upper-text margin-top20"></div>
+    <div class="color-border marginbtm20">
+        @if (Model.ObjSurvey != null)
+        {
+            int Flag = 1;
+            foreach (var Item in Model.QuestionList)
+            {
+                <div id="Div_@Flag">
+                    <div class="row btm-top-margin50 enrollmentSurveyBody">
+                        <div class="col-md-7 enrollSurveyQues">
+                            <div class="form-group">
+                                <label class="control-label">@Item.QuestionValue</label>
+                                <div class="clearfix"></div>
+                            </div>
+                            <div class="form-group">
+                                @if (Item.QuestionTypeId == (int)CBUSA.Domain.EnumQuestionType.TextBox)
+                                {
+                                    @Html.TakeSurveyTextBoxTypeQuestion(Model.ObjSurveyResult.Where(x => x.QuestionId == Item.QuestionId).FirstOrDefault(), (Item.QuestionTextBoxSetting), Flag)
+                                }
+                                else if (Item.QuestionTypeId == (int)CBUSA.Domain.EnumQuestionType.DropList)
+                                {
+                                    @Html.TakeDropListTypeQuestion(Model.ObjSurveyResult.Where(x => x.QuestionId == Item.QuestionId).FirstOrDefault(), (Item.QuestionDropdownSetting))
+                                }
+                                <div class="clearfix"></div>
+                            </div>
+                            <div class="clearfix"></div>
+
+                            @if (Item.QuestionTypeId == (int)CBUSA.Domain.EnumQuestionType.TextBox || Item.QuestionTypeId == (int)CBUSA.Domain.EnumQuestionType.DropList)
+                            {
+                                if (Item.IsFileNeedtoUpload)
+                                {
+                                    string FileContainerName = "File_" + Item.QuestionId;
+                                    <div class="pull-left">
+                                        @(Html.Kendo().Upload()
+                        .Name(FileContainerName)
+                        .HtmlAttributes(new
+                             {
+                                 // validationmessage = "Required",
+                                 data_role = "upload"
+
+                             })
+                        .Multiple(false)
+                        .Async(a => a
+                            .Save("Save", "Survey", new { Area = "AttendSurvey" })
+                            .Remove("Remove", "Survey", new { Area = "AttendSurvey" })
+                            .AutoUpload(true)
+                            .SaveField("files")
+
+                        )
+                        .Events(events =>
+                            {
+                                events.Success("onImageSuccess");
+                                events.Upload("onImageUpload");
+                                events.Select("onSelectContractReourceUpload");
+
+                            })
+
+                                        )
+
+                                        <input type="hidden" name="HdnFileName" />
+                                    </div>
+                                    if (Model.ObjSurveyResult.FirstOrDefault() != null)
+                                    {
+                                        if (Model.ObjSurveyResult.FirstOrDefault().FileName != null)
+                                        {
+                                            <div class="pull-right">
+                                                <i title="" class="fa fa-eye editPreSarvyIcon" aria-hidden="true" onclick="ViewSurveyResultFile('@(Model.ObjSurveyResult.FirstOrDefault().FileName)')"></i>
+                                            </div>
+                                        }
+
+                                    }
+                                }
+                            }
+                        </div>
+                        @if (Item.QuestionTypeId == (int)CBUSA.Domain.EnumQuestionType.Grid)
+                        {
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <div class="table-responsive enrollSurvAnsRequr" style="width:100%;">
+                                            @Html.TakeGridTypeQuestion(Model.ObjSurveyResult.Where(x => x.QuestionId == Item.QuestionId).ToList()
+                                                  , Item.QuestionGridSetting.FirstOrDefault().QuestionGridSettingHeader)
+                                        </div>
+                                        <div class="clearfix"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                    <input type="hidden" name="HdnQuestionType" value="@Item.QuestionTypeId" />
+                    @switch (Item.QuestionTypeId)
+                    {
+                        case 1:    //Text Box Type
+                            <input type="hidden" name="HdnIsMandatory" value="@(Item.IsMandatory.ToString())" />
+                            <input type="hidden" name="HdnIsFileNeedToUpload" value="@(Item.IsFileNeedtoUpload.ToString())" />
+                            break;
+                        case 2:
+                        <input type="hidden" name="HdnIsMandatory" value="@(Item.IsMandatory.ToString())" />
+                        <input type="hidden" name="HdnIsFileNeedToUpload" value="@(Item.IsFileNeedtoUpload.ToString())" />
+                            break;
+                    }
+                    <input type="hidden" name="HdnQuestionId" value="@Item.QuestionId" />
+                    <input type="hidden" name="HdnCurrentQuestionOrder" value="@Flag" />
+                </div>
+                    Flag = Flag + 1;
+
+            }
+        }
+        <ul class="previewSurveyCol"></ul>
+        <div class="block-div">
+            <button type="button" class="btn btn-info pull-right" id="BtnCancelResponse">Cancel</button>
+        </div>
+        <div class="block-div">
+            <button type="button" class="btn btn-info pull-right" id="BtnSaveResponse">Save Response</button>
+        </div>
+        <div class="clearfix"></div>
+    </div>
+</div>
+@Html.Hidden("HdnSurveyId", Model.SurveyId)
+@Html.Hidden("HdnBuilderId", Model.BuilderId)
+
+
+<div id="DivIframeContainer" style="display:none;">
+
+</div>
+
+
+
+
+@section scripts
+{
+    <script type="text/javascript">
+        var AjaxCallUrl =
+                {
+                    EditSurveyResponseByAdminUrl: '@Url.Action("EditSurveyResultByAdmin", "SurveyResponse", new { Area = "Admin" })',
+                    DownLoadFileUrl: '@Url.Action("DownloadResourceFile", "SurveyResponse", new { Area = "Admin" })',
+                    RecallSurveyUrl: '@Url.Action("ShowResponse", "SurveyResponse", new { Area = "Admin", SurveyId = "****SurveyId****" })',
+                };
+    </script>
+    <script src="@Url.Content("~/Scripts/Custom/AdminSurveyResponseEditBuilderSurveyResponse.js?v="+@DateTime.Now.ToFileTime().ToString())"></script>
+
+}

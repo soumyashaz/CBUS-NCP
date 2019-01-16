@@ -1,0 +1,246 @@
+﻿@model CBUSA.Areas.Admin.Models.SurveyViewModel
+
+
+@if (ViewBag.SurveyId != null)
+{
+    <h3>@Session["ContractName"] : @Session["SurveyName"]</h3>
+    @Html.Partial("_SurveyStepHeader", (Int64)ViewBag.SurveyId)
+}
+else
+{
+    @Html.Partial("_SurveyStepHeader", (Int64)0)
+}
+<!-- Start number Step Body -->
+<section class="create_survey-step-body " id="CreateSurveyDetails">
+    @using (Html.BeginForm("SaveSurvey", "Survey", FormMethod.Post, new { id = "FormSaveSurveyDetails" }))
+    {
+        @*@Html.ValidationSummary()*@
+        <div class="row">
+            <div class="col-md-8">
+                <div class="row">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">Contract:</label>
+                        <div class="col-sm-9">
+                            @(Html.Kendo().DropDownListFor(x => x.ContractId)
+                               .DataTextField("ContractName")
+                                  .DataValueField("ContractId")
+            //.OptionLabel("--Select--")
+                        .Events(e =>
+                    {
+
+                        e.Select("SurveyDetails.onSelectContract");
+                        e.DataBound("SurveyDetails.onDataBoundContract");
+                    })
+                           .DataSource(source =>
+                                      {
+                                          source.Read(read =>
+                                          {
+                                              read.Action("GetActivePendingContract", "Survey", new { Area = "Admin" }).Data("SurveyDetails.SendDataBeforeLoadDropDown");
+                                          });
+                                          // .ServerFiltering(true);
+                                      })
+                      .HtmlAttributes(new { @class = "form-control" })
+                                    .Value(Model.ContractId.ToString())
+                            )
+
+                            <div>
+                                <span class="k-invalid-msg" data-for="ContractId"></span>
+                            </div>
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">Survey name:</label>
+                        <div class="col-sm-9">
+                            @*<input class="form-control" type="text">*@
+                            @(Html.Kendo().TextBoxFor(x => x.SurveyName)
+                 .HtmlAttributes(new
+                  {
+                      //required = "required",
+                      @class = "form-control"
+                  })
+
+                            )
+                            <div>
+                                <span class="k-invalid-msg" data-for="SurveyName"></span>
+                            </div>
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label"></label>
+                        <div class="col-sm-9">
+                            <div class="input-group">
+                                <span class="input-group-addon">label</span>
+                                @*<input type="text" class="form-control">*@
+                                @(Html.Kendo().TextBoxFor(x => x.SurveyLabel)
+                 .HtmlAttributes(new
+                  {
+                      // required = "required",
+                      @class = "form-control"
+                  })
+                                )
+                                <div>
+                                    <span class="k-invalid-msg" data-for="SurveyLabel"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
+
+                    @if (Model.IsNcpSurvey)
+                    {
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label"></label>
+                            <div class="col-sm-9">
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <div class="input-group">
+                                            <span class="input-group-addon">Year</span>
+                                            @(Html.Kendo().DropDownListFor(x => x.Year)
+                          .DataTextField("Text")
+                          .DataValueField("Value")
+                    .BindTo(Model.YearList)
+                    .HtmlAttributes(new
+                      {
+                          @class = "form-control"
+
+                      })
+                     .Value(Model.Year)
+                                            )
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="input-group">
+                                            <span class="input-group-addon">Quarter</span>
+                                            @(Html.Kendo().DropDownListFor(x => x.Quater)
+                                              .DataTextField("Text")
+                                              .DataValueField("Value")
+                                        .BindTo(Model.QuaterList)
+                                        .HtmlAttributes(new
+                                          {
+                                              @class = "form-control"
+                                          })
+                                         .Value(Model.Quater)
+                                            )
+
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="clearfix"></div>
+                        </div>
+                    }
+
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">Start date:</label>
+                        <div class="col-sm-9" id="DivSurveyFromDate">
+                            @*<input class="form-control" type="text">*@
+                            @(Html.Kendo().DatePickerFor(x => x.StartDate)
+            .Events(e =>
+            {
+                e.Change("OnchangeFromDate");
+            })
+                       .HtmlAttributes(new
+                       {
+                           // validationmessage = "*",
+                           //@class = "width50",
+                           //required = "required",
+                           //type = "date",
+                           //data_lesserdate = true,
+                           //data_greaterfield = "ContractTo"
+                           data_min = Model.StartDate != null ? Model.StartDate : DateTime.Now.Date,
+                           data_max = Model.EndDate != null ? Model.EndDate : DateTime.Now.Date,
+                           data_futuredate = Model.StartDate != null ? "false" : "true",
+                           data_prevdate = Model.StartDate != null ? Model.StartDate : DateTime.Now.Date,
+                           @class = "form-control"
+
+                       })
+                            )
+                            <div>
+                                <span class="k-invalid-msg" data-for="StartDate"></span>
+                            </div>
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">End date:</label>
+                        <div class="col-sm-9">
+                            @*<input class="form-control" type="text">*@
+                            @(Html.Kendo().DatePickerFor(x => x.EndDate)
+             .Events(e =>
+{
+    e.Change("OnchangeToDate");
+})
+                       .HtmlAttributes(new
+                  {
+                      // validationmessage = "*",
+                      //@class = "width50",
+                      //required = "required",
+                      //type = "date",
+                      //data_lesserdate = true,
+                      //data_greaterfield = "ContractTo"
+                      data_prevdate = Model.EndDate != null ? Model.EndDate : DateTime.Now.Date,
+                      data_futuredate = true,
+                      data_greaterdate = true,
+                      data_lesserfield = "StartDate",
+                      @class = "form-control"
+
+                  })
+                            )
+                            <div>
+                                <span class="k-invalid-msg" data-for="EndDate"></span>
+                            </div>
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
+                    @if (!Model.IsNcpSurvey)
+                    {
+                        <div class="form-group @(ViewBag.IsSurveyPublish == true ? "disabledDiv" :"")">
+                            <label class="col-sm-3 control-label"></label>
+                            <div class="col-sm-9">
+                                @(Html.Kendo().CheckBoxFor(x => x.IsEnrolment).Checked(Model.IsEnrolment)
+                                ) @*<input type="checkbox">*@ Is Enrolment/Committment survey
+                            </div>
+                            <div class="clearfix"></div>
+                        </div>
+                    }
+                </div>
+            </div>
+            <div class="col-md-4"></div>
+        </div>
+        <div class="clearfix"></div>
+        <div class="form-group row margin-top20">
+            <label class="col-sm-2 control-label"></label>
+            <div class="col-sm-10">
+                <button type="button" class="btn btn-info marginLeft5" id="SaveSurvey">Save &amp; Next</button>
+                @*<button type="button" class="btn btn-default new-btn">Reset</button>*@
+            </div>
+            <div class="clearfix"></div>
+        </div>
+        @Html.HiddenFor(x => x.SurveyId, Model.SurveyId)
+        @Html.HiddenFor(x => x.IsEnrollmentChange, 0)
+        @Html.HiddenFor(x => x.IsNcpSurvey, Model.IsNcpSurvey)
+    }
+</section>
+<!-- End number Step Body -->
+
+
+<input type="hidden" value="@ViewBag.IsValidationSummaryMsgAvail" id="HdnValidationSummaryFlag" />
+@*@Html.Hidden("HdnSurveyId", (Int64)ViewBag.SurveyId)*@
+
+<span style="display:none" id="HdnValidationSummaryMsg">
+    @Html.Raw(@ViewBag.IsValidationSummaryMsg)
+</span>
+
+@section scripts
+{
+    <script type="text/javascript">
+        var AjaxCallUrl =
+                {
+                    IsEnrollmentSurveyAvailableUrl: '@Url.Action("IsEnrollmentSurveyAvailable", "Survey", new { Area = "Admin" })',
+                };
+    </script>
+    <script src="@Url.Content("~/Scripts/Custom/AdminSurveySurveyDetails.js?v="+@DateTime.Now.ToFileTime().ToString())"></script>
+}

@@ -1,0 +1,308 @@
+﻿<div class="row maginTop20">
+    <div class="col-sm-3 col-md-2 text-center">
+        <div id="CountdownChart" class="countdownChart"></div>
+    </div>
+    <div class="col-sm-6 col-md-7 chartTable">
+        <div class="chartCont">
+            <table cellspacing="5" cellpadding="15">
+                <tr>
+                    <td class="chartCountCell" style="border:solid 1px #E2A542; background-color:#E2A542">
+                        <h4><span id="spnCompletedReportingCount"></span></h4>
+                        Completed
+                    </td>
+                    <td width="2%"></td>
+                    <td class="chartCountCell" style="border:solid 1px #FAB251; background-color:#FAB251">
+                        <h4><span id="spnInProgressReportingCount"></span></h4>
+                        In Progress
+                    </td>
+                    <td width="2%"></td>
+                    <td class="chartCountCell" style="border:solid 1px #FAED51; background-color:#FAED51">
+                        <h4><span id="spnNotStartedReportingCount"></span></h4>
+                        Not Started
+                    </td>
+                    <td width="2%"></td>
+                    <td class="chartCountCell" style="border:solid 1px #CCC7C6; background-color:#CCC7C6">
+                        <h4><span id="spnTotalReportingCount"></span></h4>
+                        Total
+                    </td>
+                </tr>
+            </table>
+            <div id="ProgressChart"></div>
+        </div>
+    </div>
+    <div class="col-sm-3 col-md-3 chartButtons">
+        <div id="divBurndownChart"></div>
+        <a id="lnkSetQuarterEmailTemplate" class="btn btn-info marg-lr-0 marg-b-5" style="padding-left:36px!important;padding-right:36px!important;">Set Email Template</a><br />
+        <a id="lnkSetReportingWindow" class="btn btn-info marg-lr-0 marg-b-5">Set Reporting Window</a><br />
+        <a id="lnkSetQuarterReminder" class="btn btn-info marg-lr-0">Set Quarter Reminders</a>
+    </div>
+    <div class="clearfix"></div>
+</div>
+
+<div class="block-div row maginTop10">
+    <div class="col-md-4">
+        <div class="dbColHead"><i class="fa fa-sign-out editPreSarvyIcon" id="BtnExportExcelStarted" title="Download Excel" onclick="$('#GetNotStartedGrid').tableExport({ headerOne: 'Not Started', type: 'excel', escape: 'false'});"></i><p>No Responses</p><div class="clearfix"></div></div>
+        <div class="table-responsive croseDivSecondAfterFirst dbColGrid">
+            <table class="table" id="GetNotStartedGrid">
+                @(Html.Kendo().ListView<CBUSA.Areas.Admin.Models.DashboardBuilderListViewModel>()
+                                                .Name("listViewNotStartedBuilderList")
+                                                .TagName("tbody")
+                                                .ClientTemplateId("TemplateBuilderDetails")
+                                                .Pageable(pageable => pageable.Enabled(false))
+                                                .DataSource(dataSource =>
+                                                {
+                                                    dataSource.Read(read => read.Action("GetDetailsOfNotStartedBuilders", "Dashboard"));
+                                                })
+                                                .AutoBind(true)
+                )
+            </table>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="dbColHead"><i class="fa fa-sign-out editPreSarvyIcon" id="BtnExportExcel" title="Download Excel" onclick="$('#GetInProgressGrid').tableExport({ headerOne: 'In Progress', type: 'excel', escape: 'false'});"></i><p>Reporting in Progress</p><div class="clearfix"></div></div>
+        <div class="table-responsive croseDivSecondAfterFirst dbColGrid">
+            <table class="table" id="GetInProgressGrid">
+                @(Html.Kendo().ListView<CBUSA.Areas.Admin.Models.DashboardBuilderListViewModel>()
+                                                .Name("listViewInProgressBuilderList")
+                                                .TagName("tbody")
+                                                .ClientTemplateId("TemplateBuilderDetails")
+                                                .Pageable(pageable => pageable.Enabled(false))
+                                                .DataSource(dataSource =>
+                                                {
+                                                    dataSource.Read(read => read.Action("GetDetailsOfInProgressBuilders", "Dashboard"));
+                                                })
+                                                .AutoBind(true)
+                )
+            </table>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="dbColHead"><i class="fa fa-sign-out editPreSarvyIcon" id="BtnExportExcelCom" title="Download Excel" onclick="$('#GetCompletedGrid').tableExport({ headerOne: 'Completed', type: 'excel', escape: 'false'});"></i><p>Reporting Complete</p><div class="clearfix"></div></div>
+        <div class="table-responsive croseDivSecondAfterFirst dbColGrid">
+            <table class="table" id="GetCompletedGrid">
+                @(Html.Kendo().ListView<CBUSA.Areas.Admin.Models.DashboardBuilderListViewModel>()
+                                                .Name("listViewReportingCompletedBuilderList")
+                                                .TagName("tbody")
+                                                .ClientTemplateId("TemplateBuilderDetails")
+                                                .Pageable(pageable => pageable.Enabled(false))
+                                                .DataSource(dataSource =>
+                                                {
+                                                    dataSource.Read(read => read.Action("GetDetailsOfReportingCompletedBuilders", "Dashboard"));
+                                                })
+                                                .AutoBind(true)
+                )
+            </table>
+        </div>
+    </div>
+</div>
+<div class="clearfix"></div>
+<br /><br />
+<div class="clearfix"></div>
+<div class="block-div maginTop10">
+    <div id="grdBuilderContractProject">
+        <table>
+            <tr>
+                <td>
+                    <div id="GrdBuilderContractProjectHierarchy"></div>
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>
+
+<input type="hidden" id="hdnSelectedQuarterId" value="" />
+
+<!-- Start Quarter Email Template Window popup -->
+<div id="divSetQuarterEmailTemplate" class="modal fade" role="dialog">
+    <div class="modal-dialog quarter-reminder">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"> x </button>
+                <h4 class="modal-title">Set Invitation/Reminder Email Template</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="form-group">
+                        <div class="col-sm-6">
+                            <label class="control-label" style="font-weight:bold;text-align:center">Invitation Email Template:</label>
+                            <input type="text" id="txtInvitationEmailSubject" class="form-control" placeholder="Enter Invitation Email Subject Line" value="@ViewBag.QuarterInvitationEmailSubject" /><br />
+                            <textarea id="txtInvitationEmailTemplate" class="form-control" style="width:100%;height:250px;" rows="10" cols="30">@ViewBag.QuarterInvitationEmailTemplate</textarea>
+                        </div>
+
+                        <div class="col-sm-6">
+                            <label class="control-label" style="font-weight:bold;text-align:center">Reminder Email Template:</label>
+                            <input type="text" id="txtReminderEmailSubject" class="form-control" placeholder="Enter Reminder Email Subject Line" value="@ViewBag.QuarterReminderEmailSubject" /><br />
+                            <textarea id="txtReminderEmailTemplate" class="form-control" style="width:100%;height:250px;" rows="10" cols="30">@ViewBag.QuarterReminderEmailTemplate</textarea>
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-info" id="btnSaveEmailTemplates" onclick="SaveQuarterEmailTemplate()">SAVE</button>
+                    <button type="button" class="btn btn-default new-btn" onclick="CloseEmailTemplateWindowPopup()">CLOSE</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- End Quarter Email Template Window popup -->
+
+<!-- Start Reporting Window popup -->
+<div id="divSetReportingWindow" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"> x </button>
+                <h4 class="modal-title">Reporting Window</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="form-group">
+                        <div class="col-sm-5">
+                            <label class="control-label" style="font-weight:bold;text-align:center">Start Date:</label><br />
+                            <div id="divClnReportingStartDate" style="width:100%;"></div>
+                        </div>
+
+                        <div class="col-sm-5">
+                            <label class="control-label" style="font-weight:bold;text-align:center">End Date:</label><br />
+                            <div id="divClnReportingEndDate" style="width:100%;"></div>
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-info" id="btnApplyReportingWindow" onclick="SaveReportingWindow()">Apply</button>
+                    <button type="button" class="btn btn-default new-btn" onclick="CloseReportingWindowPopup()">CLOSE</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- End Reporting Window popup -->
+
+<!-- Start Quarter Reminder Window popup -->
+<div id="divSetQuarterReminder" class="modal fade" role="dialog">
+    <div class="modal-dialog quarter-reminder">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"> x </button>
+                <h4 class="modal-title">Set Reminder Email Dates for Current Reporting Quarter</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="form-group">
+                        <div class="col-sm-5">
+                            <label class="control-label" style="font-weight:bold;text-align:center">First Reminder Date:</label><br />
+                            <div id="divClnReminderDate1" data-reminder-name="ReminderDate1"></div>
+                        </div>
+
+                        <div class="col-sm-5">
+                            <label class="control-label" style="font-weight:bold;text-align:center">Second Reminder Date:</label><br />
+                            <div id="divClnReminderDate2" data-reminder-name="ReminderDate2"></div>
+                        </div>
+
+                        <div class="col-sm-5">
+                            <label class="control-label" style="font-weight:bold;text-align:center">Third Reminder Date:</label><br />
+                            <div id="divClnReminderDate3" data-reminder-name="ReminderDate3"></div>
+                        </div>
+
+                        <div class="col-sm-5">
+                            <label class="control-label" style="font-weight:bold;text-align:center">Fourth Reminder Date:</label><br />
+                            <div id="divClnReminderDate4" data-reminder-name="ReminderDate4"></div>
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-info" id="btnApplyQuarterReminder" onclick="SaveQuarterReminder()">Apply</button>
+                    <button type="button" class="btn btn-default new-btn" onclick="CloseQuarterReminderWindowPopup()">CLOSE</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- End Quarter Reminder Window popup -->
+
+@section scripts
+{
+<script type="text/x-kendo-tmpl" id="TemplateBuilderDetails">
+    
+    <tr>
+        <td width="100%" class="text-center">
+            <table style="width:100%">
+                <tr>
+                    <td class="text-left" width="50%">#:BuilderName#</td>
+                    <td class="text-right" width="50%">#:ContractStatus#</td>
+                </tr>
+                <tr>
+                    <td class="text-left" width="50%">#:MarketName#</td>
+                    <td class="text-right" width="50%">#:LastActivityDate#</td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+</script>
+    <script type="text/x-kendo-tmpl" id="TemplateHierarchyGridToolBar">
+        <div class="block-div row maginTop10 ">
+            <div class="col-md-3">
+                <span class="blackButtonIcontext pull-left">BUILDERS, CONTRACTS, &amp; PROJECTS</span>
+            </div>
+            <div class="col-md-2">
+                <div class="customAddWorkItemList">
+                    <span>Show:</span>
+                    <a role="button" id="ChkComplete" data-value="1" class="AddTask" title="Completely Finished Reporting"><span class="fa fa-check-circle-o redText"></span></a>
+                    <a role="button" id="ChkProgress" data-value="2" class="AddTask" title="Reporting In Progress"><span class="fa fa-check-circle-o blue"></span></a>
+                    <a role="button" id="ChkNotStarted" data-value="0" class="AddTask" title="Reporting Not Started"><span class="fa fa-check-circle-o "></span></a>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <span class="searchContPerson">
+                    <input type="search" id="SearchBoxForBuilderContract" class="k-textbox width60" placeholder="Search Member,Contract or Contract Name" />&nbsp;<button title="Search Member, Contract or Contract Name" id="SearchButtonForBuilderContract" class="k-button k-button-icontext">Search</button>
+                </span>
+                <a role="button" class="k-button k-button-icontext k-grid-excel"><span class="k-icon k-i-file-excel"></span>Export</a>
+                <input type="button" name="Reset" id="BtnResetFilter" title="Reset" class="k-button k-button-icontext" value="Reset" />
+
+            </div>
+        </div>
+
+
+    </script>
+    <script type="text/javascript">
+    var AjaxCallUrl =
+        {
+            GetHolidayList: '@Url.Action("GetHolidayList", "Dashboard", new { Area = "Admin", QuarterId = "quarterId" })',
+            GetReportingWindow: '@Url.Action("GetReportingWindow", "Dashboard", new { Area = "Admin", QuarterId = "quarterId" })',
+            SetReportingWindow: '@Url.Action("SetReportingWindow", "Dashboard", new { Area = "Admin", QuarterId = "quarterId" })',
+            GetQuarterReminderDates: '@Url.Action("GetQuarterReminderDates", "Dashboard", new { Area = "Admin", QuarterId = "quarterId" })',
+            SetQuarterReminderDates: '@Url.Action("SetQuarterReminderDates", "Dashboard", new { Area = "Admin", QuarterId = "quarterId" })',
+            SetQuarterEmailTemplates: '@Url.Action("SetQuarterEmailTemplates", "Dashboard", new { Area = "Admin", QuarterId = "quarterId" })',
+            GetCountdownStatistics: '@Url.Action("GetReportingDaysRemaining", "Dashboard", new { Area = "Admin", QuarterId = "quarterId" })',
+            GetReportingStatistics: '@Url.Action("GetReportingStatistics", "Dashboard", new { Area = "Admin", QuarterId = "quarterId" })',
+            GetBurndownStatistics: '@Url.Action("FetchBurndownStatistics", "Dashboard", new { Area = "Admin", QuarterId = "quarterId" })',
+            GetDetailsOfNotStartedBuilders: '@Url.Action("GetDetailsOfNotStartedBuilders", "Dashboard", new { Area = "Admin", QuarterId = "quarterId" })',
+            GetDetailsOfAllBuilderContractsForCurrentQuarter: '@Url.Action("GetDetailsOfAllBuilderContractsForCurrentQuarter", "Dashboard", new { Area = "Admin"})',
+            GetDetailsOfAllProjectByBuilderContractsForCurrentQuarter: '@Url.Action("GetDetailsOfAllProjectByBuilderContractsForCurrentQuarter", "Dashboard", new { Area = "Admin" })',
+            GetDetailsOfAllProjectByBuilderContractsForCurrentQuarterByQuater: '@Url.Action("GetDetailsOfAllProjectByBuilderContractsForCurrentQuarterByQuater", "Dashboard", new { Area = "Admin" })',
+            GetDetailsOfReportingCompletedBuilders: '@Url.Action("GetDetailsOfReportingCompletedBuilders", "Dashboard", new { Area = "Admin" })',
+            GetDetailsOfInProgressBuilders:'@Url.Action("GetDetailsOfInProgressBuilders", "Dashboard", new { Area = "Admin" })',
+            GetDetailsOfNotStartedBuilders:'@Url.Action("GetDetailsOfNotStartedBuilders", "Dashboard", new { Area = "Admin" })',
+        };
+    </script>
+    <link rel="stylesheet" href="https://kendo.cdn.telerik.com/2018.1.221/styles/kendo.common.min.css" />
+    <link rel="stylesheet" href="https://kendo.cdn.telerik.com/2018.1.221/styles/kendo.rtl.min.css" />
+    <link rel="stylesheet" href="https://kendo.cdn.telerik.com/2018.1.221/styles/kendo.silver.min.css" />
+    <link rel="stylesheet" href="https://kendo.cdn.telerik.com/2018.1.221/styles/kendo.mobile.all.min.css" />
+
+
+    <script src="https://kendo.cdn.telerik.com/2018.1.221/js/jszip.min.js"></script>
+    <script src="https://kendo.cdn.telerik.com/2018.1.221/js/kendo.all.min.js"></script>
+    <script src="@Url.Content("~/Scripts/moment.js")"></script>
+    <script src="@Url.Content("~/Scripts/Custom/Admin/Dashboard/AdminDashboard.js?v="+@DateTime.Now.ToFileTime().ToString())"></script>
+    <script src="~/Scripts/GeneralTableExport.js"></script>
+    <script src="~/Scripts/Custom/jquery.base64.js"></script>
+
+
+}

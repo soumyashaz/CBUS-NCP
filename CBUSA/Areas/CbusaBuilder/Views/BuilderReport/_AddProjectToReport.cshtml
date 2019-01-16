@@ -1,0 +1,102 @@
+﻿@using CBUSA.Models;
+@model CBUSA.Areas.CbusaBuilder.Models.BuilderReportViewModel
+
+@if (Model.ProjectList != null)
+{
+    foreach (var Item in Model.ProjectList)
+    {
+
+        <tr id="Tr_@Item.ProjectId">
+            <td class="text-left">@(Item.ProjectName + " ," + " ," + Item.LotNo + " ," + Item.State + " ," + Item.Address)</td>
+            @foreach (var ItemChild in Model.QuestionList)
+            {
+                <td class="text-center" data-role="TdAdminReport" id="TdMain_@(Item.ProjectId + ItemChild.QuestionId)">
+                    @if (ItemChild.QuestionTypeId == (int)CBUSA.Domain.EnumQuestionType.TextBox)
+                    {
+
+                        CBUSA.Areas.CbusaBuilder.Models.BuilderReportSubmitViewModel Result = Model.SubmitReport.Where(x => x.QuestionId == ItemChild.QuestionId && x.ProjectId == Item.ProjectId).FirstOrDefault();
+                        string Value = Result != null ? Result.Answer : "";
+                        @Html.AdminReportTextBoxTypeQuestion((ItemChild.QuestionTextBoxSetting), ItemChild.SurveyOrder, Item.ProjectId, Value)
+                    }
+                    else if (ItemChild.QuestionTypeId == (int)CBUSA.Domain.EnumQuestionType.DropList)
+                    {
+                        CBUSA.Areas.CbusaBuilder.Models.BuilderReportSubmitViewModel Result = Model.SubmitReport.Where(x => x.QuestionId == ItemChild.QuestionId && x.ProjectId == Item.ProjectId).FirstOrDefault();
+                        string Value = Result != null ? Result.Answer : "";
+                        @Html.AdminReportDropListTypeQuestion(ItemChild.QuestionDropdownSetting, Value)
+                    }
+                    else
+                    {
+                        List<CBUSA.Areas.CbusaBuilder.Models.BuilderReportSubmitViewModel> ResultList = Model.SubmitReport.Where(x => x.QuestionId == ItemChild.QuestionId && x.ProjectId == Item.ProjectId).ToList();
+                        @Html.AdminReportGridTypeQuestion(ItemChild.QuestionGridSetting.FirstOrDefault().QuestionGridSettingHeader, ResultList)
+                    }
+
+                    @if (ItemChild.QuestionTypeId == (int)CBUSA.Domain.EnumQuestionType.TextBox || ItemChild.QuestionTypeId == (int)CBUSA.Domain.EnumQuestionType.DropList)
+                    {
+                        if (ItemChild.IsFileNeedtoUpload)
+                        {
+                            string FileContainerName = "File_" + Item.ProjectId + ItemChild.QuestionId;
+
+                            @(Html.Kendo().Upload()
+                    .Name(FileContainerName)
+                    .HtmlAttributes(new
+                    {
+                            // validationmessage = "Required",
+                            data_role = "upload"
+                    })
+                   // .Multiple(false)
+                    .Async(a => a
+                        .Save("Save", "BuilderReport", new { Area = "CbusaBuilder" })
+                        .Remove("Remove", "BuilderReport", new { Area = "CbusaBuilder" })
+                        .AutoUpload(true)
+                        .SaveField("files")
+
+                    )
+                    .Events(events =>
+                    {
+                        events.Success("onImageSuccess");
+                        events.Upload("onImageUpload");
+                        events.Select("onSelectContractReourceUpload");
+
+                    })
+
+                            )
+
+                            CBUSA.Areas.CbusaBuilder.Models.BuilderReportSubmitViewModel Result = Model.SubmitReport.Where(x => x.QuestionId == ItemChild.QuestionId && x.ProjectId == Item.ProjectId).FirstOrDefault();
+
+                            if (Result != null)
+                            {
+                                if (Result.FileName != null)
+                                {
+                                    <div class="pull-right">
+                                        <i title="" class="fa fa-eye editPreSarvyIcon" aria-hidden="true" onclick="ViewNcpRebateResultFile('@(Result.FileName)')"></i>
+                                    </div>
+                                }
+
+                            }
+
+                        }
+                    }
+
+
+
+                    <input type="hidden" name="HdnQuestionType" value="@ItemChild.QuestionTypeId" />
+                    @switch (ItemChild.QuestionTypeId)
+                    {
+                        case 1:    //Text Box Type
+                            <input type="hidden" name="HdnIsMandatory" value="@(ItemChild.IsMandatory.ToString())" />
+                            <input type="hidden" name="HdnIsFileNeedToUpload" value="@(ItemChild.IsFileNeedtoUpload.ToString())" />
+                            break;
+                        case 2:
+                            <input type="hidden" name="HdnIsMandatory" value="@(ItemChild.IsMandatory.ToString())" />
+                            <input type="hidden" name="HdnIsFileNeedToUpload" value="@(ItemChild.IsFileNeedtoUpload.ToString())" />
+                            break;
+                    }
+                    <input type="hidden" name="HdnQuestionId" value="@ItemChild.QuestionId" />
+                    <input type="hidden" name="HdnProjectId" value="@Item.ProjectId" />
+                    <input type="hidden" name="HdnFileName" value="" />
+
+                </td>
+            }
+        </tr>
+    }
+}

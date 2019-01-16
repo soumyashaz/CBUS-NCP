@@ -1,0 +1,61 @@
+﻿@model CBUSA.Areas.CbusaBuilder.Models.AddProjectStatusViewModel
+<div class="modal-body" id="DivContractStatus">
+    <div class="row">       
+        <div class="form-group">            
+            <div class="col-sm-12">
+                <div class="table-responsive marginbtm20">
+                        <table class="table">
+                            <thead class="thead-bg">
+                                <tr style="width:1140px">
+                                    <th width="2%" class="text-center verticalAlignMiddle">#</th>
+                                    <th width="5%" class="text-center verticalAlignMiddle">
+                                        Select
+                                        @*<input type="checkbox" id="ckbCheckAllPrevProj">*@
+                                    </th>
+                                    <th width="93%" class="text-center">Project</th>
+
+                                </tr>
+                            </thead>
+                            @(Html.Kendo().ListView<CBUSA.Areas.CbusaBuilder.Models.AddProjectStatusViewModel>()
+                            .Name("listViewPrevRptProject")
+                            .TagName("tbody")
+                            .ClientTemplateId("TemplatePrevRptProject")
+                            .DataSource(dataSource =>
+                            {
+                                dataSource.Read(read => read.Action("listViewPrevRptProject_read", "Project", new { Area = "CbusaBuilder" }).Data("SendParaToLoadPrevRptPrjGrid"));
+                            })
+                            .AutoBind(true)
+                            )
+
+                        </table>
+                    </div>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+    </div>
+    <div class="clearfix"></div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-info" id="ReopenPrevProj">Re - Open</button>
+        <button type="button" class="btn btn-default new-btn" id="CancelPrevProj">Close</button>
+
+    </div>
+</div>
+
+<input type="hidden" name="hdnReopenQuaterid" id="hdnReopenQuaterId" value="@Model.QuaterId" />
+<input type="hidden" name="hdnReopenContractId" id="hdnReopenContractId" value="@Model.ContractId" />
+<input type="hidden" name="hdnReopenBuilderId" id="hdnReopenBuilderId" value="@Model.BuilderId" />
+
+<script type="text/x-kendo-tmpl" id="TemplatePrevRptProject">
+
+    <tr id="tr#=ProjectId#">
+        <td width="2%" class="text-center verticalAlignMiddle">
+            <span id="spnRowNumber">#:rowcount#</span>
+        </td>
+        <td width="5%" class="text-center verticalAlignMiddle checkBoxClass">
+            <input type="checkbox" class="checkBoxClass" name="ChkPrevRptProject">
+            <input type="hidden" name="HdnReopenProject" value="#:ProjectId#" />
+        </td>
+        <td width="93%" class="text-center verticalAlignMiddle">#:ProjectName#</td>
+    </tr>
+
+ </script>

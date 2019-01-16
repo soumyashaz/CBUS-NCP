@@ -1,0 +1,96 @@
+﻿@using CBUSA.Models
+@model CBUSA.Areas.CbusaBuilder.Models.BuilderReportViewModel
+
+<div id="BuilderContractQuaterReport">
+
+
+
+
+    @*<div class="row margin-top20 btm-top-padding15">
+        @if (Model.ContractIcon != null)
+        {
+            @Html.ShowLogo(Model.ContractIcon, new { @class = "wayne-dalton-logo" })
+        }
+        else
+        {
+            <img src="@Url.Content("~/content/images/default.png")" id="ContractLogo" style="width:50%;height:100px;" />
+        }
+        @*<img src="../content/images/wayne-dalton.png" class="wayne-dalton-logo" alt="CBUSA" />
+
+        <div class="wayne-dalton-title">
+            <h3 class="text-upper">NPC Quarterly Rebate Report - @Model.QuaterName</h3>
+            <h4>@Model.ContractName</h4>
+        </div>
+
+    </div>*@
+    @*<div class="row">
+        <p><strong>Please report units for each project below.</strong></p>
+        <p>+ If you do not find the project listed below, please make sure that you have marked it as 'Report units for this Quater' in the previous screen.</p>
+        <p>+ If you still do not see the project, please click the 'Add new project' link.</p>
+    </div>*@
+    <div class="row">
+        @*<div class="row btm-top-padding15">
+            <div class="col-md-8 margin-top5">
+                <div class="col-md-6 margin-top5"><strong>Select projects(s) you want to report the units for:</strong></div>
+                <div class="col-md-6 classproject reportUnitsDropSelect">
+                    <div class="CustomControl-Div-Parent" data-role='buildercontracproject' id="DivBuilderContractProject">
+                        <div class="CustomControl-Div" id="DivBuilderContractProjectHeader" style="height:36px;">
+                            <span class="k-select select-arrow" id="DivBuilderContractProjectDropdown"><span class="k-icon k-i-arrow-s">select</span></span>
+                        </div>
+                    </div>
+                    @*<span class="k-invalid-msg" data-for="DivProduct"></span>
+                        <input type="hidden" id="ProductIdHistory" />
+                </div>
+            </div>
+            <div class="col-md-4">Did not find the project? <button type="button" class="btn btn-default new-btn" id="addproj">Add Project</button></div>
+            <div class="clearfix"></div>
+        </div>*@
+
+        <div id="DivAdminReportGenarate" style="min-height:200px;">
+            @*This div is used for render admin report*@
+        </div>
+        <div class="row btm-top-padding15">
+            <div class="col-md-12">
+                @*<button type="button" class="btn btn-default new-btn" id="BtnBack">Back</button>*@
+                <button type="button" class="btn btn-info" id="BtnSave">Save</button>
+                @*<button type="button" class="btn btn-default new-btn" id="BtnCancel">Cancel</button>*@
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="DivIframeContainer" style="display:none;">
+
+</div>
+
+@Html.Hidden("HdnBuilderId", Model.BuilderId)
+@Html.Hidden("HdnContractId", Model.ContractId)
+@Html.Hidden("HdnQuaterId", Model.QuaterId)
+@Html.Hidden("HdnEditReportBuilder", 1)
+@Html.Hidden("HdnSurveyId", Model.SurveyId)
+
+@section scripts
+{
+    <script type="text/javascript">
+
+        var AjaxCallUrl =
+            {
+                CustomProjectControlUrl: '@Url.Action("RenderProjectDropdown", "BuilderReport", new { Area = "CbusaBuilder" })',
+                LoadBuilderReportViewUrl: '@Url.Action("LoadAdminReport", "BuilderReport", new { Area = "CbusaBuilder" })',
+                AddBuilderReportViewUrl: '@Url.Action("LoadAdminReport", "BuilderReport", new { Area = "CbusaBuilder" })',
+                SaveBuilderReportUrl: '@Url.Action("SaveAdminReport", "BuilderReport", new { Area = "CbusaBuilder" })',
+                DownLoadFileUrl: '@Url.Action("DownloadResourceFile", "BuilderReport", new { Area = "CbusaBuilder" })',
+                BackUrl: '@Url.Action("AddProjectStatus", "Builder", new { Area = "CbusaBuilder", ContractId="****ContractId****" })',
+                CancelUrl: '@Url.Action("RegularReporting", "Builder", new { Area = "CbusaBuilder" })',
+                //AddProjectRedirectUrl: '@Url.Action("AddProject", "Project", new { Area = "CbusaBuilder",ContractId=@ViewBag.Contract,status = 1})',
+                AddProjectRedirectUrl: '@Url.Action("AddProject", "Project", new { Area = "CbusaBuilder",ContractId=@ViewBag.Contract,status="2" } )',
+                RegularReportingUrl: '@Url.Action("RegularReporting", "Builder", new { Area = "CbusaBuilder" })',
+                 AdminNcpSurveyRebateReport: '@Url.Action("ShowResponse", "SurveyResponse", new { SurveyId = "****SurveyId****" })'
+            };
+
+
+    </script>
+
+    <script src="@Url.Content("~/Scripts/Custom/CustomControlProject.js?v="+@DateTime.Now.ToFileTime().ToString())"></script>
+    <script src="@Url.Content("~/Scripts/Custom/CbusaBuilderBuilderReportSubmitReport.js?v="+@DateTime.Now.ToFileTime().ToString())"></script>
+}

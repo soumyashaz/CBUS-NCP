@@ -1,0 +1,166 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Index</title>
+    <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet" type="text/css">
+    <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+    @Scripts.Render("~/bundles/modernizr")
+    <link rel="stylesheet" href="@Url.Content("~/Content/css/font-awesome.min.css")" type="text/css">
+    <link href="@Url.Content("~/Content/kendo/2016.2.607/kendo.common.min.css")" rel="stylesheet" type="text/css" />
+    <link href="@Url.Content("~/Content/kendo/2016.2.607/kendo.mobile.all.min.css")" rel="stylesheet" type="text/css" />
+    <link href="@Url.Content("~/Content/kendo/2016.2.607/kendo.dataviz.min.css")" rel="stylesheet" type="text/css" />
+    <link href="@Url.Content("~/Content/kendo/2016.2.607/kendo.default.min.css")" rel="stylesheet" type="text/css" />
+    <link href="@Url.Content("~/Content/kendo/2016.2.607/kendo.dataviz.default.min.css")" rel="stylesheet" type="text/css" />
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/kendo")
+    @Scripts.Render("~/bundles/kendoOther")
+    @Styles.Render("~/Content/css/style")
+
+    <script src="https://kendo.cdn.telerik.com/2018.1.221/js/jszip.min.js"></script>
+    <script src="https://kendo.cdn.telerik.com/2018.1.221/js/kendo.all.min.js"></script>
+    <script src="@Url.Content("~/Scripts/Custom/CbusaBuilder/Dashboard/BuilderNcpDashboard.js?v="+@DateTime.Now.ToFileTime().ToString())"></script>
+    <script type="text/javascript">
+        var AjaxCallUrl =
+            {
+                UpdateNoReportSelectedContract: '@Url.Action("UpdateNoReportToContract", "Project", new { Area = "CbusaBuilder" })',
+                UpdateNoReportAllContract: '@Url.Action("UpdateNoReportAllContract", "Project", new { Area = "CbusaBuilder" })'
+            };
+    </script>
+</head>
+<body>
+    <div id="CreateContract">
+        <div class="main-body-wrapper" id="divNCPBuilderDashboard">
+            <div class="container" style="width:100%;">
+                <div class="row">
+                    <div class="col-sm-12 quartReporTitel">Contracts Joined [@ViewBag.TotalContracts]</div>
+                </div>
+                <div class="slideshow-container">
+                    @for (int i = 0; i < ViewBag.TotalPages; i++)
+                    {
+                        <div id="divSlides_@(i+1)" class="mySlides">
+                            <ul class="sliderListImg">
+                                <li><img src="@ViewBag.ContractLogos[(i * 4) + 0]" class="wayne-dalton-logo2"></li>
+                                <li><img src="@ViewBag.ContractLogos[(i * 4) + 1]" class="wayne-dalton-logo2"></li>
+                                <li><img src="@ViewBag.ContractLogos[(i * 4) + 2]" class="wayne-dalton-logo2"></li>
+                                <li><img src="@ViewBag.ContractLogos[(i * 4) + 3]" class="wayne-dalton-logo2"></li>
+                            </ul>
+                        </div>
+                    }
+
+                    @if (ViewBag.TotalPages > 1)
+                    {
+                        <!-- Next and previous buttons -->
+                        <a class="prev" onclick="plusSlides(-1)">&#10094;</a>
+                        <a class="next" onclick="plusSlides(1)">&#10095;</a>
+                    }
+
+                    <div class="clearfix"></div>
+                </div>
+                <div class="btm-top-padding15">
+                    <div class="row">
+                        <div class="col-sm-5" style="width: 35.5%;">
+                            @if (ViewBag.CountOfContractsCanJoin > 0)
+                            {
+                                <i class="fa fa-search-plus colorGray"></i> <a style="font-size:12px;color:#777777;" id="lnkContractsCanJoin" href="@Url.Action("ContractMayjoin", "Builder", new { Area = "CbusaBuilder" })" target="_blank">View <span id="spnNumOfContractsCanJoin">@ViewBag.CountOfContractsCanJoin</span> Other Contracts You can Join</a>
+                            }
+                            else
+                            {
+                                <a href="@Url.Action("ContractMayjoin", "Builder", new { Area = "CbusaBuilder" })" target="_blank">No other contracts to join</a>
+                            }
+                        </div>
+                        <div class="col-sm-6" style="width:40%">
+                            <i class="fa fa-download colorGray"></i> <a class="" id="lnkDownloadReportingWorksheetPdf" style="font-size:12px;color:#777777;" href="@Url.Action("DownloadPreReportingWorksheet", "Dashboard", new { BuilderId = ViewBag.BuilderId })" target="_blank">Download Reporting Worksheet &amp; Instructions</a>
+                        </div>
+                        <div class="col-sm-3 pull-right" style="width: 23.2%;">
+                            <a id="lnkContractsCentral" href="@Url.Action("Dashboard", "Builder", new { Area = "CbusaBuilder" })" target="_blank" class="btn btn-default changeBtn">CONTRACTS CENTRAL</a>
+                        </div>
+                    </div>
+                </div>
+
+                <input type="hidden" id="hdnIFrmHeight" value="@(ViewBag.IsReportingPeriodOn ? 500 : 240)" />
+
+                @if (ViewBag.IsReportingPeriodOn == true)
+                {
+                    <div class="">
+                        <div class="row" style="height:200px">
+                            <div class="col-sm-12 quartReporTitel">Quarterly Reporting - @ViewBag.ReportingQuarter @ViewBag.ReportingYear</div>
+                            <div class="quarterlyReportGrid">
+                                <input type="hidden" id="hdnIsReportSubmitted" value="@ViewBag.IsReportSubmitted" />
+                                <table>
+                                    <tr>
+                                        <th style="text-align:center">Reporting Ends</th>
+                                        <th style="text-align:center">Percent Complete</th>
+                                        <th style="text-align:center">Contract Reporting Statuses</th>
+                                        <th style="text-align:center">Project Archiving Opportunities</th>
+                                    </tr>
+                                    <tr>
+                                        <td style="vertical-align:top">
+                                            <div class="reportEnd">
+                                                <i class="fa fa-calendar-o" style="cursor:default"></i>
+                                                <span id="spnReportingEndMonth">@ViewBag.ReportingEndMonth</span>
+                                                <span id="spnReportingEndDay">@ViewBag.ReportingEndDay</span>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div id="divGauge"></div>
+                                        </td>
+                                        <td>
+                                            <div id="divReportingStatus" class="reportStatusChat" style="position:absolute;z-index:-90;margin-top:-42px;margin-left:-42px;"></div>
+                                            <div id="divReportingStatusLegend" class="reportStatusChat" style="position:absolute;z-index:-90;margin-top:-115px;margin-left:100px;font-size:11px;color:#0e2d50;">
+                                                <div><div style="float:left;margin-top:5px;width:9px;height:9px;border:1px solid #3d9968;background-color:#3d9968;"></div>&nbsp;<div style="float:left;padding-left: 5px;">Report Submitted</div></div>
+                                                <div><div style="float:left;margin-top:5px;width:9px;height:9px;border:1px solid #0e2d50;background-color:#0e2d50;"></div>&nbsp;<div style="float:left;padding-left: 5px;">Completed (<span id="spnCompletedCount"></span>)</div></div>
+                                                <div><div style="float:left;margin-top:5px;width:9px;height:9px;border:1px solid #58cff5;background-color:#58cff5;"></div>&nbsp;<div style="float:left;padding-left: 5px;">In Progress (<span id="spnInProgressCount"></span>)</div></div>
+                                                <div><div style="float:left;margin-top:5px;width:9px;height:9px;border:1px solid #d3d3d3;background-color:#d3d3d3;"></div>&nbsp;<div style="float:left;padding-left: 5px;">Not Started (<span id="spnNotStartedCount"></span>)</div></div>
+                                            </div>
+                                            <div id="divNoReportableContract" style="position:relative;width:250px;height:250px; top:20px; left:100px; display:none">
+                                                <span style="font-size:30px;color:#a3a3a3">N/A</span>
+                                            </div>
+                                            <input type="hidden" id="hdnContractReportCompleted" value="@ViewBag.ContractReportCompleted" />
+                                            <input type="hidden" id="hdnContractReportInProgress" value="@ViewBag.ContractReportInProgress" />
+                                            <input type="hidden" id="hdnContractReportNotStarted" value="@ViewBag.ContractReportNotStarted" />
+                                        </td>
+                                        <td style="vertical-align:top">
+                                            <ul class="proArchivOpport">
+                                                <li>
+                                                    <p>No Longer Eligible</p>
+                                                    <p>@ViewBag.ProjectsNotEligibleForReporting</p>
+                                                </li>
+                                                <li class="oddWhiteList">
+                                                    <p>Created 9+ Months Ago</p>
+                                                    <p>@ViewBag.ProjectsCreated9MonthsAgo</p>
+                                                </li>
+                                                <li>
+                                                    <p>No Reports for 6 Months</p>
+                                                    <p>@ViewBag.ProjectsNotReportedIn6Months</p>
+                                                </li>
+                                            </ul>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="clearfix"></div>
+                        <div class="btm-top-padding15">
+                            <div class="row">
+                                <div class="col-sm-5" style="width:44.1%;">
+                                    @*<i class="fa fa-download colorGray"></i> <a class="" id="lnkDownloadReportingWorksheetPdf" style="color:darkslateblue!important;font-weight:bold;" href="@Url.Action("DownloadPreReportingWorksheet", "Dashboard", new { BuilderId = ViewBag.BuilderId })" target="_blank">Download Reporting Worksheet &amp; Instructions</a>*@
+                                </div>
+                                <div class="col-sm-7 pull-right" style="width:53.9%;">
+                                    <button type="button" id="btnNTRTQ" class="btn btn-default changeBtn" onclick="UpdateNTRTQForAllContract(@ViewBag.QuaterId)">NOTHING TO REPORT THIS QUARTER</button>
+                                    <a id="lnkReportPurchases" href="@Url.Action("RegularReporting", "Builder", new { Area = "CbusaBuilder" })" target="_blank" class="btn btn-default changeBtn">REPORT PURCHASES</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</body>
+</html>

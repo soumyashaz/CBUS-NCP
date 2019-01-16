@@ -1,0 +1,18 @@
+﻿
+@{
+    Layout = null;
+}
+
+@(Html.Kendo().ListView<CBUSA.Areas.Admin.Models.ActiveContractViewModel>()
+    .Name("listViewContractActiveAsc")
+    .TagName("tbody")
+            .ClientTemplateId("TemplateResourceCategory")
+
+    .DataSource(dataSource =>
+    {
+        dataSource.Read(read => read.Action("ContractResourceCategory", "Builder"));
+        dataSource.PageSize(21);
+    })
+        //.Pageable()
+    .AutoBind(true))
+

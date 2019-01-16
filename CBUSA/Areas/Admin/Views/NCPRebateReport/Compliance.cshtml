@@ -1,0 +1,113 @@
+﻿<div class="btm-top-padding15">
+    <div class="table-responsive btm-top-padding15">
+        <table class="table">
+            <thead class="thead-bg">
+                <tr>
+                    <th width="500px" class="text-center"><i class="fa fa-caret-down" aria-hidden="true"></i> Contract</th>
+                    <th width="640px" class="text-center">Manage compliance factors</th>
+                </tr>
+            </thead>
+
+            @(Html.Kendo().ListView<CBUSA.Areas.Admin.Models.ActiveContractViewModel>()
+    .Name("listActiveContract")
+    .TagName("tbody")
+    .ClientTemplateId("TemplateActiveContract")
+            .Events(events => { events.DataBound("listActiveContractDataBound"); })
+    .DataSource(dataSource =>
+    {
+        dataSource.Read(read => read.Action("ActiveContract_Read", "NCPRebateReport"));
+
+    })
+                    //.Pageable()
+    .AutoBind(true)
+            )
+
+
+        </table>
+    </div>
+</div>
+
+@(Html.Kendo().Window()
+                        .Name("WndConfigureCompliance")
+                            .Title("Configure compliance factor")
+                        .Actions(actions => actions
+                            .Close()
+                        )
+                        .Visible(false)
+                        .Height(400)
+        // .Content("Loading...")
+                                .Draggable()
+                                .Resizable()
+                                .Width(600)
+
+                                .Modal(true)
+                                                 .Events(e => e.Open("ContractCompliance.OnOpenWndConfigureCompliance")
+                                                     .Refresh("ContractCompliance.OnRefreshWndConfigureCompliance"))
+
+        //     .LoadContentFrom("LoadManageStatus", "Contract", new { Area = "Admin" })
+
+)
+
+@(Html.Kendo().Window()
+                        .Name("WndOvverideConfigureCompliance")
+                            .Title("Overide Configure compliance factor")
+                        .Actions(actions => actions
+                            .Close()
+                        )
+                        .Visible(false)
+
+                      //  .Events(x=>x)
+                        .Height(400)
+        // .Content("Loading...")
+                                .Draggable()
+                                .Resizable()
+                                .Width(650)
+
+                                .Modal(true)
+                                                     .Events(e => e.Open("ContractCompliance.OnOpenWndOvverideConfigureCompliance")
+                                                         .Refresh("ContractCompliance.OnRefreshWndOvverideConfigureCompliance"))
+
+        //     .LoadContentFrom("LoadManageStatus", "Contract", new { Area = "Admin" })
+
+)
+
+
+<!-- End Body -->
+@section scripts
+{
+    <script type="text/javascript">
+
+        var AjaxCallUrl =
+                {
+                    WndConfigureComplianceUrl: '@Url.Action("LoadWndConfigureCompliance", "NCPRebateReport", new { Area = "Admin" })',
+                    WndOvverideConfigureComplianceUrl: '@Url.Action("LoadWndOvverideConfigureCompliance", "NCPRebateReport", new { Area = "Admin", ContrcatId = "****ContractId****" })',
+                    SaveContractComplianceUrl: '@Url.Action("SaveContrcatCompliance", "NCPRebateReport", new { Area = "Admin" })',
+                    AddNewRowUrl: '@Url.Action("AddNewRow", "NCPRebateReport", new { Area = "Admin" })',
+                    SaveContractComplianceBuilderUrl: '@Url.Action("SaveOverrideCompliance", "NCPRebateReport", new { Area = "Admin" })',
+                    GetBuilderActualComplianceFactorUrl: '@Url.Action("GetBuilderActualComplianceFactor", "NCPRebateReport", new { Area = "Admin" })'
+                };
+    </script>
+
+    <script type="text/x-kendo-tmpl" id="TemplateActiveContract">
+        <tr style="width:100%">
+            <td width="500px" class="text-center">
+                #:ConractName#
+                <input type="hidden" value="#:ConractId#" />
+            </td>
+            <td width="640px" class="text-center">
+                <div class="block-div">
+                    <div class="width50 pull-left">
+                        <a name="a_ConfigureCompliance" data-val="#:ConractId#" title="Configure compliance factor">Configure compliance factor</a>
+                    </div>
+                    <div class="width50 pull-left">
+                        <a name="a_OverrideCompliance" data-val="#:ConractId#" title="Override compliance factor">Override compliance factor</a>
+                    </div>
+                </div>
+            </td>
+        </tr>
+    </script>
+
+    <script src="@Url.Content("~/Scripts/Custom/NCPRebateReportCompliance.js?v="+@DateTime.Now.ToFileTime().ToString())"></script>
+}
+
+

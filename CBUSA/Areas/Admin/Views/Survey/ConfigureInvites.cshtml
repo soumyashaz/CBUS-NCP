@@ -1,0 +1,91 @@
+﻿@if (ViewBag.SurveyId != null)
+{
+    <h3>@Session["ContractName"] : @Session["SurveyName"]</h3>
+    @Html.Partial("_SurveyStepHeader", (Int64)ViewBag.SurveyId)
+}
+
+<section class="create_survey-step-body">
+    <div class="row">
+        <div class="col-sm-2"><label class="control-label">Add Invites:</label></div>
+        <div class="col-sm-10  ">
+            <a id="a_openaddinvitespopup">Select Invitees (Markets)</a>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-2"></div>
+        <div class="col-sm-10 btm-top-padding15">
+            <div class="table-responsive">
+                <table class="table" id="">
+                    <thead class="thead-bg">
+                        <tr>
+                            <th width="70%" class="text-center">Markets</th>
+                            <th width="30%" class="text-center">Total Builders invited</th>
+                            <th width="0" class="text-center"></th>
+                        </tr>
+                    </thead>
+                    @(Html.Kendo().ListView<CBUSA.Areas.Admin.Models.SurveyViewModel>()
+                     .Name("SurveyMarketBuilderList")
+                     .TagName("tbody")
+                     .ClientTemplateId("SurveyMarketBuilderListTemplate")
+                     .Events(x => x.DataBound("SurveyMarketBuilderListDataBound"))
+                     .DataSource(dataSource =>
+                     {
+                        dataSource.Read(read => read.Action("SurveyMarketBuilderList_Read", "Survey").Data("SendSurveyAsParameter"));
+                        // dataSource.PageSize(21);
+                     })
+                     // .Pageable()
+                    )
+                </table>
+            </div>
+        </div>
+    </div>
+
+</section>
+
+@Html.Hidden("HdnSurveyId", (Int64)@ViewBag.SurveyId)
+
+<!-- End number Step Body -->
+@(Html.Kendo().Window()
+                        .Name("WndSurveyInvitesPopup")
+                        .Title("Select Invites")
+                        .Actions(actions => actions
+                            .Close()
+                        )
+                        .Visible(false)
+                        .Draggable()
+                                .Resizable()
+                              .Width(600)
+                             .Height(200)
+                                .Modal(true)
+                                    .Events(e => e.Open("SurveyInvites.OnOpenSurveyInvitesPopup")
+                                        .Refresh("SurveyInvites.OnRefreshSurveyInvitesPopup"))
+)
+
+@section scripts
+{
+    <script type="text/javascript">
+        var AjaxCallUrl =
+                {
+                    SurveyInvitesPopupUrl: '@Url.Action("ShowSurveyAddInvitesPopup", "Survey", new { Area = "Admin" })',
+                    SaveSurveyMarket: '@Url.Action("SaveSurveyMarket", "Survey", new { Area = "Admin" })',
+                    RemoveSurveyMarket: '@Url.Action("RemoveSurveyMarket", "Survey", new { Area = "Admin" })',
+                };
+    </script>
+
+    <script type="text/x-kendo-tmpl" id="SurveyMarketBuilderListTemplate">
+        <tr>
+            <td width="70%" class="text-center">#:MarketName#</td>
+            <td width="30%" class="text-center">#:BuilderCount#</td>
+            <td width="0" class="text-center">
+                #if (!IsSurveyPublished){
+                #<input type="hidden" value="#:MarketId#"><i onclick="SurveyInvites.RemoveSurveyMarket('#:MarketId#')" class="fa fa-times-circle editPreSarvyIcon" aria-hidden="true"></i>#
+                }#
+            </td>
+        </tr>
+    </script>
+
+
+    <script src="@Url.Content("~/Scripts/Custom/AdminSurveyConfigureInvites.js?v="+@DateTime.Now.ToFileTime().ToString())"></script>
+    <script src="@Url.Content("~/Scripts/Custom/CustomControlZoneStateList.js?v="+@DateTime.Now.ToFileTime().ToString())"></script>
+}

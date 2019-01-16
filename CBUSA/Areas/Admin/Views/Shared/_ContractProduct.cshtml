@@ -1,0 +1,59 @@
+﻿@model  IEnumerable<CBUSA.Domain.Product>
+
+
+
+<div class="color-border">
+   
+            @*<div class="highlight-title-text">@Item.ProductCategoryName</div>*@
+
+            @foreach (var Item in Model)
+            {
+                <div class="row">
+                    <div class="col-md-1">
+                        <input type="checkbox" name="ChkContractProductSelect" checked>
+                        <input type="hidden" value="@Item.ProductId" />
+                    </div>
+                    <div class="col-md-10">@Item.ProductName</div>
+                </div>
+            }
+        
+
+    <div class="row margin-top20">
+        <button type="button" id="BtnModifyContractProduct" class="btn btn-info" data-toggle="modal" data-target="#modifyProducts">Modify Products</button>
+        <button type="button" id="BtnSaveContractProduct" class="btn btn-info">Save</button>
+        <a href="#" title="" id="BtnProductViewDetails">View All</a>
+    </div>
+</div>
+
+@*<button type="button" class="btn btn-primary btn-sm" id="BtnSaveContractProduct">Save</button>
+    <button type="button" class="btn btn-primary btn-sm" id="BtnModifyContractProduct">Modify Product</button>
+    <button type="button" class="btn btn-primary btn-sm" id="BtnProductViewDetails">View All</button>*@
+
+
+
+@*<div>
+        @foreach (var Item in Model)
+        {
+            if (Item.Products.Count > 0)
+            {
+                <div>
+                    <h5>@Item.ProductCategoryName</h5>
+                    <table style="width:100%" class="ShowProductTable">
+                        @foreach (var Itemchild in Item.Products)
+                        {
+                            <tr>
+                                <td style="width:20%" align="center">
+                                    <input type="checkbox" name="ChkProductSelect" />
+                                    <input type="hidden" value="@Itemchild.ProductId" />
+                                </td>
+                                <td style="width:80%">
+                                    <span>@Itemchild.ProductName</span>
+
+                                </td>
+                            </tr>
+                        }
+                    </table>
+                </div>
+            }
+        }
+    </div>*@

@@ -1,0 +1,66 @@
+﻿@using CBUSA.Models
+@model CBUSA.Areas.Admin.Models.RecoverUserNameViewModel
+
+<div class="row row-eq-height">
+    <div class="col-sm-12">
+        <div class="dividerHeight150p">
+            <div class="clearfix"></div>
+        </div>
+        @using (Html.BeginForm("RecoverUserName", "Account", FormMethod.Post))
+        {
+            @Html.AntiForgeryToken()
+            <div class="row">
+                <div class="col-sm-3"> &nbsp; </div>
+                <div class="col-sm-6">
+                    <h3>Recover my CBUSA User Name!</h3>
+                    <div class="">@Html.ValidationSummary("", new { @class = "text-danger" })</div>
+                    <p>
+                        Please enter the email you used to sign-up with CBUSA
+                        @Html.TextBoxFor(m => m.EmailId, new { @class = "width40" })
+                    </p>
+                    <p class="text-center"><strong>And</strong></p>
+                    <p>You will also need to answer one of the following challenge questions you picked when you signed-up</p>
+                    <br />
+                    <div class="recoverAnsFilds">
+                        <div class="fldRow">
+                            @Html.DropDownListFor(x => x.SelectedQuestionId1, new SelectList(ViewBag.Question, "QuestioId", "QuestionDescription"), "--Select--")
+                            @Html.TextBoxFor(m => m.Answare1, new { @class = "width40" })
+                        </div>
+                        <div class="fldRow">
+                            @Html.DropDownListFor(x => x.SelectedQuestionId2, new SelectList(ViewBag.Question, "QuestioId", "QuestionDescription"), "--Select--")
+                            @Html.TextBoxFor(m => m.Answare2, new { @class = "width40" })
+                        </div>
+                        <div class="fldRow">
+                            @Html.DropDownListFor(x => x.SelectedQuestionId3, new SelectList(ViewBag.Question, "QuestioId", "QuestionDescription"), "--Select--")
+                            @Html.TextBoxFor(m => m.Answare3, new { @class = "width40" })
+                        </div>
+                    </div>
+                    <div class="fldRow">
+                        <div class="marginbtm10 marginTop10"> @Html.reCaptcha()</div>
+                    </div>
+                    <div class="fldRow">
+                        <span class="icon-input-btn"><span class="fa fa-caret-square-o-right"></span><input type="submit" class="btn btn-primary" value="Get my User Name" /></span>
+                    </div>
+                    <p class="msg-blue marginTop10">If you are not sure of the above or need help, please call our CourtWorks help-desk at @{Html.RenderAction("GetCourWorksContactUsPhone", "Home", new { area = "" });}</p>
+                </div>
+                <div class="col-sm-3"> &nbsp; </div>
+            </div>
+        }
+        <div class="dividerHeight250p">
+            <div class="clearfix"></div>
+        </div>
+    </div>
+</div>
+
+@section CustomScripts {
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#SelectedQuestionId1 option").eq(0).val('0');
+            $("#SelectedQuestionId2 option").eq(0).val('0');
+            $("#SelectedQuestionId3 option").eq(0).val('0');
+
+
+        });
+    </script>
+}

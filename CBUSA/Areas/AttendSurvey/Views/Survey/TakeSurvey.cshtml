@@ -1,0 +1,196 @@
+﻿@using CBUSA.Models;
+@model CBUSA.Areas.AttendSurvey.Models.TakeSurveyViewModel
+
+@if (Model.ObjSurvey != null)
+{
+    <div class="maginTop20">
+        <table class="takeSurveyContHead" cellpadding="0" cellspacing="0" border="0">
+            @if (Model.ContractImage != null)
+            {
+                <tr>
+                    <td width="10%">
+                        @Html.ShowLogo(Model.ContractImage, new { @class = "maginRight5 surveyQuComImg" })
+                    </td>
+                    <td width="60%"><h3 class="SurveyNameText margin0">@Model.ObjSurvey.SurveyName</h3></td>
+                    <td width="30%">
+                        <div class="">
+                            <label class="width10 pull-left maginRight5 maginTop10" id="LblQuestionStatus"></label>
+                            <div class="width88 pull-left verticalAlignMiddle SurveyCompleteGraphTotalView">
+                                <div class="SurveyCompleteGraphActive" id="DivQuestionStatus"></div>
+                            </div>
+                            <div class="clearfix"></div>
+                        </div>
+                    </td>
+                </tr>
+            }
+            else
+            {
+                <tr>
+                    @*<img src="@Url.Content("~/content/images/default.png")" id="ContractLogo" class="surveyQuComImg" />*@
+                    <td width="70%">
+                        <div class="">
+                            <div width="50%">
+                                <h2 class="ManufacturerNameText maginRight10">@Model.ManufacturerName</h2>
+                            </div>
+                            <div width="50%"><h3 class="SurveyNameText margin0">@Model.ObjSurvey.SurveyName</h3></div>
+                        </div>
+                    </td>
+                    <td width="30%">
+                        <div class="">
+                            <div class="">
+                                <label class="width10 pull-left maginRight5 maginTop10" id="LblQuestionStatus"></label>
+                                <div class="width88 pull-left verticalAlignMiddle SurveyCompleteGraphTotalView">
+                                    <div class="SurveyCompleteGraphActive" id="DivQuestionStatus"></div>
+                                </div>
+                                <div class="clearfix"></div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            }
+        </table>       
+        <div class="clearfix"></div>
+    </div>
+    <hr />
+    if (Model.ObjTakeSurveyQuestion.TotalQuestion > 0)
+    {
+        if (Model.ObjTakeSurveyQuestion != null)
+        {
+            <div id="DivMainQuestionContainer">
+                @{Html.RenderPartial("_SurveyQuestion", Model.ObjTakeSurveyQuestion);}
+            </div>
+            <div class="clearfix"></div>
+            <div class="marginbtm20">
+                <div style="width:34.6%; margin-left:15px; margin-top:7px;">
+                    <div class="form-group">
+                        <button type="button" class="btn btn-default new-btn maginRight10" id="Btn_Prev" disabled="disabled">Back</button>
+                        <button type="button" class="btn btn-default new-btn maginRight10" id="Btn_Next">Next</button>
+                        <button type="button" class="btn btn-default new-btn" id="Btn_Save" disabled="disabled">Submit</button>
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="form-group">
+                        <div class="position-center">
+                            <button type="button" class="btn withOutBgBodar maginRight10" id="Btn_SaveContinue">Save &amp; continue later</button>
+                            <button type="button" class="btn withOutBgBodar" id="Btn_SaveNew">Save</button>
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
+
+                </div>
+                <div class="clearfix"></div>
+                @*<div class="maginTop10">
+                        <div class="col-md-12">
+                            <nav aria-label="">
+                                <ul class="pagination">
+                                    <li class="page-item disabled">
+                                        <a class="page-link" href="#" tabindex="-1" aria-label="Previous">
+                                            <span aria-hidden="true">&laquo;</span>
+                                            <span class="sr-only">Previous</span>
+                                        </a>
+                                    </li>
+                                    <li class="page-item active">
+                                        <a class="page-link" href="#">1 <span class="sr-only">(current)</span></a>
+                                    </li>
+                                    <li class="page-item"><a class="page-link" href="#">2</a></li>
+                                    <li class="page-item"><a class="page-link" href="#">3</a></li>
+                                    <li class="page-item"><a class="page-link" href="#">4</a></li>
+                                    <li class="page-item"><a class="page-link" href="#">5</a></li>
+                                    <li class="page-item">
+                                        <a class="page-link" href="#" aria-label="Next">
+                                            <span aria-hidden="true">&raquo;</span>
+                                            <span class="sr-only">Next</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </nav>
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>*@
+
+
+                <div class="col-md-12 surveyQuPagination">
+                    <nav aria-label="Page navigation">
+                        @if (Model.ObjTakeSurveyQuestion.TotalQuestion > 5)
+                        {
+                            <ul class="pagination">
+                                <li class="page-item">
+                                    <a class="page-link" href="javascript:void(0)" aria-label="Previous" id="a_prev" style="display:none">
+                                        <span aria-hidden="true">&lt;</span>
+                                        <span class="sr-only">Previous</span>
+                                    </a>
+                                </li>
+                                <li class="page-item active"><a class="page-link" href="javascript:void(0)" name="a_pagination">1</a></li>
+                                <li class="page-item"><a class="page-link" href="javascript:void(0)" name="a_pagination">2</a></li>
+                                <li class="page-item"><a class="page-link" href="javascript:void(0)" name="a_pagination">3</a></li>
+                                <li class="page-item"><a class="page-link" href="javascript:void(0)" name="a_pagination">4</a></li>
+                                <li class="page-item"><a class="page-link" href="javascript:void(0)" name="a_pagination">5</a></li>
+                                <li class="page-item">
+                                    <a class="page-link" href="javascript:void(0)" aria-label="Next" id="a_next">
+                                        <span aria-hidden="true">&gt;</span>
+                                        <span class="sr-only">Next</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        }
+                        else
+                        {
+
+                            <ul class="pagination">
+                                <li class="page-item" style="display:none">
+                                    <a class="page-link" href="#" aria-label="Previous">
+                                        <span aria-hidden="true">&laquo;</span>
+                                        <span class="sr-only">Previous</span>
+                                    </a>
+                                </li>
+
+                                @for (int i = 1; i <= Model.ObjTakeSurveyQuestion.TotalQuestion; i++)
+                                {
+                                    if (i == 1)
+                                    {
+                                        <li class="page-item active"><a class="page-link" href="javascript:void(0)" name="a_pagination">@i</a></li>
+                                    }
+                                    else
+                                    {
+                                        <li class="page-item"><a class="page-link" href="javascript:void(0)" name="a_pagination">@i</a></li>
+                                    }
+
+                                }
+
+                                <li class="page-item" style="display:none">
+                                    <a class="page-link" href="#" aria-label="Next">
+                                        <span aria-hidden="true">&raquo;</span>
+                                        <span class="sr-only">Next</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        }
+                    </nav>
+                </div>
+                <div class="clearfix"></div>
+            </div>
+
+            @Html.Hidden("HdnTotalQuestion", Model.ObjTakeSurveyQuestion.TotalQuestion)
+                    @Html.Hidden("HdnPaginationSet", "1")
+                    @Html.Hidden("HdnSurveyId", Model.SurveyId)
+                    @Html.Hidden("HdnBuilderId", Model.BuilderId)
+                    @Html.Hidden("HdnPageIdNeedToShow", 0)
+                            }
+                        }
+                    }
+
+<div id="DivIframeContainer" style="display:none;"></div>
+
+@section scripts
+{
+    <script type="text/javascript">
+        var AjaxCallUrl =
+            {
+                SaveSurveyResult: '@Url.Action("SaveSurveyResult", "Survey", new { Area = "AttendSurvey" })',
+                RenderQuestion: '@Url.Action("LoadSurveyQuestion", "Survey", new { Area = "AttendSurvey" })',
+                ThankYouSurveyUrl: '@Url.Action("ThankYou", "Survey", new { Area = "AttendSurvey", SurveyId = "****SurveyId****", BuilderId = "****BuilderId****", IsSurveyCompleted = "****IsSurveyCompleted****" })',
+                DownLoadFileUrl: '@Url.Action("DownloadResourceFile", "Survey", new { Area = "AttendSurvey" })',
+            };
+
+    </script>
+    <script src="@Url.Content("~/Scripts/Custom/AttendSurveySurveyTakeSurvey.js?v="+@DateTime.Now.ToFileTime().ToString())"></script>
+}

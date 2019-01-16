@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<test-run id="2" testcasecount="8" result="Failed" total="1" passed="0" failed="1" inconclusive="0" skipped="0" asserts="18" engine-version="3.8.0.0" clr-version="4.0.30319.42000" start-time="2019-01-02 11:54:14Z" end-time="2019-01-02 11:56:50Z" duration="156.153674">
+  <command-line><![CDATA[nunit3-console.exe  UI.dll --test=UI.Tests.ReportsDashboardTests.ClickNoReport]]></command-line>
+  <filter>
+    <test>UI.Tests.ReportsDashboardTests.ClickNoReport</test>
+  </filter>
+  <test-suite type="Assembly" id="0-1018" name="UI.dll" fullname="C:\Soumya_Medullus\CBUSA-NCP\CBUSA-NCP-PROD\UI\bin\Debug\UI.dll" runstate="Runnable" testcasecount="8" result="Failed" site="Child" start-time="2019-01-02 11:54:17Z" end-time="2019-01-02 11:56:50Z" duration="153.130836" total="1" passed="0" failed="1" warnings="0" inconclusive="0" skipped="0" asserts="18">
+    <environment framework-version="3.10.1.0" clr-version="4.0.30319.42000" os-version="Microsoft Windows NT 10.0.17134.0" platform="Win32NT" cwd="C:\Soumya_Medullus\CBUSA-NCP\CBUSA-NCP-PROD\UI\bin\Debug" machine-name="COMPUTER43" user="Medullus User 42" user-domain="COMPUTER43" culture="en-US" uiculture="en-US" os-architecture="x64" />
+    <settings>
+      <setting name="DisposeRunners" value="True" />
+      <setting name="WorkDirectory" value="C:\Soumya_Medullus\CBUSA-NCP\CBUSA-NCP-PROD\UI\bin\Debug" />
+      <setting name="ImageRuntimeVersion" value="4.0.30319" />
+      <setting name="ImageTargetFrameworkName" value=".NETFramework,Version=v4.6.1" />
+      <setting name="ImageRequiresX86" value="False" />
+      <setting name="ImageRequiresDefaultAppDomainAssemblyResolver" value="False" />
+      <setting name="NumberOfTestWorkers" value="4" />
+    </settings>
+    <properties>
+      <property name="_PID" value="576" />
+      <property name="_APPDOMAIN" value="domain-" />
+    </properties>
+    <failure>
+      <message><![CDATA[One or more child tests had errors]]></message>
+    </failure>
+    <test-suite type="TestSuite" id="0-1019" name="UI" fullname="UI" runstate="Runnable" testcasecount="8" result="Failed" site="Child" start-time="2019-01-02 11:54:17Z" end-time="2019-01-02 11:56:50Z" duration="153.035899" total="1" passed="0" failed="1" warnings="0" inconclusive="0" skipped="0" asserts="18">
+      <failure>
+        <message><![CDATA[One or more child tests had errors]]></message>
+      </failure>
+      <test-suite type="TestSuite" id="0-1020" name="Tests" fullname="UI.Tests" runstate="Runnable" testcasecount="8" result="Failed" site="Child" start-time="2019-01-02 11:54:17Z" end-time="2019-01-02 11:56:50Z" duration="153.033840" total="1" passed="0" failed="1" warnings="0" inconclusive="0" skipped="0" asserts="18">
+        <failure>
+          <message><![CDATA[One or more child tests had errors]]></message>
+        </failure>
+        <test-suite type="TestFixture" id="0-1015" name="ReportsDashboardTests" fullname="UI.Tests.ReportsDashboardTests" classname="UI.Tests.ReportsDashboardTests" runstate="Runnable" testcasecount="1" result="Failed" site="Child" start-time="2019-01-02 11:54:17Z" end-time="2019-01-02 11:56:50Z" duration="153.021695" total="1" passed="0" failed="1" warnings="0" inconclusive="0" skipped="0" asserts="18">
+          <failure>
+            <message><![CDATA[One or more child tests had errors]]></message>
+          </failure>
+          <test-suite type="ParameterizedMethod" id="0-1017" name="ClickNoReport" fullname="UI.Tests.ReportsDashboardTests.ClickNoReport" classname="UI.Tests.ReportsDashboardTests" runstate="Runnable" testcasecount="1" result="Failed" site="Child" start-time="2019-01-02 11:54:18Z" end-time="2019-01-02 11:56:50Z" duration="152.423243" total="1" passed="0" failed="1" warnings="0" inconclusive="0" skipped="0" asserts="18">
+            <failure>
+              <message><![CDATA[One or more child tests had errors]]></message>
+            </failure>
+            <test-case id="0-1016" name="ClickNoReport()" fullname="UI.Tests.ReportsDashboardTests.ClickNoReport()" methodname="ClickNoReport" classname="UI.Tests.ReportsDashboardTests" runstate="Runnable" seed="1686764004" result="Failed" label="Error" start-time="2019-01-02 11:54:18Z" end-time="2019-01-02 11:56:50Z" duration="152.393923" asserts="18">
+              <failure>
+                <message><![CDATA[OpenQA.Selenium.NoSuchElementException : no such element: Unable to locate element: {"method":"id","selector":"TblAdminReport"}
+  (Session info: chrome=71.0.3578.98)
+  (Driver info: chromedriver=2.40.565498 (ea082db3280dd6843ebfb08a625e3eb905c4f5ab),platform=Windows NT 10.0.17134 x86_64)]]></message>
+                <stack-trace><![CDATA[   at OpenQA.Selenium.Remote.RemoteWebDriver.UnpackAndThrowOnError(Response errorResponse)
+   at OpenQA.Selenium.Remote.RemoteWebDriver.Execute(String driverCommandToExecute, Dictionary`2 parameters)
+   at OpenQA.Selenium.Remote.RemoteWebDriver.FindElement(String mechanism, String value)
+   at UI.Pages.ReportDashboardPage.InsertTextInFullResponse(String projectname, String value) in C:\Soumya_Medullus\CBUSA-NCP\CBUSA-NCP-PROD\UI\Pages\ReportDashboardPage.cs:line 190
+   at UI.Tests.ReportsDashboardTests.ClickNoReport() in C:\Soumya_Medullus\CBUSA-NCP\CBUSA-NCP-PROD\UI\Tests\ReportsDashboardTests.cs:line 89]]></stack-trace>
+              </failure>
+            </test-case>
+          </test-suite>
+        </test-suite>
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>

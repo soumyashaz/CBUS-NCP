@@ -1,0 +1,96 @@
+﻿@model CBUSA.Areas.Admin.Models.ConstructFormulaViewModel
+<div class="row maginTop20">
+    <div class="col-md-3">
+        @(Html.Kendo().DropDownListFor(x => x.ContractId)
+                                    .Name("Contract")
+                                    .DataTextField("ContractName")
+                                    .DataValueField("ContractId")
+                                    //.OptionLabel("--Select Contract--")
+                                    //.OptionLabel(new { ContractName = "--Select Contract--", ContractId = "-1" })
+                                    .DataSource(source =>
+                                    {
+                                        source.Read(read =>
+                                        {
+                                            read.Action("GetActivePendingContract", "Survey", new { Area = "Admin" }).Data("DownloadVolumeFeeReport.SendDataBeforeLoadDropDown");
+                                        });
+                                //.ServerFiltering(true);
+                            })
+                                    //.Enable(false)
+                                    //.AutoBind(false)
+                                    .Events(e =>
+                                    {
+                                        e.Select("DownloadVolumeFeeReport.onSelectContract");
+                                //e.DataBound("DownloadVolumeFeeReport.onDataBoundContract");
+                            })
+                                    //.SelectedIndex(0)
+                                    .HtmlAttributes(new { @class = "form-control" })
+                                    .Value(Model.ContractId.ToString())
+        )
+    </div>
+    <div class="col-md-3">
+        @(Html.Kendo().DropDownListFor(x => x.Quarter)
+                                .Name("QuarterDDL")
+                                .DataTextField("Text")
+                                .DataValueField("Value")
+                                .Events(e =>
+                                {
+                                    e.Select("DownloadVolumeFeeReport.onSelectQuarter");
+                                    e.DataBound("DownloadVolumeFeeReport.onDataBoundQuarter");
+                                })
+                                .BindTo(Model.QuarterList)
+                                .SelectedIndex(0)
+                                .HtmlAttributes(new
+                                {
+                                    @class = "form-control"
+                                })
+                            .Value(Model.Quarter)
+        )
+    </div>
+    <div class="col-md-3">
+        @(Html.Kendo().DropDownListFor(x => x.MarketId)
+                                .Name("MarketDDL")
+                                .DataTextField("Text")
+                                .DataValueField("Value")
+                                .Events(e =>
+                                {
+                                    e.Select("DownloadVolumeFeeReport.onSelectMarket");
+                                    e.DataBound("DownloadVolumeFeeReport.onDataBoundMarket");
+                                })
+                                .BindTo(Model.MarketListData)
+                                .SelectedIndex(0)
+                                .HtmlAttributes(new
+                                {
+                                    @class = "form-control"
+                                })
+                            .Value(Model.MarketId.ToString())
+        )
+    </div>
+    <div class="col-md-3"></div>
+    <div class="clearfix"></div>
+    <div class="form-group">
+        <label class="col-sm-3 control-label"></label>
+    </div>
+    <div class="col-md-9">
+        <button id="BtnDownload" type="button" class="btn btn-info pull-left">Download</button>
+    </div>
+</div>
+
+
+@Html.Hidden("hdnSelectedContractId")
+@Html.Hidden("hdnSurveyId")
+@Html.Hidden("hdnSelectedQuarter")
+@Html.Hidden("hdnSelectedYear")
+@Html.Hidden("hdnSelectedMarketList")
+
+
+@section scripts
+{
+    <script type="text/javascript">
+        var AjaxCallUrl =
+                {
+                    GetSurveyUrl: '@Url.Action("GetSurveyByConstructFormula", "NCPRebateReport", new { Area = "Admin" })',
+                    DownloadUrl: '@Url.Action("DownloadNCPVolumeFeeResult", "NCPRebateReport", new { Area = "Admin", SurveyId = "SurveyIdParam",MarketId = "MarketIdParam" })',
+                             };
+    </script>
+    <script src="@Url.Content("~/Scripts/Custom/AdminVolumeFeeCalculationReport.js")"></script>
+}

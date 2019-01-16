@@ -1,0 +1,23 @@
+﻿@using CBUSA.Models;
+@model CBUSA.Areas.AttendSurvey.Models.TakeSurveyConfAgreementViewModel
+
+
+<div id="DivContractResourceCategory">
+
+    <table style="width:100%">
+        <tr>           
+            <td>                
+                @*<label class="control-label">@Model.QuestionValue</label>*@
+                <p class="control-label" align="justify" style="margin-left:8px; margin-right:5px;">@Model.QuestionValue</p>
+            </td>            
+        </tr>
+    </table>
+
+    
+    <div style="height:50px;width:100%;margin-top:10px;">
+        <div style="float:right">
+            <button type="button" class="btn btn-default new-btn" id="CloseConfAgreement">Close</button>
+        </div>
+    </div>
+</div>
+

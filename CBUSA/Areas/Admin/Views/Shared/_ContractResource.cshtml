@@ -1,0 +1,287 @@
+﻿@model CBUSA.Areas.Admin.Models.ResourceViewModel
+
+<!-- Start Upload Resources -->
+@*<div id="uploadResources" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Upload Resources</h4>
+            </div>*@
+<div class="modal-body" id="DivContractResource">
+    <div class="row">
+        <div class="form-group">
+            <label class="col-sm-4 control-label">Category:</label>
+            <div class="col-sm-8">
+                @(Html.Kendo().DropDownListFor(x => x.ResourceCategoryId)
+                                .Name("ResourceCategoryDropDown")
+                                          .DataTextField("ResourceCategoryName")
+                                          .DataValueField("ResourceCategoryId")
+                                     .DataSource(source =>
+                                      {
+                                          source.Read(read =>
+                                          {
+                                              read.Action("GetContractResourceCategory", "Contract", new { Area = "Admin" });
+                                          })
+                                          .ServerFiltering(true);
+                                      })
+                                      .SelectedIndex(0)
+                                      .HtmlAttributes(new
+                             {
+                                 // validationmessage = "Required",
+                                 @class = "form-control"
+
+                             })
+
+                )
+
+
+                <div><span class="k-invalid-msg" data-for="ResourceCategoryDropDown"></span></div>
+
+                <a href="#" id="a_ContactResourceCategory" title="Manage Category" style="font-size:14px; line-height:20px; text-decoration:underline;">Manage Category</a>
+
+
+            </div>
+            <div class="clearfix"></div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-4 control-label">Apply to Markets:</label>
+            <div class="col-sm-8 classZoneMarket">
+                @*<select class="form-control">
+                <option value="1">Select Markets</option>
+            </select>*@
+                <div class="CustomControl-Div-Parent" data-role='ZoneSate' id="DivZoneState">
+                    <div class="CustomControl-Div" id="DivZoneStateHeader">
+                        <span class="k-select select-arrow" id="DivZoneStateDropdown"><span class="k-icon k-i-arrow-s">select</span></span>
+                    </div>
+                </div>
+                <span class="k-invalid-msg" id="ValidationMsgZoneState" data-for="DivZoneState"></span>
+                <input type="hidden" id="HdnValidZoneState" />
+
+            </div>
+            <div class="clearfix"></div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-4 control-label">Select File:</label>
+            <div class="col-sm-8">
+                @*<label class="btn btn-default btn-file new-btn margin-top5">
+                        Browse... <input type="file" style="display: none;">
+                    </label>*@
+                @(Html.Kendo().Upload()
+                                 .Name("ContractReourceUpload")
+                                 .Multiple(false)
+                             .HtmlAttributes(new
+                             {
+                                 // validationmessage = "*",
+                                 //  required = "required"
+                                 data_filerequired = true
+
+                             })
+                            .Events(events => events
+
+                                        .Select("onSelectContractReourceUpload")
+                            )
+                )
+                <span class="k-invalid-msg" data-for="ContractReourceUpload"></span>
+
+            </div>
+            <div class="clearfix"></div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-4 control-label">Title:</label>
+            <div class="col-sm-8" id="tdtitle">
+                @*<input class="form-control" type="text">*@
+                @(Html.Kendo().TextBoxFor(x => x.Title).Name("ContractResourceTitle")
+                 .HtmlAttributes(new
+                  {
+                      // validationmessage = "*",
+                      //@class = "width50",
+                      // required = "required"
+                      // @data-available=true
+                      data_available = true,
+                      @class = "form-control"
+
+                  })
+                )
+                <span class="k-invalid-msg" data-for="ContractResourceTitle" id="SpanResourceTitleValidation"></span>
+
+                @if (@Model.EditMode == 1)
+                {
+                    <input type="hidden" id="ValidResourceTitle" value="1" />
+                }
+                else
+                {
+                    <input type="hidden" id="ValidResourceTitle" />
+                }
+
+
+
+            </div>
+            <div class="clearfix"></div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-4 control-label">Description:</label>
+            <div class="col-sm-8">
+                @*<input class="form-control" type="text">*@
+                @(Html.Kendo().TextBoxFor(x => x.Description)
+                .Name("ContractResourceDescription")
+                 .HtmlAttributes(new
+                  {
+                      // validationmessage = "*",
+                      //@class = "width50",
+                      // required = "required"
+                      @class = "form-control"
+
+                  })
+                )
+            </div>
+            <div class="clearfix"></div>
+        </div>
+    </div>
+    <div class="clearfix"></div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-info" id="SaveContractResource">Save</button>
+        <button type="button" class="btn btn-default new-btn" id="CancelContractResource">Close</button>
+    </div>
+</div>
+<input type="hidden" id="HdnDumpId" value="0" />
+<input type="hidden" id="HdnResourceId" value="@Model.ResourceId" />
+
+
+<input type="hidden" id="HdnEditMode" value="@Model.EditMode" />
+
+
+<input type="hidden" id="HdnResourceTitleHistory" value="@Model.Title" />
+
+
+@*</div>
+        </div>
+    </div>*@
+<!-- End Upload Resources -->
+@*<div id="DivContractResource">
+
+        <table>
+            <tr>
+                <td style="width:30%">Category</td>
+                <td style="width:70%">
+                    @(Html.Kendo().DropDownListFor(x => x.ResourceCategoryId)
+                                    .Name("ResourceCategoryDropDown")
+                                              .DataTextField("ResourceCategoryName")
+                                              .DataValueField("ResourceCategoryId")
+                                         .DataSource(source =>
+                                          {
+                                              source.Read(read =>
+                                              {
+                                                  read.Action("GetContractResourceCategory", "Contract", new { Area = "Admin" });
+                                              })
+                                              .ServerFiltering(true);
+                                          })
+                                          .SelectedIndex(0)
+
+                    )
+                    <a href="#" id="a_ContactResourceCategory">Manage Category</a>
+                </td>
+            </tr>
+            <tr>
+                <td style="width:30%">Apply to Market</td>
+                <td style="width:70%">
+                    <div class="CustomControl-Div-Parent" data-role='ZoneSate' id="DivZoneState">
+                        <div class="CustomControl-Div" id="DivZoneStateHeader">
+                            <span class="k-select select-arrow" id="DivZoneStateDropdown"><span class="k-icon k-i-arrow-s">select</span></span>
+                        </div>
+                    </div>
+                    <span class="k-invalid-msg" id="ValidationMsgZoneState" data-for="DivZoneState"></span>
+                    <input type="hidden" id="HdnValidZoneState" />
+                </td>
+            </tr>
+            <tr>
+                <td style="width:30%">Select File</td>
+                <td style="width:70%">
+                    @(Html.Kendo().Upload()
+                                     .Name("ContractReourceUpload")
+                                     .Multiple(false)
+                                 .HtmlAttributes(new
+                                 {
+                                    // validationmessage = "*",
+                                   //  required = "required"
+                                     data_filerequired = true
+
+                                 })
+                                .Events(events => events
+
+                                            .Select("onSelectContractReourceUpload")
+                                )
+                    )
+
+                    <span class="k-invalid-msg" data-for="ContractReourceUpload"></span>
+                </td>
+            </tr>
+
+            <tr>
+                <td style="width:30%">Title</td>
+                <td style="width:70%" id="tdtitle">
+                    @(Html.Kendo().TextBoxFor(x => x.Title).Name("ContractResourceTitle")
+                     .HtmlAttributes(new
+                      {
+                          // validationmessage = "*",
+                          //@class = "width50",
+                          // required = "required"
+                          // @data-available=true
+                          data_available = true
+
+                      })
+                    )
+                    <span class="k-invalid-msg" data-for="ContractResourceTitle"></span>
+                    <input type="hidden" id="ValidResourceTitle" />
+                </td>
+            </tr>
+            <tr>
+                <td style="width:30%">Description</td>
+                <td style="width:70%">
+                    @(Html.Kendo().TextBoxFor(x => x.Description)
+                    .Name("ContractResourceDescription")
+                     .HtmlAttributes(new
+                      {
+                          // validationmessage = "*",
+                          //@class = "width50",
+                          // required = "required"
+
+                      })
+                    )
+                </td>
+            </tr>
+        </table>
+
+
+        <input type="hidden" id="HdnDumpId" value="0" />
+        <input type="hidden" id="HdnResourceId" value="@Model.ResourceId" />
+
+    </div>*@
+
+@*<div style="height:50px;width:100%">
+        <div style="float:right">
+            <button type="button" class="btn btn-primary btn-sm" id="SaveContractResource">Save Contract</button>
+            <button type="button" class="btn btn-primary btn-sm" id="CancelContractResource">Cancel</button>
+        </div>
+
+    </div>*@
+
+
+@(Html.Kendo().Window()
+                        .Name("ContractResourceCategoryWindow")
+                            .Title("Manage Resource Category")
+                        .Actions(actions => actions
+                            .Close()
+                        )
+                        .Visible(false)
+                        .Draggable()
+                                .Resizable()
+                                .Width(600).
+                                Height(365)
+                                .Modal(true)
+                                .Events(e => e.Open("OnOpenContractResourceCategory")
+                                .Refresh("OnRefreshContractResourceCategory"))
+
+
+
+)

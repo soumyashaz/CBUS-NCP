@@ -1,0 +1,119 @@
+﻿@using CBUSA.Models;
+@model CBUSA.Areas.AttendSurvey.Models.TakeSurveyQuestionViewModel
+
+<div id="Div_@Model.CurrentQuestionIndex" style="display:none">
+    <div class="row maginTop20 enrollmentSurveyBody">
+        <div class="col-md-12 enrollSurveyQues">
+            <div class="form-group">
+                <label class="control-label">@Model.Question.QuestionValue</label>
+                <div class="clearfix"></div>
+            </div>
+            <div class="form-group selectRightIcon width377p">
+
+                @if (Model.Question.QuestionTypeId == (int)CBUSA.Domain.EnumQuestionType.TextBox)
+                {
+                    @Html.TakeSurveyTextBoxTypeQuestion(Model.ObjSurveyResult.FirstOrDefault(), (Model.Question.QuestionTextBoxSetting), Model.CurrentQuestionIndex)
+                }
+                else if (Model.Question.QuestionTypeId == (int)CBUSA.Domain.EnumQuestionType.DropList)
+                {
+                    @Html.TakeDropListTypeQuestion(Model.ObjSurveyResult.FirstOrDefault(), (Model.Question.QuestionDropdownSetting))
+                }
+                <div class="clearfix"></div>
+            </div>
+            <div class="clearfix"></div>
+            <div class="width377p">
+                @if (Model.Question.QuestionTypeId == (int)CBUSA.Domain.EnumQuestionType.TextBox || Model.Question.QuestionTypeId == (int)CBUSA.Domain.EnumQuestionType.DropList)
+                {
+                    if (Model.Question.IsFileNeedtoUpload)
+                    {
+
+                        string FileContainerName = "File_" + Model.Question.QuestionId;
+                        <div class="pull-left">
+                            @(Html.Kendo().Upload()
+                        .Name(FileContainerName)
+                        .HtmlAttributes(new
+                             {
+                                 // validationmessage = "Required",
+                                 data_role = "upload"
+
+                             })
+                        //.Multiple(false)
+                        .Async(a => a
+                            .Save("Save", "Survey", new { Area = "AttendSurvey" })
+                            .Remove("Remove", "Survey", new { Area = "AttendSurvey" })
+                            .AutoUpload(true)
+                            .SaveField("files")
+
+                        )
+                        .Events(events =>
+                            {
+                                events.Success("onImageSuccess");
+                                events.Upload("onImageUpload");
+                                events.Select("onSelectContractReourceUpload");
+
+                            })
+
+                        //.Events(events =>{ events.Upload("onImageUpload")};
+
+                        //   )
+                            )
+
+                            <input type="hidden" name="HdnFileName" />
+                        </div>
+                        if (Model.ObjSurveyResult.FirstOrDefault() != null)
+                        {
+                            if (Model.ObjSurveyResult.FirstOrDefault().FileName != null)
+                            {
+                                <div class="pull-right">
+                                    <i title="" class="fa fa-eye editPreSarvyIcon" aria-hidden="true" onclick="ViewSurveyResultFile('@(Model.ObjSurveyResult.FirstOrDefault().FileName)')"></i>
+                                </div>
+                            }
+
+                        }
+                        <div class="clearfix"></div>
+                        <div class="marginbtm20"></div>
+                    }
+                }
+                <div class="clearfix"></div>
+            </div>
+        </div>
+
+        @*<div class="col-md-4 col-md-offset-1">
+    <label class="width10 pull-left maginRight5">@Model.CurrentQuestionIndex/@Model.TotalQuestion</label>
+       <div class="width85 pull-left SurveyCompleteGraphTotalView">
+           <div class="SurveyCompleteGraphActive" style="width:@(Model.TotalQuestion!=Model.CurrentQuestionIndex?(int)Math.Round((double)(100 / Model.TotalQuestion) * Model.CurrentQuestionIndex):100)%"></div>
+       </div>
+        </div>*@
+
+        @if (Model.Question.QuestionTypeId == (int)CBUSA.Domain.EnumQuestionType.Grid)
+        {
+            <div class="col-md-12">
+                <div class="form-group">
+                    <div class="table-responsive enrollSurvAnsRequr" style="width:100%;">
+                        <div class="selectRightIcon">
+
+                            @Html.TakeGridTypeQuestion(Model.ObjSurveyResult.ToList()
+                     , Model.Question.QuestionGridSetting.FirstOrDefault().QuestionGridSettingHeader)
+
+                        </div>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+        }
+    </div>
+    <input type="hidden" name="HdnQuestionType" value="@Model.Question.QuestionTypeId" />
+    @switch (Model.Question.QuestionTypeId)
+    {
+        case 1:    //Text Box Type
+            <input type="hidden" name="HdnIsMandatory" value="@(Model.Question.IsMandatory.ToString())" />
+            <input type="hidden" name="HdnIsFileNeedToUpload" value="@(Model.Question.IsFileNeedtoUpload.ToString())" />
+            break;
+        case 2:
+        <input type="hidden" name="HdnIsMandatory" value="@(Model.Question.IsMandatory.ToString())" />
+        <input type="hidden" name="HdnIsFileNeedToUpload" value="@(Model.Question.IsFileNeedtoUpload.ToString())" />
+            break;
+    }
+    <input type="hidden" name="HdnQuestionId" value="@Model.Question.QuestionId" />
+    <input type="hidden" name="HdnCurrentQuestionOrder" value="@Model.CurrentQuestionIndex" />
+</div>

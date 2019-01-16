@@ -1,0 +1,30 @@
+﻿@using CBUSA.Models;
+
+<div id="divAttachmentDetailsView">
+    @foreach (CBUSA.Domain.Attachment Attachment in ViewBag.AttachmentList)
+    {
+        <div class="list-wrapper div-attachment-info detail-view" data-attachment-id="@Attachment.AttachmentId" data-attachment-title="@Attachment.DisplayValue" data-attachment-file-path="@String.Concat("../../", System.IO.Path.GetFileName(Attachment.AbsolutePath))" data-attachment-desc="@Attachment.Description" data-attachment-size="@Attachment.SizeInBytes" data-attachment-version="@Attachment.VersionName">
+            <div class="list-wrapper-left">
+                @Html.FileIcon(Attachment.FileName)
+            </div>
+            <div class="list-wrapper-right">
+                <h2>@Attachment.DisplayValue</h2>
+                <p>@Attachment.Description</p>
+            </div>
+        </div>
+    }
+</div>
+
+<div id="divAttachmentListView" style="display:none;">
+    @foreach (CBUSA.Domain.Attachment Attachment in ViewBag.AttachmentList)
+    {
+        <div class="list-wrapper-small div-attachment-info list-view" data-attachment-id="@Attachment.AttachmentId" data-attachment-title="@Attachment.DisplayValue" data-attachment-file-path="@String.Concat("../../", System.IO.Path.GetFileName(Attachment.AbsolutePath))" data-attachment-desc="@Attachment.Description" data-attachment-size="@Attachment.SizeInBytes" data-attachment-version="@Attachment.VersionName">
+            <div class="list-wrapper-left-small">
+                @Html.FileIcon(Attachment.FileName)
+            </div>
+            <div class="list-wrapper-right div-attachment-info">
+                @Attachment.DisplayValue
+            </div>
+        </div>
+    }
+</div>

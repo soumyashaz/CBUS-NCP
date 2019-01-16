@@ -1,0 +1,182 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <Name>CBUSA.DB</Name>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectVersion>4.1</ProjectVersion>
+    <ProjectGuid>{68c961d3-04f7-4ab5-b2ec-3f1504864d63}</ProjectGuid>
+    <DSP>Microsoft.Data.Tools.Schema.Sql.SqlAzureV12DatabaseSchemaProvider</DSP>
+    <OutputType>Database</OutputType>
+    <RootPath>
+    </RootPath>
+    <RootNamespace>CBUSA.DB</RootNamespace>
+    <AssemblyName>CBUSA.DB</AssemblyName>
+    <ModelCollation>1033,CI</ModelCollation>
+    <DefaultFileStructure>BySchemaAndSchemaType</DefaultFileStructure>
+    <DeployToDatabase>True</DeployToDatabase>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <TargetLanguage>CS</TargetLanguage>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <SqlServerVerification>False</SqlServerVerification>
+    <IncludeCompositeObjects>True</IncludeCompositeObjects>
+    <TargetDatabaseSet>True</TargetDatabaseSet>
+    <SccProjectName>SAK</SccProjectName>
+    <SccProvider>SAK</SccProvider>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccLocalPath>SAK</SccLocalPath>
+    <DefaultCollation>SQL_Latin1_General_CP1_CI_AS</DefaultCollation>
+    <DefaultFilegroup>PRIMARY</DefaultFilegroup>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <OutputPath>bin\Release\</OutputPath>
+    <BuildScriptName>$(MSBuildProjectName).sql</BuildScriptName>
+    <TreatWarningsAsErrors>False</TreatWarningsAsErrors>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <DefineDebug>false</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <OutputPath>bin\Debug\</OutputPath>
+    <BuildScriptName>$(MSBuildProjectName).sql</BuildScriptName>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <DefineDebug>true</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">11.0</VisualStudioVersion>
+    <!-- Default to the v11.0 targets path if the targets file for the current VS version is not found -->
+    <SSDTExists Condition="Exists('$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v$(VisualStudioVersion)\SSDT\Microsoft.Data.Tools.Schema.SqlTasks.targets')">True</SSDTExists>
+    <VisualStudioVersion Condition="'$(SSDTExists)' == ''">11.0</VisualStudioVersion>
+  </PropertyGroup>
+  <Import Condition="'$(SQLDBExtensionsRefPath)' != ''" Project="$(SQLDBExtensionsRefPath)\Microsoft.Data.Tools.Schema.SqlTasks.targets" />
+  <Import Condition="'$(SQLDBExtensionsRefPath)' == ''" Project="$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v$(VisualStudioVersion)\SSDT\Microsoft.Data.Tools.Schema.SqlTasks.targets" />
+  <ItemGroup>
+    <Folder Include="Properties" />
+    <Folder Include="dbo\" />
+    <Folder Include="dbo\Tables\" />
+    <Folder Include="dbo\Views\" />
+    <Folder Include="dbo\Functions\" />
+    <Folder Include="dbo\Stored Procedures\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Build Include="dbo\Tables\QuestionGridSetting.sql" />
+    <Build Include="dbo\Tables\QuestionGridSettingHeader.sql" />
+    <Build Include="dbo\Tables\QuestionTextBoxSetting.sql" />
+    <Build Include="dbo\Tables\QuestionType.sql" />
+    <Build Include="dbo\Tables\Resource.sql" />
+    <Build Include="dbo\Tables\ResourceCategory.sql" />
+    <Build Include="dbo\Tables\ResourceMarket.sql" />
+    <Build Include="dbo\Tables\RowStatus.sql" />
+    <Build Include="dbo\Tables\State.sql" />
+    <Build Include="dbo\Tables\__MigrationHistory.sql" />
+    <Build Include="dbo\Tables\Survey.sql" />
+    <Build Include="dbo\Tables\AspNetRoles.sql" />
+    <Build Include="dbo\Tables\AspNetUserClaims.sql" />
+    <Build Include="dbo\Tables\SurveyBuilder.sql" />
+    <Build Include="dbo\Tables\AspNetUserLogins.sql" />
+    <Build Include="dbo\Tables\SurveyBuilderEmailSendDetails.sql" />
+    <Build Include="dbo\Tables\AspNetUserRoles.sql" />
+    <Build Include="dbo\Tables\SurveyEmailSetting.sql" />
+    <Build Include="dbo\Tables\AspNetUsers.sql" />
+    <Build Include="dbo\Tables\Builder.sql" />
+    <Build Include="dbo\Tables\Builder20.sql" />
+    <Build Include="dbo\Tables\BuilderQuaterAdminReport.sql" />
+    <Build Include="dbo\Tables\SurveyInviteEmailSetting.sql" />
+    <Build Include="dbo\Tables\BuilderQuaterContractProjectDetails.sql" />
+    <Build Include="dbo\Tables\SurveyMarket.sql" />
+    <Build Include="dbo\Tables\SurveyRemainderEmailSetting.sql" />
+    <Build Include="dbo\Tables\SurveyResult.sql" />
+    <Build Include="dbo\Tables\BuilderQuaterContractProjectReport.sql" />
+    <Build Include="dbo\Tables\SurveySaveContinueEmailSetting.sql" />
+    <Build Include="dbo\Tables\BuilderSurveyEmailSent.sql" />
+    <Build Include="dbo\Tables\TblContractBuilderAssociation.sql" />
+    <Build Include="dbo\Tables\TblContractBuilderAssociation_1.sql" />
+    <Build Include="dbo\Tables\BuilderUser.sql" />
+    <Build Include="dbo\Tables\TblEnrollmentSurveyAnswer.sql" />
+    <Build Include="dbo\Tables\TblEnrollmentSurveyAnswer_1.sql" />
+    <Build Include="dbo\Tables\BuilderUserSurveyEmailSent.sql" />
+    <Build Include="dbo\Tables\Test_QryString.sql" />
+    <Build Include="dbo\Tables\TextBoxType.sql" />
+    <Build Include="dbo\Tables\CBUSAIntegrationStatus.sql" />
+    <Build Include="dbo\Tables\TmpUserData.sql" />
+    <Build Include="dbo\Tables\City.sql" />
+    <Build Include="dbo\Tables\Zone.sql" />
+    <Build Include="dbo\Tables\ConstructFormula.sql" />
+    <Build Include="dbo\Tables\ConstructFormulaMarket.sql" />
+    <Build Include="dbo\Tables\Contract.sql" />
+    <Build Include="dbo\Tables\ContractBuilder.sql" />
+    <Build Include="dbo\Tables\ContractCompliance.sql" />
+    <Build Include="dbo\Tables\ContractComplianceBuilder.sql" />
+    <Build Include="dbo\Tables\ContractMarket.sql" />
+    <Build Include="dbo\Tables\ContractProduct.sql" />
+    <Build Include="dbo\Tables\ContractRebate.sql" />
+    <Build Include="dbo\Tables\ContractRebateBuilder.sql" />
+    <Build Include="dbo\Tables\ContractStatus.sql" />
+    <Build Include="dbo\Tables\ContractStatusHistory.sql" />
+    <Build Include="dbo\Tables\ELMAH_Error.sql" />
+    <Build Include="dbo\Tables\Manufacturer.sql" />
+    <Build Include="dbo\Tables\Market.sql" />
+    <Build Include="dbo\Tables\NCPVolumeFeeExportData.sql" />
+    <Build Include="dbo\Tables\Product.sql" />
+    <Build Include="dbo\Tables\ProductCategory.sql" />
+    <Build Include="dbo\Tables\Project.sql" />
+    <Build Include="dbo\Tables\ProjectStatus.sql" />
+    <Build Include="dbo\Tables\Quater.sql" />
+    <Build Include="dbo\Tables\Question.sql" />
+    <Build Include="dbo\Tables\QuestionDropdownSetting.sql" />
+    <Build Include="dbo\Views\NcpEvaluteConstructFormula.sql" />
+    <Build Include="dbo\Views\vw_NCPSurveyResponseResult.sql" />
+    <Build Include="dbo\Views\vwTestExport.sql" />
+    <Build Include="dbo\Functions\GetFormulaColumnValue.sql" />
+    <Build Include="dbo\Functions\GetVolumeFeeDynamicQuestionHeader.sql" />
+    <Build Include="dbo\Functions\GetVolumeFeeDynamicQuestionWhereClause.sql" />
+    <Build Include="dbo\Functions\RemoveNonAlphaCharactersInFormula.sql" />
+    <Build Include="dbo\Functions\SplitVolumeFeeFormula.sql" />
+    <Build Include="dbo\Functions\SplitVolumeFeeFormula_bkp.sql" />
+    <Build Include="dbo\Functions\SplitDropDownFormulaList.sql" />
+    <Build Include="dbo\Functions\SplitQuestionList.sql" />
+    <Build Include="dbo\Stored Procedures\DataProcContractSurvey.sql" />
+    <Build Include="dbo\Stored Procedures\DataProcJoinBuilderToContract.sql" />
+    <Build Include="dbo\Stored Procedures\DataProcSendEmailtobuilder.sql" />
+    <Build Include="dbo\Stored Procedures\ELMAH_GetErrorsXml.sql" />
+    <Build Include="dbo\Stored Procedures\ELMAH_GetErrorXml.sql" />
+    <Build Include="dbo\Stored Procedures\ELMAH_LogError.sql" />
+    <Build Include="dbo\Stored Procedures\proc_CBUSA_Integration_Initiate.sql" />
+    <Build Include="dbo\Stored Procedures\Proc_CheckConstructFormulaCreation.sql" />
+    <Build Include="dbo\Stored Procedures\proc_GetCBUSA_Builders.sql" />
+    <Build Include="dbo\Stored Procedures\proc_GetCBUSA_Manufacturer.sql" />
+    <Build Include="dbo\Stored Procedures\proc_GetCBUSA_Market.sql" />
+    <Build Include="dbo\Stored Procedures\proc_GetCBUSA_ProductCategories.sql" />
+    <Build Include="dbo\Stored Procedures\proc_GetCBUSA_Products.sql" />
+    <Build Include="dbo\Stored Procedures\proc_GetCBUSA_Users.sql" />
+    <Build Include="dbo\Stored Procedures\Proc_GetNCPRebateFormulaValueReport.sql" />
+    <Build Include="dbo\Stored Procedures\Proc_GetNCPRebateFormulaValueReportExport.sql" />
+    <Build Include="dbo\Stored Procedures\Proc_GetNcpResult.sql" />
+    <Build Include="dbo\Stored Procedures\proc_GetNCPSurveyResponseQuestionHeader.sql" />
+    <Build Include="dbo\Stored Procedures\proc_GetNCPSurveyResponseQuestionHeader_New.sql" />
+    <Build Include="dbo\Stored Procedures\Proc_GetNCPVolumeFeeRebateData.sql" />
+    <Build Include="dbo\Stored Procedures\Proc_GetReturnedEvaluatedFormulaValue.sql" />
+    <Build Include="dbo\Stored Procedures\proc_GetSurveyResponseQuestionHeader.sql" />
+    <Build Include="dbo\Stored Procedures\Proc_NcpConstructFormulaEvalute.sql" />
+    <Build Include="dbo\Stored Procedures\Proc_NcpConstructFormulaEvalute_Cols.sql" />
+    <Build Include="dbo\Tables\Holiday.sql" />
+    <Build Include="dbo\Tables\QuarterEmailTemplate.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <RefactorLog Include="CBUSA.DB.refactorlog" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="dbo\Tables\ChallengeQuestion.sql" />
+  </ItemGroup>
+</Project>

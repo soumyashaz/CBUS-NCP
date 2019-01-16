@@ -1,0 +1,151 @@
+﻿@model CBUSA.Areas.Admin.Models.OverrideComplianceViewModel
+
+@{
+    int Count = 0;
+}
+@*For the first time*@
+@if (Model.Flag == 0)
+{
+
+
+    <div class="block-div" id="DivContractComplianceBuilder">
+        <div class="table-responsive">
+            <table class="table" id="table_complaincelist">
+                <tbody>
+                    <tr>
+                        <td width="30%"></td>
+                        <td width="35%" class="text-center">Original Values</td>
+                        <td width="35%" class="text-center">New Values</td>
+                    </tr>
+                    <tr>
+                        <td>Builder</td>
+                        <td class="text-center">
+                            <div class="block-div">
+                                <div class="width50 pull-left">Estimated</div>
+                                <div class="width50 pull-left">Actuals</div>
+                            </div>
+                        </td>
+                        <td class="text-center">
+                            <div class="block-div">
+                                <div class="width50 pull-left">Estimated</div>
+                                <div class="width50 pull-left">Actuals</div>
+                            </div>
+                        </td>
+                    </tr>
+
+                    @foreach (var Item in Model.ContractBuilderComplianceList)
+                    {
+                        Count = Count + 1;
+                        <tr data-role="Modfied">
+                            <td>
+                                @(Html.Kendo().DropDownList()
+                    .Name("ContractBuilder_" + Count)
+                          .DataTextField("Text")
+                          .DataValueField("Value")
+                    .BindTo(Model.BuilderList)
+                    .HtmlAttributes(new
+                      {
+                          @class = "form-control width170p"
+
+                      })
+                  .Events(e =>
+                {
+                    e.Select("onSelectContractBuilder");
+                })
+                      .Value(Item.BuilderId.ToString())
+                                )
+                            </td>
+                            <td class="text-center">
+                                <div class="block-div">
+                                    <div class="width50 pull-left">
+                                        <input class="form-control width70 height23" name="Txt_Orginal_Estimate" type="text" value="@Item.OrginalEstilamteValue" disabled>
+                                    </div>
+                                    <div class="width50 pull-left">
+                                        <input class="form-control width70 height23" name="Txt_Orginal_Actual" type="text" value="@Item.OrginalActualValue" disabled>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="text-center">
+                                <div class="block-div">
+                                    <div class="width50 pull-left">
+                                        <input class="form-control width70 height23" name="Txt_NewValue_Estimate_@Model.Count" required=required type="text" value="@Item.NewlEstilamteValue">
+                                        <span class="k-invalid-msg" data-for="Txt_NewValue_Estimate_@Model.Count"></span>
+                                    </div>
+                                    <div class="width50 pull-left">
+                                        <input class="form-control width70 height23" name="Txt_NewValue_Actual_@Model.Count" required=required type="text" value="@Item.NewActualValue">
+                                        <span class="k-invalid-msg" data-for="Txt_NewValue_Actual_@Model.Count"></span>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+
+
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td class="text-right"><a id="a_AddMoreRows" title="Add More Rows">Add More Rows...</a></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="clearfix"></div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" id="Btn_SaveOverrideCompliance" class="btn btn-info">Save</button>
+        <button type="button" id="Btn_CancelOverrideCompliance" class="btn btn-default new-btn" data-dismiss="modal">Close</button>
+    </div>
+
+
+    <input type="hidden" id="HdnContractId" value="@Model.ContractId" />
+    <input type="hidden" id="HdnNoOfDropDown" value="@Count" />
+}
+else
+{
+
+    <tr data-role="Modfied">
+        <td>
+            @(Html.Kendo().DropDownList()
+                        .Name("ContractBuilder_" + Model.Count)
+                          .DataTextField("Text")
+                          .DataValueField("Value")
+            .BindTo(Model.BuilderList)
+
+           .HtmlAttributes(new
+                  {
+
+                      @class = "form-control width170p"
+
+                  })
+              .Events(e =>
+            {
+                e.Select("onSelectContractBuilder");
+            })
+            )
+            <span class="k-invalid-msg" data-for="ContractBuilder_@Model.Count"></span>
+        </td>
+        <td class="text-center">
+            <div class="block-div">
+                <div class="width50 pull-left">
+                    <input class="form-control width70 height23" name="Txt_Orginal_Estimate" type="text" disabled>
+                </div>
+                <div class="width50 pull-left">
+                    <input class="form-control width70 height23" name="Txt_Orginal_Actual" type="text" disabled>
+                </div>
+            </div>
+        </td>
+        <td class="text-center">
+            <div class="block-div">
+                <div class="width50 pull-left">
+                    <input class="form-control width70 height23" name="Txt_NewValue_Estimate_@Model.Count" required=required type="text" onkeyup="numericFilter(this);">
+                    <span class="k-invalid-msg" data-for="Txt_NewValue_Estimate_@Model.Count"></span>
+                </div>
+                <div class="width50 pull-left">
+                    <input class="form-control width70 height23" name="Txt_NewValue_Actual_@Model.Count" required=required type="text" onkeyup="numericFilter(this);">
+                    <span class="k-invalid-msg" data-for="Txt_NewValue_Actual_@Model.Count"></span>
+                </div>
+            </div>
+        </td>
+    </tr>
+}
+

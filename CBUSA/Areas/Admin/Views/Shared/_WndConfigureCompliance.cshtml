@@ -1,0 +1,259 @@
+﻿@model CBUSA.Areas.Admin.Models.NcpComplianceViewModel
+
+<div class="block-div">
+    <div class="confForTabTile"><label class="control-label">Configure for:</label></div>
+    <ul class="nav nav-tabs pull-right">
+        <li class="active"><a data-toggle="tab" href="#DivConfEstimatvalue" name="a_tab"> Configure Estimated value</a></li>
+        <li><a data-toggle="tab" href="#DivConfActualvalue" name="a_tab"> Configure Actual value</a></li>
+    </ul>
+    <div class="clearfix"></div>
+    <div class="tab-content maginTop10" id="DivComplianceMainContainer">
+        <div id="DivConfEstimatvalue" class="tab-pane fade in active">
+            <div class="form-group">
+                <label class="col-sm-4 control-label">Select Survey:</label>
+                <div class="col-sm-8">
+
+                    @(Html.Kendo().DropDownListFor(x => x.EstimatedSurveyId)
+                        .DataTextField("SurveyName")
+                         .DataValueField("SurveyId")
+                        .Events(e =>
+                        {
+                            //  e.Select("onSelectEstimateSurvey"); e.DataBound("onDataBoundEstimateSurvey");
+                        })
+                           .DataSource(source =>
+                           {
+                               source.Read(read =>
+                               {
+                                   read.Action("SurveyList", "NCPRebateReport", new { Area = "Admin" }).Data("SendContractIdasParameter");
+                               })
+                               .ServerFiltering(true);
+                           })
+                                      .SelectedIndex(0)
+                                     .HtmlAttributes(new
+                                     {
+                                         @class = "form-control width315p",
+                                         required = "required"
+                                     })
+                  .Value(Model.EstimatedSurveyId.ToString()))
+                    <span class="k-invalid-msg" data-for="EstimatedSurveyId"></span>
+                </div>
+
+                <div class="clearfix"></div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-4 control-label">Select Question or Configure Formula:</label>
+                <div class="col-sm-8">
+                    @*<input type="radio" name="rad_">*@ @Html.RadioButtonFor(x => x.IsEstimateDirectQuestion, "directquestion", Model.IsEstimateDirectQuestion == true
+                            ? new { @checked = "checked" } : null)  Select direct question
+                    @*<select class="form-control">
+                            <option value="1">Select Question</option>
+                            <option value="2">(1) - How many houses are you going to build this year?</option>
+                            <option value="3">(2) - How many doors per house do you build approx?</option>
+                        </select>*@
+                    @(Html.Kendo().DropDownListFor(x => x.EstimatedQuestionId)
+
+                          .DataTextField("QuestionValue")
+                          .DataValueField("QuestionId")
+
+                        .Events(e =>
+                        {
+                            // e.Select("onSelectActualSurvey");
+                        })
+                           .DataSource(source =>
+                           {
+                               source.Read(read =>
+                               {
+                                   read.Action("QuestionList", "NCPRebateReport", new { Area = "Admin" }).Data("SendEstimatedSurveyIdAsParameter");
+                               })
+                               .ServerFiltering(true);
+                           })
+                                      .SelectedIndex(0)
+                                     .HtmlAttributes(new
+                                     {
+                                         @class = "form-control width315p",
+                                         required = "required"
+
+
+                                     })
+                             .Value(Model.EstimatedQuestionId.ToString())
+                             .AutoBind(false)
+                                             .CascadeFrom("EstimatedSurveyId")
+                    )
+
+
+                    <span class="k-invalid-msg" data-for="EstimatedQuestionId"></span>
+                </div>
+
+                <div class="clearfix"></div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-4 control-label"></label>
+                <div class="col-sm-8">
+                    @*<input type="radio">*@ @Html.RadioButtonFor(x => x.IsEstimateDirectQuestion, "composeformula", Model.IsEstimateDirectQuestion == false
+                            ? new { @checked = "checked" } : null) Compose Formula
+                    @Html.TextAreaFor(x => x.EstimatedComposeFormula, new { @class = "form-control width315p", rows = "3", placeholder = "(question id) (opr) (question id) (opr) (1340)", })
+                    @*<textarea class="form-control" placeholder="(question id) (opr) (question id) (opr) (1340) "></textarea>*@
+                    <span class="k-invalid-msg" data-for="EstimatedComposeFormula"></span>
+                </div>
+                <div class="clearfix"></div>
+            </div>
+        </div>
+        <div id="DivConfActualvalue" class="tab-pane fade">
+            <div class="form-group">
+                <label class="col-sm-4 control-label">Select Year</label>
+                <div class="col-sm-8">
+
+                    @(Html.Kendo().DropDownListFor(x => x.Year)
+                          .DataTextField("Text")
+                          .DataValueField("Value")
+                    .BindTo(Model.YearList)
+                    .HtmlAttributes(new
+                    {
+                        @class = "form-control width315p",
+                        required = "required"
+
+                    })
+                    .Value(Model.Year.ToString())
+                    )
+                    <span class="k-invalid-msg" data-for="ActualsSurveyId"></span>
+                </div>
+
+                <div class="clearfix"></div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-4 control-label">Select Quarter:</label>
+                <div class="col-sm-8">
+
+                    @(Html.Kendo().DropDownListFor(x => x.Quater)
+                          .DataTextField("Text")
+                          .DataValueField("Value")
+                    .BindTo(Model.QuaterList)
+                    .HtmlAttributes(new
+                    {
+                        @class = "form-control width315p",
+                        required = "required"
+
+                    })
+                    .Value(Model.Quater)
+                    )
+                    <span class="k-invalid-msg" data-for="ActualsSurveyId"></span>
+                </div>
+                <div class="clearfix"></div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-4 control-label">Select Survey:</label>
+                <div class="col-sm-8">
+                    @*<select class="form-control">
+                            <option value="1">Select Survey</option>
+                            <option value="2">Paint contract Enrolment survey</option>
+                            <option value="3">Paint contract Follow up survey</option>
+                        </select>*@
+                    @(Html.Kendo().DropDownListFor(x => x.ActualsSurveyId)
+
+                          .DataTextField("SurveyName")
+                          .DataValueField("SurveyId")
+
+                        .Events(e =>
+                        {
+                            // e.Select("onSelectActualSurvey"); e.DataBound("onDataBoundActualsSurvey");
+                        })
+                           .DataSource(source =>
+                           {
+                               source.Read(read =>
+                               {
+                                   read.Action("NCPSurveyList", "NCPRebateReport", new { Area = "Admin" }).Data("SendDataToLoadNcpSurvey"); ;
+                               })
+                               .ServerFiltering(true);
+                           })
+                                      .SelectedIndex(0)
+                                     .HtmlAttributes(new
+                                     {
+                                         @class = "form-control width315p",
+                                         required = "required"
+
+
+                                     })
+                             .Value(Model.ActualsSurveyId.ToString())
+                             .AutoBind(false)
+                             .CascadeFrom("Quater")
+                    )
+                    <span class="k-invalid-msg" data-for="ActualsSurveyId"></span>
+                </div>
+
+                <div class="clearfix"></div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-4 control-label">Select Question or Configure Formula:</label>
+                <div class="col-sm-8">
+                    @Html.RadioButtonFor(x => x.IsActualDirectQuestion, "directquestion", Model.IsActualDirectQuestion == true
+                            ? new { @checked = "checked" } : null) @*<input type="radio">*@ Select direct question
+                            @*<select class="form-control">
+                                    <option value="1">Select Question</option>
+                                    <option value="2">(1) - How many houses are you going to build this year?</option>
+                                    <option value="3">(2) - How many doors per house do you build approx?</option>
+                                </select>*@
+                            @(Html.Kendo().DropDownListFor(x => x.ActualQuestionId)
+
+                                  .DataTextField("QuestionValue")
+                                  .DataValueField("QuestionId")
+
+                        .Events(e =>
+                        {
+                            // e.Select("onSelectContractStatus");
+                        })
+                           .DataSource(source =>
+                           {
+                               source.Read(read =>
+                               {
+                                   read.Action("QuestionList", "NCPRebateReport", new { Area = "Admin" }).Data("SendActualSurveyIdAsParameter");
+                               })
+                               .ServerFiltering(true);
+                           })
+                                      .SelectedIndex(0)
+                                     .HtmlAttributes(new
+                                     {
+                                         @class = "form-control width315p",
+                                         required = "required"
+
+
+                                     })
+                             .AutoBind(false)
+
+                     .CascadeFrom("ActualsSurveyId")
+                            )
+                            <span class="k-invalid-msg" data-for="ActualQuestionId"></span>
+                        </div>
+
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label"></label>
+                        <div class="col-sm-8">
+                            @Html.RadioButtonFor(x => x.IsActualDirectQuestion, "composefromula", Model.IsActualDirectQuestion == false
+                            ? new { @checked = "checked" } : null) @*<input type="radio">*@ Compose Formula
+                            @Html.TextAreaFor(x => x.ActualComposeFormula, new { @class = "form-control width315p", rows = "3", placeholder = "(question id) (opr) (question id) (opr) (1340)" })
+                            @*<textarea class="form-control" rows="3" placeholder="(question id) (opr) (question id) (opr) (1340) "></textarea>*@
+                            <span class="k-invalid-msg" data-for="ActualComposeFormula"></span>
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="clearfix"></div>
+
+        <input type="hidden" id="HdnTab" />
+        <input type="hidden" id="HdnContractId" value="@Model.ContractId" />
+
+        <input type="hidden" id="HdnSurveyIdTemp" />
+
+
+        <div class="modal-footer">
+            <button type="button" class="btn btn-info" id="BtnSaveCompliance">Save</button>
+            @*<button type="button" class="btn btn-info">Edit</button>*@
+            <button type="button" class="btn btn-default new-btn" data-dismiss="modal" id="CancelCompliance">Close</button>
+        </div>
+        @*</div>
+                </div>
+            </div>*@
+        <!-- End Configure compliance factor -->

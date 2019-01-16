@@ -1,0 +1,66 @@
+﻿@model IEnumerable<CBUSA.Areas.Admin.Models.ContractRebateViewModel>
+
+<!-- Start popup -->
+<div id="DivManageContractStatus" class="DivManageContractStatus">
+    <div class="block-div">
+       
+        <div class="col-md-12 btm-top-padding15">
+            <div class="table-responsive">
+                <table class="table">
+                    <thead class="thead-bg">
+                        <tr>
+                            <th>Contract status</th>
+                            <th>Enter % value to be assigned for each stage</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var Item in Model)
+                        {
+                            <tr>
+                                <td class="verticalAlignInherit">@(Item.ContractStatusName)</td>
+                                <td class="TxtRebateValueNumeric"><input type="text" class="form-control" name="TxtRebateValue" value="@Item.RebatePercentage" /> <input type="hidden" value="@Item.ContractStatusId" name="HdnRebateStatus" /></td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+            <div class="btm-top-padding15"><a id="a_override_rebate" title="Override rebate % for specific Builders">Override rebate % for specific Builders</a></div>
+        </div>
+        <div class="clearfix"></div>
+    </div>
+    <button type="button" class="btn btn-info" id="SaveContractRebate">Confirm</button>
+    <button type="button" class="btn btn-default new-btn" id="CancelContractRebate">Close</button>
+</div>
+
+
+<!-- End popup -->
+@*<h5>Enter Rebate Status</h5>
+    <div id="DivManageContractStatus">
+        <table>
+            <tr>
+                <th>Contract Status</th>
+                <th>Enter % value to be assigned for each stage</th>
+            </tr>
+            @foreach (var Item in Model)
+            {
+                <tr>
+                    <td>@Item.ContractStatusName</td>
+                    <td>
+                        <input type="text" name="TxtRebateValue" value="@Item.RebatePercentage" />
+                        <input type="hidden" value="@Item.ContractStatusId" name="HdnRebateStatus" />
+                    </td>
+                </tr>
+            }
+        </table>
+    </div>
+    <div>
+        <a href="#" id="a_override_rebate">Override rebate % for specific Builders</a>
+    </div>
+
+    <div style="height:50px;width:100%">
+        <div style="float:right">
+            <button type="button" class="btn btn-primary btn-sm" id="SaveContractRebate">Save</button>
+            <button type="button" class="btn btn-primary btn-sm" id="CancelContractRebate">Cancel</button>
+        </div>
+
+    </div>*@

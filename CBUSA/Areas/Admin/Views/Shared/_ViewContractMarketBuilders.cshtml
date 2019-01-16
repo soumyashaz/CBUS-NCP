@@ -1,0 +1,73 @@
+﻿@model IEnumerable<CBUSA.Areas.Admin.Models.MarketBuilderViewModel>
+
+@{
+    int Flag = 0;
+    int Count = 1;
+
+}
+
+
+@foreach (var Item in Model)
+{
+
+  if (Count > 3)
+    {
+        Count = 1;
+    }
+
+
+    if ((Flag % 2) == 0)
+    {
+
+        @:<div>
+     }
+
+
+    if (Item.Builders.Count > 0)
+    {
+
+        <div style="width:50%;float:left;">
+            <div>
+                <h5>@Item.MarketName</h5>
+                <table style="width:100%" class="ShowZoneStateTable">
+                    @foreach (var Itemchild in Item.Builders)
+                    {
+                        <tr>
+                            <td style="width:20%" align="center">
+                                <input type="checkbox" name="ChkStateSelect" />
+                                <input type="hidden" value="@Itemchild.BuilderId" />
+                            </td>
+                            <td style="width:80%">
+                                <span>@Itemchild.BuilderName</span>
+                            </td>
+                        </tr>
+                    }
+                </table>
+            </div>
+        </div>
+
+    }
+
+
+    if ((Count % 2 == 0))
+    {
+        @:
+    </div>
+    <div style="clear:both"></div>
+    }
+
+
+    Flag = Flag + 1;
+    Count = Count + 1;
+
+
+
+
+}
+
+
+
+
+
+
+

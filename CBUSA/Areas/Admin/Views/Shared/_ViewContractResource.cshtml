@@ -1,0 +1,21 @@
+﻿@using CBUSA.Models;
+@model CBUSA.Domain.Resource
+<h4>@Model.ResourceCategory.ResourceCategoryName</h4>
+
+<div>
+    <div style="width:25%;float:left">
+        @Html.FileIcon(Model.FileLocation)
+    </div>
+    <div style="width:50%;float:left">
+        <p>
+            @Model.Title
+        </p>
+        <p>
+            @Model.Description
+        </p>
+    </div>
+    <div style="width:25%;">
+        <input type="hidden" value="@Model.ResourceId"  />
+        <button type="button" class="btn btn-info" id="a_ContractResourceDownload" >Download</button>
+    </div>
+</div>

@@ -1,0 +1,46 @@
+﻿@model  IEnumerable<CBUSA.Domain.Product>
+
+@{
+    int Flag = 0;
+}
+
+<!-- Start popup -->
+<div>
+    <div class="block-div">
+        <div class="table-responsive">
+            <table class="table">
+                <thead class="thead-bg">
+                    <tr>
+                        <th class="text-center">Product name</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var Itemchild in Model)
+                    {
+                        <tr>
+                            <td class="text-center">
+                                @Itemchild.ProductName
+                                <input type="hidden" value="@Itemchild.ProductId" />
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        <div class="clearfix"></div>
+        <button type="button" class="btn btn-info" id="DownloadProductDetials">Download</button>
+    </div>
+</div>
+
+
+
+
+
+@*NR*@
+@*<div id="">
+        <div class="col-md-6 col-md-offset-6">
+            <button type="button" class="btn btn-info" id="DownloadProductDetials">Download</button>
+
+        </div>
+
+    </div>*@

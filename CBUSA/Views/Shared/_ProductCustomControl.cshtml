@@ -1,0 +1,49 @@
+﻿@using CBUSA.Domain
+@model  CBUSA.Models.ProductControlVM
+
+@if (Model.Flag == 0)
+{
+    <div id="DivCustomProductSearch" class="searchSeconDiv">
+        <input type="text" id="TxtProductSearch" />
+    </div>
+
+    <div id="DivCustomProductSelect">
+        <div style="float:left; margin:0px 10px 0px 30%;">
+        @*<input type="checkbox" id="ChkSelectAll" /> <span> Select All</span>*@ 
+            <a href="javascript:void(0)" id="ChkSelectAll"><span> Select All</span></a>
+        </div>
+        <div style="float:left;"> 
+             @*<input type="checkbox" id="ChkClearAll" /> <span> Clear All</span>*@
+            <a href="javascript:void(0)" id="ChkClearAll"> <span> Clear All</span></a>
+        </div>
+        <div class="clearfix"></div>
+    </div>
+}
+
+
+<div>
+    @foreach (var Item in Model.ObjProductCategory)
+    {
+        if (Item.Product.Count > 0)
+        {
+            <div id="divProductCategoryContainer_@Item.ProductCategoryId">
+                <h5>@Item.ProductCategoryName</h5>
+                <table style="width:100%" class="ShowProductTable">
+                    @foreach (var Itemchild in Item.Product.Where(x=>x.RowStatusId==(int)RowActiveStatus.Active))
+                    {
+                        <tr>
+                            <td style="width:20%" align="center">
+                                <input type="checkbox" name="ChkProductSelect" />
+                                <input type="hidden" value="@Itemchild.ProductId" />
+                            </td>
+                            <td style="width:80%">
+                                <span>@Itemchild.ProductName</span>
+
+                            </td>
+                        </tr>
+                    }
+                </table>
+            </div>
+        }
+    }
+</div>

@@ -1,0 +1,6 @@
+﻿@model CBUSA.Areas.CbusaBuilder.Models.ProjectViewModel
+@{
+   
+    Layout = null;
+}
+@Html.Kendo().NumericTextBoxFor(cltr => cltr.rowcount).Format("#").Decimals(0).Min(0).Value(Model.rowcount)

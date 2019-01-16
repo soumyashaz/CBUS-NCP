@@ -1,0 +1,60 @@
+﻿<h3 class="text-center"><u>@ViewBag.SurveyName</u></h3>
+<div class="centerAlignPosition btm-top-margin50">
+    @if (ViewBag.SurveyName != null)
+    {
+        if (ViewBag.IsTakeSurveyCompleted != null)
+        {
+            if (ViewBag.IsTakeSurveyCompleted == true)
+            {
+                <label>Thank you for taking the time to complete the @ViewBag.SurveyName.</label>
+            }
+            else
+            {
+                <label>Please click on the below link to complete the survey @ViewBag.SurveyName.</label>
+            }
+
+        }
+        <br />
+        <label>Should you have any questions, please contact April Gray at 601-307-2503 or april@cbusa.us.</label>
+        <div class="col-md-12 margin-top20">
+            @if (ViewBag.IsTakeSurveyCompleted == false)
+            {
+                <button type="button" class="btn btn-info" id="BtnTakeSurvey">Take Survey</button>
+            }
+            <button type="button" class="btn btn-info" id="BtnClose">Close Window</button>
+        </div>
+    }
+</div>
+
+<input type="hidden" id="HdnSurveyId" value="@ViewBag.SurveyId" />
+<input type="hidden" id="HdnBuilderId" value="@ViewBag.BuilderId" />
+<!-- End Enrollment Survey Thank You -->
+@section scripts
+{
+    <script type="text/javascript">
+        var AjaxCallUrl =
+            {
+                TakeSurveyUrl: '@Url.Action("TakeSurvey", "Survey", new { Area = "AttendSurvey", SurveyId = "****SurveyId****", BuilderId = "****BuilderId****" })',
+                RenderQuestion: '@Url.Action("LoadSurveyQuestion", "Survey", new { Area = "AttendSurvey" })'
+            };
+
+
+        $(document).ready(function () {
+
+            $("#BtnClose").on("click", function () {
+                window.close()
+
+            });
+
+            $("#BtnTakeSurvey").on("click", function () {
+                window.location.href = AjaxCallUrl.TakeSurveyUrl.replace("****SurveyId****", $("#HdnSurveyId").val()).replace("****BuilderId****", $("#HdnBuilderId").val());
+
+            });
+
+        });
+
+
+
+    </script>
+
+}

@@ -1,0 +1,165 @@
+﻿<div class="margin-top20 btm-top-padding15">
+    <div class="width40 activeSurveysDrop" style="display:inline-block;">
+        @(Html.Kendo().DropDownList()
+                            .Name("ContractManufacturer")
+                                      .DataTextField("ContractName")
+                                             .DataValueField("ContractId")
+                                                      .Events(e =>
+                                {
+                                    e.Select("onSelectContractStatus");
+                                })
+                               .DataSource(source =>
+                                          {
+                                              source.Read(read =>
+                                              {
+                                                  read.Action("GetContracts", "Survey", new { Area = "Admin" });
+                                              })
+                                              .ServerFiltering(true);
+                                          })
+                                                                  .SelectedIndex(0)
+                                                                          .HtmlAttributes(new
+                                                                          {
+
+                                                                              width = "100%"
+
+                                                                          })
+
+        )
+    </div>
+    <div class="row pull-right">
+        <div class="maginRight5">
+            <div class="col-md-2"></div>
+            <div class="col-md-2"><i class="fa fa-pencil editPreSarvyIcon" aria-hidden="true" id="BtnEdit" title="Edit"></i></div>
+            <div class="col-md-2"><a href="javascript:void(0)" id="BtnCopy" title="Copy"><img src="~/content/images/copy-icon.png" /></a></div>
+            <div class="col-md-2"><a href="javascript:void(0)" id="BtnPublish" title="Publish"><img src="~/content/images/upload-icon.png" /></a></div>
+            <div class="col-md-2"><i class="fa fa-eye editPreSarvyIcon" aria-hidden="true" id="BtnPreview" title="View"></i></div>
+            <div class="col-md-2"><a href="javascript:void(0)" onclick="return confirm('Are you sure you want to archive the selected survey?')"> <i class="fa fa-folder-open editPreSarvyIcon" aria-hidden="true" id="BtnArchivedSurvey" title="Archived"></i></a></div>
+        </div>
+    </div>
+    <div class="clearfix"></div>
+</div>
+<div class="clearfix"></div>
+<div class="table-responsive">
+    <table class="table">
+        <thead class="thead-bg">
+            <tr>
+                <th width="2%" class="text-center">#</th>
+                <th width="22%" class="text-left"><a href="#" id="ascser"><span id="ascincp"><i class="fa fa-caret-down" aria-hidden="true"></i></span></a><a href="#" id="descser"><span id="descincp" hidden="hidden"><i class="fa fa-caret-up" aria-hidden="true"></i></span></a> Surveys</th>
+                <th width="16%" class="text-center"><a href="#" id="asccont"><span id="ascicon"><i class="fa fa-caret-down" aria-hidden="true"></i></span></a><a href="#" id="desccont"><span id="descicon" hidden="hidden"><i class="fa fa-caret-up" aria-hidden="true"></i></span></a> Contract</th>
+                <th width="10%" class="text-center"><a href="#" id="ascdue"><span id="ascidue"><i class="fa fa-caret-down" aria-hidden="true"></i></span></a><a href="#" id="descdue"><span id="descidue" hidden="hidden"><i class="fa fa-caret-up" aria-hidden="true"></i></span></a> Due Date</th>
+                <th width="18%" class="text-center">Survey Details</th>
+                <th width="10%" class="text-center">Survey Status</th>
+                <th width="15%" class="text-left">
+                    <div class="text-left" style="margin-left:5px;">Responses</div>
+                    <ul class="mang-servy-respon-ops">
+                        <li><a href="#" title="Complete">Complete</a></li>
+                        <li><a href="#" title="Incomplete">Incomplete</a></li>
+                    </ul>
+                </th>
+                <th width="5%" class="text-center">Select</th>
+            </tr>
+        </thead>
+        @(Html.Kendo().ListView<CBUSA.Areas.Admin.Models.SurveyViewModel>()
+                                .Name("listViewContractActiveAsc")
+                                .TagName("tbody")
+                                .ClientTemplateId("TemplateActiveContract")
+                                .DataSource(dataSource =>
+                                {
+                                    dataSource.Read(read => read.Action("SurveyList", "Survey").Data("SendContractIdAsParameterOrder"));
+                                    dataSource.PageSize(21);
+                                })
+                                //.Pageable()
+                                .AutoBind(true)
+        )
+    </table>
+    <input type="hidden" id="HdnResourcePageValue" value="1" />
+</div>
+<div class="clearfix"></div>
+<div class="btm-top-padding15">* View archived survey  <a href="@Url.Action("ArchivedSurvey","Survey")" id="archser">here</a>. Survey ended for more than 30 days are archived automatically.</div>
+<!-- End Body -->
+<!-- Start Footer -->
+<footer class="footer-wrapper">
+    <div class="container"></div>
+</footer>
+<!-- End Footer -->
+<!-- Jquery Library -->
+
+
+<script src="@Url.Content("~/Scripts/Custom/AdminContractShorting.js?v="+@DateTime.Now.ToFileTime().ToString())"></script>
+<script src="@Url.Content("~/Scripts/Custom/ManageSurvey.js?v="+@DateTime.Now.ToFileTime().ToString())"></script>
+
+
+@section scripts
+{
+    <script type="text/x-kendo-tmpl" id="TemplateActiveContract">
+
+        <tr>
+            <td width="2%" class="text-center">
+                <span id="spnRowNumber">#:rowcount#</span>
+            </td>
+            <td width="26%" class="text-left">#:SurveyName#</td>
+            <td width="16%" class="text-center">#:ContractName# </td>
+            <td width="10%" class="text-center redText">#:LastDate#</td>
+            <td width="18%" class="text-center">
+                <p>Created By: Gordan Miller</p>
+                <p>#:PublishDate#</p>
+            </td>
+            <td width="10%" class="text-center">
+
+                #if (SurveyStatus=="Live")
+                {#
+                <div><i class="fa fa-check StatusLiveCheck" aria-hidden="true"></i> #:SurveyStatus#</div>
+                <input type="hidden" name="HdnSurveyStatus" value=#:SurveyStatus#>
+                #}else if(SurveyStatus==" "&&IsPublished==false){#
+                <div><i class=" fa fa-check statuslivecheck" aria-hidden="true"></i> Live</div>
+                <input type="hidden" name="HdnSurveyStatus" value=#:SurveyStatus#>
+                #}else if(SurveyStatus==""&&IsPublished==true){#
+                <div><i class="fa fa-check StatusLiveCheck" aria-hidden="true"></i> Live</div>
+                <input type="hidden" name="HdnSurveyStatus" value=#:SurveyStatus#>
+                #}
+                else{#
+                <div><i class="fa fa-times StatusCloseTimes" aria-hidden="true"></i> #:SurveyStatus#</div>
+                <input type="hidden" name="HdnSurveyStatus" value=#:SurveyStatus#>
+                #}#
+
+            <td width="15%" class="text-center">
+                #if (IsPublished==true)
+                {#
+                <a onclick="RedirectToSurveyResponse('#=SurveyId#', 2)"> #:ResponseCom# </a> |<a onclick="RedirectToSurveyResponse('#=SurveyId#', 3)">  #:ResponseInCom# </a>
+                <input type="hidden" name="HdnSurveyPublished" value="true">
+
+                #}
+                else{#
+                <span>Not Published</span>
+                <input type="hidden" name="HdnSurveyPublished" value="false">
+                #}#
+
+            </td>
+            <td width="3%" class="text-center">
+                <input type="radio" name="RadSurvey">
+                <input type="hidden" name="HdnSurvey" value="#:SurveyId#">
+                <input type="hidden" name="HdnContract" value="#:ContractId#">
+                <input type="hidden" name="Hdnst" value="#:SurveyStatus#">
+                <input type="hidden" name="HdnArchive" value="#:Archive#">
+                <input type="hidden" name="HdnPub" value="#:IsPublished#">
+            </td>
+        </tr>
+    </script>
+
+    <script type="text/javascript">
+        var AjaxCallUrl =
+                {
+
+                    RedirectSurveyDeployUrl: '@Url.Action("PublishSurvey", "Survey", new { Area = "Admin", SurveyId = "****SurveyId****" })',
+                    RedirectSurveyEditUrl: '@Url.Action("SurveyDetails", "Survey", new { Area = "Admin", SurveyId = "****SurveyId****" })',
+                    PreviewSurveyUrl: '@Url.Action("PreviewSurvey", "Survey", new { Area = "Admin", id = "****id****" })',
+                    ArchievedStatusUrl: '@Url.Action("ArchievedStatus", "Survey", new { Area = "Admin", SurveyId = "****SurveyId****" })',
+                    RedirectContractUrl: '@Url.Action("ShowResponse", "SurveyResponse", new { Area = "Admin", SurveyId = "****SurveyId****", IsCompleted ="****IsCompleted****" })',
+                    CopySurvey: '@Url.Action("CopySurvey", "Contract", new { Area = "Admin" })',
+
+                }
+    </script>
+
+    <script src="@Url.Content("~/Scripts/Custom/AdminSurveyManageSurvey.js?v="+@DateTime.Now.ToFileTime().ToString())"></script>
+
+}

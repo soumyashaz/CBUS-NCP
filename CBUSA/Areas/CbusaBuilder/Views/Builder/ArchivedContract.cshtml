@@ -1,0 +1,78 @@
+﻿<h4 class="text-upper btm-top-padding15">Archived Contracts</h4>
+<div class="table-responsive">
+    <table class="table">
+        <thead class="thead-bg">
+            <tr>
+                <th width="2%" class="text-center">#</th>
+                <th width="20%" class="text-center"><a href="#" id="asccon"><span id="ascicon"><i class="fa fa-caret-down" aria-hidden="true"></i></span></a><a href="#" id="desccon"><span id="descicon" hidden="hidden"><i class="fa fa-caret-up" aria-hidden="true"></i></span></a> Contract</th>
+                <th width="18%" class="text-center"><a href="#" id="ascncp"><span id="ascincp"><i class="fa fa-caret-down" aria-hidden="true"></i></span></a><a href="#" id="descncp"><span id="descincp" hidden="hidden"><i class="fa fa-caret-up" aria-hidden="true"></i></span></a> National Contract Partner</th>
+                <th width="15%" class="text-center"> Product Category</th>
+                <th width="15%" class="text-center"><a href="#" id="ascyr"><span id="asciyr"><i class="fa fa-caret-down" aria-hidden="true"></i></span></a><a href="#" id="descyr"><span id="desciyr" hidden="hidden"><i class="fa fa-caret-up" aria-hidden="true"></i></span></a> Contract Term</th>
+                <th width="15%">Contract Deliverables</th>
+            </tr>
+        </thead>
+
+        @(Html.Kendo().ListView<CBUSA.Areas.CbusaBuilder.Models.ContractBuilderViewModel>()
+                    .Name("listViewContractActiveAsc")
+                    .TagName("tbody")
+                    .ClientTemplateId("TemplateActiveContract")
+
+                    .DataSource(dataSource =>
+                    {
+                        dataSource.Read(read => read.Action("ArchivedContractList", "Builder").Data("SendContractIdAsParameterOrder"));
+                        dataSource.PageSize(21);
+                    })
+                    //.Pageable()
+                    .AutoBind(true)
+        )
+    </table>
+    <input type="hidden" id="HdnResourcePageValue" value="1" />
+</div>
+
+@section scripts
+{
+    <script src="@Url.Content("~/Scripts/Custom/ContractBuilder.js?v="+@DateTime.Now.ToFileTime().ToString())"></script>
+    <script type="text/javascript">
+            var TreeControlUrl = '@Url.Action("ParseProductTreeViewControl", "Home", new { Area = "" })';
+            var AjaxCallUrl =
+                {
+                    @*ContractResourceUrl: '@Url.Action("LoadContractResource", "Contract", new { Area = "Admin" })'*@
+
+                    ContractResourceUrl: '@Url.Action("LoadContractResourceWithCategory", "Contract", new { Area = "Admin" })',
+                    DownLaodResourceFile: '@Url.Action("DownloadResourceFile", "Builder", new { Area = "CbusaBuilder" })',
+                    RedirectContractUrl: '@Url.Action("SurveyDetails", "Survey", new { Area = "Admin", SurveyId = "****SurveyId****" })'
+
+                };
+
+            $(document).ready(function () {
+                // TreeControlUrl = '@Url.Action("ParseProductTreeViewControl", "Home", new { Area = "" })';
+            });
+    </script>
+
+    <script src="@Url.Content("~/Scripts/Custom/CbusaBuilderContractBuilder.js?v="+@DateTime.Now.ToFileTime().ToString())"></script>
+
+    <script type="text/x-kendo-tmpl" id="TemplateActiveContract">
+        <tr>
+            <td width="2%" class="text-center">
+                <span id="spnRowNumber">#:rowcount#</span>
+            </td>
+            <td width="20%" class="text-center">#:ContractName#</td>
+            <td width="18%" class="text-center"><a href="http://#:Website#" title="Vendor 1" target="_blank">#:NationalContractPartner#</a></td>
+            <td width="15%" class="text-center">#:ProductList#</td>
+            <td width="15%" class="text-center">#:ContractFrom#-#:ContractTo#</td>
+            <td width="15%">
+                #for(var z=0; z < ContractDeliverableslist.length; z++){#
+                <ul class="cont-delver-icon">
+                    <li><i class="fa fa-check StatusLiveCheck" aria-hidden="true"></i> #:ContractDeliverableslist[z]# </li>
+                </ul>
+                #}#
+            </td>
+        </tr>
+    </script>
+
+    <script>
+        function SendContractIdAsParameterPending() {
+            return { Type: type, PageValue: $("#HdnResourcePageValue3").val() };
+        }
+    </script>
+}

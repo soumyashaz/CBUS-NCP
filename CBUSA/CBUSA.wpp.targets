@@ -1,0 +1,88 @@
+﻿<Project ToolsVersion="4.0"
+         xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ExcludeFromPackageFolders Include="Scripts/Kendo">
+      <FromTarget>ContactManager.Mvc.wpp.targets</FromTarget>
+    </ExcludeFromPackageFolders>
+    <ExcludeFromPackageFolders Include="ApplicationDocument">
+      <FromTarget>don't need application document</FromTarget>
+    </ExcludeFromPackageFolders>
+    <ExcludeFromPackageFolders Include="CustomTemplate">
+      <FromTarget>don't need custom template</FromTarget>
+    </ExcludeFromPackageFolders>
+    <ExcludeFromPackageFolders Include="DesignHTML">
+      <FromTarget>don't need designhtml</FromTarget>
+    </ExcludeFromPackageFolders>
+    <ExcludeFromPackageFiles Include="Web.config">
+      <FromTarget>fff</FromTarget>
+    </ExcludeFromPackageFiles>
+    <ExcludeFromPackageFiles Include="Scripts/_references.js">
+      <FromTarget>fff</FromTarget>
+    </ExcludeFromPackageFiles>
+    <ExcludeFromPackageFiles Include="Scripts/bootstrap.js">
+      <FromTarget>fff</FromTarget>
+    </ExcludeFromPackageFiles>
+    <ExcludeFromPackageFiles Include="Scripts/bootstrap.min.js">
+      <FromTarget>fff</FromTarget>
+    </ExcludeFromPackageFiles>
+    <ExcludeFromPackageFiles Include="Scripts/jquery-1.10.2.intellisense.js">
+      <FromTarget>fff</FromTarget>
+    </ExcludeFromPackageFiles>
+    <ExcludeFromPackageFiles Include="Scripts/jquery-1.10.2.js">
+      <FromTarget>fff</FromTarget>
+    </ExcludeFromPackageFiles>
+    <ExcludeFromPackageFiles Include="Scripts/jquery-1.10.2.min.js">
+      <FromTarget>fff</FromTarget>
+    </ExcludeFromPackageFiles>
+
+    <ExcludeFromPackageFiles Include="Scripts/jquery-1.10.2.min.map">
+      <FromTarget>fff</FromTarget>
+    </ExcludeFromPackageFiles>
+    <ExcludeFromPackageFiles Include="Scripts/jquery-ui.min.js">
+      <FromTarget>fff</FromTarget>
+    </ExcludeFromPackageFiles>
+    <ExcludeFromPackageFiles Include="Scripts/jquery.multiselect.js">
+      <FromTarget>fff</FromTarget>
+    </ExcludeFromPackageFiles>
+    <ExcludeFromPackageFiles Include="Scripts/jquery.scrollTo.min.js">
+      <FromTarget>fff</FromTarget>
+    </ExcludeFromPackageFiles>
+    <ExcludeFromPackageFiles Include="Scripts/jquery.sumoselect.js">
+      <FromTarget>fff</FromTarget>
+    </ExcludeFromPackageFiles>
+    <ExcludeFromPackageFiles Include="Scripts/jquery.sumoselect.min.js">
+      <FromTarget>fff</FromTarget>
+    </ExcludeFromPackageFiles>
+    <ExcludeFromPackageFiles Include="Scripts/jquery.validate-vsdoc.js">
+      <FromTarget>fff</FromTarget>
+    </ExcludeFromPackageFiles>
+    <ExcludeFromPackageFiles Include="Scripts/jquery.validate.js">
+      <FromTarget>fff</FromTarget>
+    </ExcludeFromPackageFiles>
+    <ExcludeFromPackageFiles Include="Scripts/jquery.validate.unobtrusive.js">
+      <FromTarget>fff</FromTarget>
+    </ExcludeFromPackageFiles>
+    <ExcludeFromPackageFiles Include="Scripts/jquery.validate.unobtrusive.min.js">
+      <FromTarget>fff</FromTarget>
+    </ExcludeFromPackageFiles>
+    <ExcludeFromPackageFiles Include="Scripts/kendo.modernizr.custom.js">
+      <FromTarget>fff</FromTarget>
+    </ExcludeFromPackageFiles>
+    <ExcludeFromPackageFiles Include="Scripts/modernizr-2.6.2.js">
+      <FromTarget>fff</FromTarget>
+    </ExcludeFromPackageFiles>
+    <ExcludeFromPackageFiles Include="Scripts/respond.min.js">
+      <FromTarget>fff</FromTarget>
+    </ExcludeFromPackageFiles>
+    <ExcludeFromPackageFiles Include="Scripts/respond.js">
+      <FromTarget>fff</FromTarget>
+    </ExcludeFromPackageFiles>
+    <ExcludeFromPackageFiles Include="Scripts/tableExport.js">
+      <FromTarget>fff</FromTarget>
+    </ExcludeFromPackageFiles>
+    <ExcludeFromPackageFiles Include="Scripts/jquery.validate.min.js">
+      <FromTarget>fff</FromTarget>
+    </ExcludeFromPackageFiles>
+
+  </ItemGroup>
+</Project>

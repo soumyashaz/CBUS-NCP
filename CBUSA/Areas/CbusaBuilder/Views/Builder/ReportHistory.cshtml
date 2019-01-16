@@ -1,0 +1,208 @@
+﻿<div class="row margin-top20 btm-top-padding15">
+    <div class="col-md-7">
+        <div class="wayne-dalton-title">
+            <h3 class="text-upper">NCP Rebate Report History - <span id="spnContractName">@ViewBag.ContractName</span></h3>
+            <div>You joined on: @ViewBag.joining</div>
+        </div>
+    </div>
+    <div class="col-md-5 pull-right margin-top5">
+        <div class="block-div row">
+            <div class="col-md-4">
+                @(Html.Kendo().DropDownList()
+                                            .Name("year")
+                                                              .DataTextField("ProjectName")
+                                                                     .DataValueField("ProjectId")
+                                                                          .Events(e =>
+                                                    {
+                                                        e.Select("onSelectYearStatus");
+                                                    })
+                                               .DataSource(source =>
+                                                          {
+                                                              source.Read(read =>
+                                                              {
+                                                                  read.Action("GetYear", "Builder", new { Area = "CbusaBuilder" });
+                                                              })
+                                                              .ServerFiltering(true);
+                                                          })
+                                                                                  .SelectedIndex(0)
+                                                                                                  .HtmlAttributes(new { @class = "width100 form-control" })
+                )
+                @*<select class="form-control">
+                        <option>All</option>
+                        <option>2016</option>
+                        <option>2015</option>
+                        <option>2014</option>
+                    </select>*@
+            </div>
+            <div class="col-md-8">
+                @(Html.Kendo().DropDownList()
+                        .Name("ContractManufacturer")
+                                  .DataTextField("ContractName")
+                                         .DataValueField("ContractId")
+                                                  .Events(e =>
+                            {
+                                e.Select("onSelectContractStatus");
+                            })
+                           .DataSource(source =>
+                                      {
+                                          source.Read(read =>
+                                          {
+                                              read.Action("GetActiveContracts", "Builder", new { Area = "CbusaBuilder" });
+                                          })
+                                          .ServerFiltering(true);
+                                      })
+                                                              .SelectedIndex(ViewBag.FilterIndex)
+                                                                              .HtmlAttributes(new { @class = "width100 form-control" })
+                )
+                @*<select class="form-control">
+                        <option>Wayne Dalton Overhead Door Company NC</option>
+                        <option>Faucet contract</option>
+                        <option>Tankless water heater contract</option>
+                    </select>*@
+            </div>
+        </div>
+    </div>
+</div>
+<div class="table-responsive">
+    <table class="table">
+        <thead class="thead-bg">
+            <tr>
+                <th width="2%" class="text-center">#</th>
+                <th width="15%" class="text-center"><a href="#" id="asccon"><span id="ascicon"><i class="fa fa-caret-down" aria-hidden="true"></i></span></a><a href="#" id="desccon"><span id="descicon" hidden="hidden"><i class="fa fa-caret-up" aria-hidden="true"></i></span></a> Quarter-Year</th>
+                <th width="15%" class="text-center"><a href="#" id="ascncp"><span id="ascincp"><i class="fa fa-caret-down" aria-hidden="true"></i></span></a><a href="#" id="descncp"><span id="descincp" hidden="hidden"><i class="fa fa-caret-up" aria-hidden="true"></i></span></a> No. of projects reported for</th>
+                <th width="15%" class="text-center"><a href="#" id="ascbj"><span id="ascibj"><i class="fa fa-caret-down" aria-hidden="true"></i></span></a><a href="#" id="descbj"><span id="descibj" hidden="hidden"><i class="fa fa-caret-up" aria-hidden="true"></i></span></a> Submitted on</th>
+                @*<th width="30%" class="text-center"><i class="fa fa-caret-down" aria-hidden="true"></i> Submitted by</th>*@
+                @*<th width="15%">
+                        <i class="fa fa-caret-down" aria-hidden="true"></i> Compliance
+                    </th>*@
+                <th width="5%" class="text-center"></th>
+                <th width="5%" class="text-center"></th>
+            </tr>
+        </thead>
+        @(Html.Kendo().ListView<CBUSA.Areas.Admin.Models.ActiveContractViewModel>()
+.Name("listViewreporthistory")
+.TagName("tbody")
+                        .ClientTemplateId("TemplateNcpReport")
+// .Events(x => x.DataBound("GetList"))
+.DataSource(dataSource =>
+{
+    dataSource.Read(read => read.Action("ReportHistoryList", "Builder").Data("SendContractIdAsParameterOrder"));
+    dataSource.PageSize(21);
+})
+//.Pageable()
+.AutoBind(true)
+        )
+        @*<tbody>
+                <tr>
+                    <td class="text-center">Q2 - 2016</td>
+                    <td class="text-center">15</td>
+                    <td class="text-center">31/05/16</td>
+                    <td class="text-center">
+                        <div>Gordon Miller</div>
+                        <div>[gmiller@homebuilders.com]</div>
+                    </td>
+                    <td>
+                        <div>65/100 Quarterly</div>
+                        <div class="status online pull-left"></div>
+                        <div class="pull-left">(65%)</div>
+                    </td>
+                    <td class="text-center"><a href="#"><i class="fa fa-eye editPreSarvyIcon" aria-hidden="true"></i></a></td>
+                    <td class="text-center"><a href="#"><i class="fa fa-file-pdf-o editPreSarvyIcon" aria-hidden="true"></i></a></td>
+                </tr>
+                <tr>
+                    <td class="text-center">Q1 - 2016</td>
+                    <td class="text-center">20</td>
+                    <td class="text-center">31/02/16</td>
+                    <td class="text-center">
+                        <div>James Miller</div>
+                        <div>[jmiller@homebuilders.com]</div>
+                    </td>
+                    <td>
+                        <div>13/100 Quarterly</div>
+                        <div class="status offline pull-left"></div>
+                        <div class="pull-left">(13%)</div>
+                    </td>
+                    <td class="text-center"><a href="#"><i class="fa fa-eye editPreSarvyIcon" aria-hidden="true"></i></a></td>
+                    <td class="text-center"><a href="#"><i class="fa fa-file-pdf-o editPreSarvyIcon" aria-hidden="true"></i></a></td>
+                </tr>
+            </tbody>*@
+    </table>
+    <div class="btm-top-padding15 pull-right">
+        <a href="@Url.Action("NcpRebateReportHistory", "Builder")" class="btn btn-info">Back</a>
+        @*<button class="btn btn-info" type="button">Back</button></div>*@
+    </div>
+</div>
+
+<!-- Start popup -->
+<div id="submitRebateReport" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Submit Rebate Report</h4>
+            </div>
+            <div class="modal-body">
+                <div class="block-div">
+                    <h4>Are you sure you want to submit the NCP Quarterly Rebate Report Q3 - 2016 to CBUSA?</h4>
+                    <h5>Please note that you will not be able to edit the report after submission.</h5>
+                    <div class="clearfix"></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-info">Confirm</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- End popup -->
+
+@section scripts
+{
+
+    <script src="@Url.Content("~/Scripts/Custom/CbusaBuilderNcpReportHistory.js?v="+@DateTime.Now.ToFileTime().ToString())"></script>
+    <script type="text/javascript">
+
+    var AjaxCallUrl =
+            {
+                InsertQuaterAdminReport: '@Url.Action("InsertQuaterAdminReport", "Project", new { Area = "CbusaBuilder" })',
+                ChangeQuaterAdminReport: '@Url.Action("ChangeQuaterAdminReport", "Project", new { Area = "CbusaBuilder" })',
+                RedirectContractUrl: '@Url.Action("AddProjectStatus", "Builder", new { Area = "CbusaBuilder", ContractId = "****ContractId****" })',
+                RedirectViewDetailUrl: '@Url.Action("BuilderReportView", "BuilderReport", new { Area = "CbusaBuilder", ContractId = "****ContractId****", QuaterId = "****QuaterId****" })',
+
+            };
+    </script>
+
+    <script type="text/x-kendo-tmpl" id="TemplateNcpReport">
+        <tr>
+            <td class="text-center">
+                <span id="spnRowNumber">#:rowcount#</span>
+            </td>
+            <td class="text-center">#:Quater#</td>
+            <td class="text-center">#:ProjectCount#</td>
+            <td class="text-center">#:SubmitDate#</td>
+            @*<td class="text-center">
+                    <div>Gordon Miller</div>
+                    <div>[gmiller@homebuilders.com]</div>
+                </td>*@
+            <td>
+                <div>#:estimatedactual#</div>
+                @*<div class="status online pull-left"></div>*@
+                @*<div class="pull-left">(#:percentage#%)</div>*@
+            </td>
+
+            #if(ProjectCount>0){#
+            <td class="text-center"><a onclick="redirectdetail('#=ContractId#', '#=QuaterId#')" title="View Detail"><i class="fa fa-eye editPreSarvyIcon" aria-hidden="true"></i></a></td>
+            #}else{#
+            <td class="text-center"><a disabled="true" title="No record to view detail"><i class="fa fa-eye-slash editPreSarvyIcon" aria-hidden="true"></i></a></td>
+            #}#
+
+
+
+            @*<td class="text-center"><a><i class="fa fa-file-pdf-o editPreSarvyIcon" aria-hidden="true"></i></a></td>*@
+        </tr>
+
+
+
+    </script>
+}

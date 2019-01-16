@@ -1,0 +1,212 @@
+﻿<!-- Start popup -->
+
+<div id="DivOverrideRebate">
+    <div class="block-div">
+        <div class="form-group">
+            <label class="col-sm-3 control-label">Select Market:</label>
+            <div class="col-sm-9 classZoneMarket">
+                <div class="CustomControl-Div-Parent" data-role='ZoneSate' id="DivZoneState">
+                    <div class="CustomControl-Div" id="DivZoneStateHeader">
+                        <span class="k-select select-arrow" id="DivZoneStateDropdown"><span class="k-icon k-i-arrow-s">select</span></span>
+                    </div>
+                </div>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">Select Builder:</label>
+            <div class="col-sm-9 selectBuilderPop">
+                @(Html.Kendo().DropDownList()
+                        .Name("DdlBuilder")
+                                  .DataTextField("BuilderName")
+                                  .DataValueField("BuilderId")
+
+                        // .OptionLabel("--Select--")
+                    .Events(e =>
+                    {
+                        e.Select("onSelectDdlBuilder");
+                        e.DataBound("onDataBoundDdlBuilder");
+                    })
+                           .DataSource(source =>
+                                      {
+                                          source.Read(read =>
+                                          {
+                                              read.Action("GetAssociatedBuilder", "Contract", new { Area = "Admin" }).Data("GetMarketInformation");
+                                          })
+                                          .ServerFiltering(true);
+                                      })
+                                   .AutoBind(false)
+                                   .SelectedIndex(0)
+                )
+            </div>
+            <div class="clearfix"></div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">Builder's current rebate %:</label>
+            <div class="col-sm-9">
+                <div class="ConfgRebBudrRow">
+                    @*<div class="row">
+                            <div class="col-md-4"><i>Joined on:</i></div>
+                            <div class="col-md-4"><span id="SpanJoinOn"></span></div>
+                            <div class="col-md-3"></div>
+                            <div class="col-md-1"></div>
+                        </div>*@
+                    <div class="partByPartCol">
+                        <div class="firstGridRebate"><i>Joined on:</i></div>
+                        <div class="secondGridRebate"><span id="SpanJoinOn">Lorem Ipsum is simply dummy text of the printing and typesetting industry.</span></div>
+                        <div class="thairdGridRebate">Lorem Ipsum is simply dummy text of the printing and typesetting industry.</div>
+                        <div class="fourthGridRebate">Lorem Ipsum is simply dummy text of the printing and typesetting industry.</div>
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="partByPartCol">
+                        <div class="firstGridRebate"><i>Contract status when joined:</i></div>
+                        <div class="secondGridRebate"><span id="SpanContractStatus"></span></div>
+                        <div class="thairdGridRebate"><i>Applicable rebate:</i></div>
+                        <div class="fourthGridRebate"><span id="SpanApplicableRebeat"></span></div>
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="partByPartCol">
+                        <div class="firstGridRebate"><i>Applicable rebate %  as on today:</i></div>
+                        <div class="secondGridRebate"><span id="SpanApplicableRebeatToday"></span></div>
+                        <div class="thairdGridRebate"></div>
+                        <div class="fourthGridRebate"></div>
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="partByPartCol">
+                        <div class="firstGridRebate"><i>Last updated:</i></div>
+                        <div class="secondGridRebate"><span id="SpanLastUpdated"></span></div>
+                        <div class="thairdGridRebate"></div>
+                        <div class="fourthGridRebate"></div>
+                        <div class="clearfix"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">Update the Rebate % to:</label>
+            <div class="col-sm-9">
+                <input class="form-control TxtOverrideRebate" type="text" id="TxtOverrideRebate" onkeyup='numericFilter(this)' name="TxtOverrideRebate" data-greaterthanzero=true required=required />
+                <span class="k-invalid-msg" data-for="TxtOverrideRebate"></span>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+        <div class="clearfix"></div>
+    </div>
+    <button type="button" class="btn btn-info" id="SaveContractRebateOverride">Save</button>
+    <button type="button" class="btn btn-default new-btn" id="CancelContractRebateOverride">Close</button>
+</div>
+<input type="hidden" id="HdnZoneSetting" value="1" />
+
+<!-- End popup -->
+@*<h5>Override Rebate % for Builder</h5>
+
+    <div id="DivOverrideRebate">
+
+        <table>
+            <tr>
+                <td style="width:35%">Select Market</td>
+                <td style="width:75%">
+                    <div class="CustomControl-Div-Parent" data-role='ZoneSate' id="DivZoneState">
+                        <div class="CustomControl-Div" id="DivZoneStateHeader">
+                            <span class="k-select select-arrow" id="DivZoneStateDropdown"><span class="k-icon k-i-arrow-s">select</span></span>
+                        </div>
+                    </div>
+
+                </td>
+            </tr>
+            <tr>
+                <td style="width:35%">Select Builder</td>
+                <td style="width:75%">
+                    @(Html.Kendo().DropDownList()
+                            .Name("DdlBuilder")
+                                      .DataTextField("BuilderName")
+                                      .DataValueField("BuilderId")
+
+                            // .OptionLabel("--Select--")
+                        .Events(e =>
+                        {
+                            e.Select("onSelectDdlBuilder");
+                            e.DataBound("onDataBoundDdlBuilder");
+                        })
+                               .DataSource(source =>
+                                          {
+                                              source.Read(read =>
+                                              {
+                                                  read.Action("GetAssociatedBuilder", "Contract", new { Area = "Admin" }).Data("GetMarketInformation");
+                                              })
+                                              .ServerFiltering(true);
+                                          })
+                                       .AutoBind(false)
+                                       .SelectedIndex(0)
+                    )
+
+                </td>
+            </tr>
+            <tr>
+                <td style="width:35%">Builder Current Rebate</td>
+                <td style="width:75%">
+                    <table>
+                        <tr>
+                            <td style="width:40%">Joined On</td>
+                            <td style="width:40%">
+                                <span id="SpanJoinOn"></span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="width:40%">Contract status when joined</td>
+                            <td style="width:40%">
+                                <span id="SpanContractStatus"></span>
+
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="width:40%">Applicable rebate:</td>
+                            <td style="width:40%">
+                                <span id="SpanApplicableRebeat"></span>
+
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="width:40%">Applicable rebate %  as on today</td>
+                            <td style="width:40%">
+                                <span id="SpanApplicableRebeatToday"></span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="width:40%">Last updated</td>
+                            <td style="width:40%">
+                                <span id="SpanLastUpdated"></span>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            <tr>
+                <td style="width:35%">Update the Rebate % to</td>
+                <td style="width:75%">
+                    <input type="text" id="TxtOverrideRebate" name="TxtOverrideRebate" data-greaterthanzero=true required=required />
+
+                    <span class="k-invalid-msg" data-for="TxtOverrideRebate"></span>
+                </td>
+            </tr>
+            <tr>
+                <td style="width:35%">&nbsp;</td>
+                <td style="width:75%">&nbsp;</td>
+            </tr>
+
+        </table>
+
+
+
+    </div>
+
+    <div style="height:50px;width:100%">
+        <div style="float:right">
+            <button type="button" class="btn btn-primary btn-sm" id="SaveContractRebateOverride">Save</button>
+            <button type="button" class="btn btn-primary btn-sm" id="CancelContractRebateOverride">Cancel</button>
+        </div>
+
+    </div>
+
+    <input type="hidden" id="HdnZoneSetting" value="1" />*@

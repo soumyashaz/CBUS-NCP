@@ -1,0 +1,180 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{3EEF1B18-93DA-4F0E-A523-4B11E4CEE3B1}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>CBUSA.Services</RootNamespace>
+    <AssemblyName>CBUSA.Services</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="EntityFramework.Extended, Version=6.0.0.0, Culture=neutral, PublicKeyToken=05b7e29bdd433584, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.Extended.Async.6.1.1.0\lib\net45\EntityFramework.Extended.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="CategoryServices.cs" />
+    <Compile Include="ChallengeQuestionServices.cs" />
+    <Compile Include="EulaServices.cs" />
+    <Compile Include="ICategoryServices.cs" />
+    <Compile Include="IChallengeQuestionServices.cs" />
+    <Compile Include="IContractServices.cs" />
+    <Compile Include="ContractServices.cs" />
+    <Compile Include="IEulaServices.cs" />
+    <Compile Include="Interface\IAdminDashboardService.cs" />
+    <Compile Include="Interface\IBuilderDashboardService.cs" />
+    <Compile Include="Interface\IBuilderQuarterContractStatusService.cs" />
+    <Compile Include="Interface\IBuilderQuaterAdminReportService.cs" />
+    <Compile Include="Interface\IBuilderQuaterContractProjectDetailsService.cs" />
+    <Compile Include="Interface\IBuilderQuaterContractProjectReportService.cs" />
+    <Compile Include="Interface\IBuilderService.cs" />
+    <Compile Include="Interface\ICityService.cs" />
+    <Compile Include="Interface\IConstructFormulaService.cs" />
+    <Compile Include="Interface\IContractBuilderService.cs" />
+    <Compile Include="Interface\IContractCentralService.cs" />
+    <Compile Include="Interface\IContractComplianceService.cs" />
+    <Compile Include="Interface\IContractRebateService.cs" />
+    <Compile Include="Interface\IContractStatusService.cs" />
+    <Compile Include="Interface\IHolidayService.cs" />
+    <Compile Include="Interface\IManufacturerService.cs" />
+    <Compile Include="Interface\IMarketService.cs" />
+    <Compile Include="Interface\INonResponderReportService.cs" />
+    <Compile Include="Interface\IProductCategoryService.cs" />
+    <Compile Include="Interface\IProductService.cs" />
+    <Compile Include="Interface\IProjectReportStatusService.cs" />
+    <Compile Include="Interface\IProjectService.cs" />
+    <Compile Include="Interface\IProjectStatusService.cs" />
+    <Compile Include="Interface\IQBBuilderDataService.cs" />
+    <Compile Include="Interface\IQuarterContractStatusService.cs" />
+    <Compile Include="Interface\IQuarterEmailTemplateService.cs" />
+    <Compile Include="Interface\IQuarterReminderService.cs" />
+    <Compile Include="Interface\IQuaterService.cs" />
+    <Compile Include="Interface\IQuestionService.cs" />
+    <Compile Include="Interface\IRandom.cs" />
+    <Compile Include="Interface\IResourceCategoryService.cs" />
+    <Compile Include="Interface\IResourceService.cs" />
+    <Compile Include="Interface\IRoleServices.cs" />
+    <Compile Include="Interface\IStateService.cs" />
+    <Compile Include="Interface\ISurveyBuilderEmailSentService.cs" />
+    <Compile Include="Interface\ISurveyBuilderService.cs" />
+    <Compile Include="Interface\ISurveyResponseService.cs" />
+    <Compile Include="Interface\ISurveyService.cs" />
+    <Compile Include="Interface\IUserInRoleServices.cs" />
+    <Compile Include="Interface\IZoneService.cs" />
+    <Compile Include="IPasswordLogServices.cs" />
+    <Compile Include="IResourceMarketServices.cs" />
+    <Compile Include="IResourceServices.cs" />
+    <Compile Include="IStatusServices.cs" />
+    <Compile Include="Model\AdminDashboardService.cs" />
+    <Compile Include="Model\BuilderQuarterContractStatusService.cs" />
+    <Compile Include="Model\BuilderQuaterAdminReportService.cs" />
+    <Compile Include="Model\BuilderQuaterContractProjectDetailsService.cs" />
+    <Compile Include="Model\BuilderQuaterContractProjectReportService.cs" />
+    <Compile Include="Model\BuilderService.cs" />
+    <Compile Include="Model\CityService.cs" />
+    <Compile Include="Model\ConstructFormulaService.cs" />
+    <Compile Include="Model\ContractBuilderService.cs" />
+    <Compile Include="Model\ContractCentralService.cs" />
+    <Compile Include="Model\ContractComplianceService.cs" />
+    <Compile Include="Model\ContractRebateService.cs" />
+    <Compile Include="Model\ContractStatusService.cs" />
+    <Compile Include="Model\Encrypt.cs" />
+    <Compile Include="Model\Encryption.cs" />
+    <Compile Include="Model\HolidayService.cs" />
+    <Compile Include="Model\ManufacturerService.cs" />
+    <Compile Include="Model\MarketService.cs" />
+    <Compile Include="Model\NonResponderReportService.cs" />
+    <Compile Include="Model\ProductCategoryService.cs" />
+    <Compile Include="Model\ProductService.cs" />
+    <Compile Include="Model\ProjectReportStatusService.cs" />
+    <Compile Include="Model\ProjectService.cs" />
+    <Compile Include="Model\ProjectStatusService.cs" />
+    <Compile Include="Model\QBBuilderDataService.cs" />
+    <Compile Include="Model\QuarterContractStatusService.cs" />
+    <Compile Include="Model\QuarterEmailTemplateService.cs" />
+    <Compile Include="Model\QuarterReminderService.cs" />
+    <Compile Include="Model\QuaterService.cs" />
+    <Compile Include="Model\QuestionService.cs" />
+    <Compile Include="Model\RandomNo.cs" />
+    <Compile Include="Model\ResourceCategoryService.cs" />
+    <Compile Include="Model\ResourceService.cs" />
+    <Compile Include="Model\RoleServices.cs" />
+    <Compile Include="Model\StateService.cs" />
+    <Compile Include="Model\SurveyBuilderEmailSentService.cs" />
+    <Compile Include="Model\SurveyBuilderService.cs" />
+    <Compile Include="Model\SurveyResponseService.cs" />
+    <Compile Include="Model\SurveyService.cs" />
+    <Compile Include="Model\UserInRoleServices.cs" />
+    <Compile Include="Model\ZoneService.cs" />
+    <Compile Include="PasswordLogServices.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ResourceMarketServices.cs" />
+    <Compile Include="ResourceServices.cs" />
+    <Compile Include="StatusServices.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\CBUSA.Domain\CBUSA.Domain.csproj">
+      <Project>{d6f729ab-cdb3-4cec-9fbf-33da80f886cd}</Project>
+      <Name>CBUSA.Domain</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CBUSA.Repository\CBUSA.Repository.csproj">
+      <Project>{0d6832a3-ba2a-44d4-8d7a-30294ee1b27b}</Project>
+      <Name>CBUSA.Repository</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

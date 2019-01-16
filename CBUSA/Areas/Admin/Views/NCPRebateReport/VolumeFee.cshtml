@@ -1,0 +1,168 @@
+﻿@model CBUSA.Areas.Admin.Models.ConstructFormulaViewModel
+<div class="row maginTop20">
+    <div class="col-md-3">
+        @(Html.Kendo().DropDownListFor(x => x.ContractId)
+                                    .DataTextField("ContractName")
+                                        .DataValueField("ContractId")
+                                         .OptionLabel(new { ContractName = "--Select Contract--", ContractId = "0" })
+                                    //.OptionLabel("--Select--")
+                                    .Events(e =>
+                                    {
+
+                                        e.Change("ConstructFormula.onSelectContract");
+                                        e.DataBound("ConstructFormula.onDataBoundContract");
+                                    })
+                                    .DataSource(source =>
+                                    {
+                                        source.Read(read =>
+                                        {
+                                            read.Action("GetActivePendingContract", "NCPRebateReport", new { Area = "Admin" }).Data("ConstructFormula.SendDataBeforeLoadDropDown");
+                                        });
+                                // .ServerFiltering(true);
+                            })
+                                    .SelectedIndex(0)
+
+                                    .HtmlAttributes(new { @class = "form-control" })
+                                    .Value(Model.ContractId.ToString())
+        )
+    </div>
+    <div class="col-md-3">
+        @(Html.Kendo().DropDownListFor(x => x.Quarter)
+                                .Name("QuarterDDL")
+                                .DataTextField("Text")
+                                .DataValueField("Value")
+                                .Events(e =>
+                                {
+                                    e.Select("ConstructFormula.onSelectQuarter");
+                                    e.DataBound("ConstructFormula.onDataBoundQuarter");
+                                })
+                                .BindTo(Model.QuarterList)
+                                .SelectedIndex(0)
+                                .HtmlAttributes(new
+                                {
+                                    @class = "form-control"
+                                })
+                            .Value(Model.Quarter)
+        )
+    </div>
+    <div class="col-md-3">
+        @(Html.Kendo().DropDownListFor(x => x.MarketId)
+                                .Name("MarketDDL")
+                                .DataTextField("Text")
+                                .DataValueField("Value")
+                                .Events(e =>
+                                {
+                                    e.Select("ConstructFormula.onSelectMarket");
+                                    e.DataBound("ConstructFormula.onDataBoundMarket");
+                                })
+                                .BindTo(Model.MarketListData)
+                                .SelectedIndex(0)
+                                .HtmlAttributes(new
+                                {
+                                    @class = "form-control"
+                                })
+                            .Value(Model.MarketId.ToString())
+        )
+    </div>
+    <div class="col-md-3">
+        <button id="BtnCalculateVolumeFee" type="button" class="btn btn-default new-btn pull-right">Process Volume Fee Initial</button>
+    </div>
+    <div class="clearfix"></div>
+</div>
+<div class="block-div maginTop10">
+    <div class="table-responsive croseDivSecondAfterFirst">
+        <table class="table" id="secondDiv">
+            <thead class="thead-bg">
+                <tr>
+                    <th width="0" hidden>ConstructFormulaId</th>
+                    <th width="15%" class="text-center"><a href="#" id="ascqtr"><span id="asciqtr"><i class="fa fa-caret-down" aria-hidden="true"></i></span></a><a href="#" id="descqtr"><span id="desciqtr" hidden="hidden"><i class="fa fa-caret-up" aria-hidden="true"></i></span></a> Quarter</th>
+                    <th width="25%" class="text-center"><a href="#" id="asccon"><span id="ascicon"><i class="fa fa-caret-down" aria-hidden="true"></i></span></a><a href="#" id="desccon"><span id="descicon" hidden="hidden"><i class="fa fa-caret-up" aria-hidden="true"></i></span></a> Contract</th>
+                    <th width="55%" class="text-center">Market</th>
+                    <th width="10%" class="text-center">Edit Formula</th>
+                </tr>
+            </thead>
+            @(Html.Kendo().ListView<CBUSA.Areas.Admin.Models.SurveyViewModel>()
+                        .Name("listViewConstructFormulaList")
+                        .TagName("tbody")
+                        .ClientTemplateId("TemplateConstructFormula")
+                        .Pageable(pageable => pageable
+                        .Refresh(true)
+                        .PageSizes(true)
+
+                        )
+                        .DataSource(dataSource =>
+                        {
+                            dataSource.Read(read => read.Action("GetConstructFormulaList", "NCPRebateReport").Data("SendContractIdAndOtherFiltersAsParameterOrder"));
+                            dataSource.PageSize(20);
+                        })
+                        //.Pageable()
+                        .AutoBind(true)
+                    //.Pageable()
+            )
+        </table>
+    </div>
+    <div class="clearfix"></div>
+</div>
+
+
+
+@Html.Hidden("hdnIsNcpSurvey", (object)ViewBag.IsNcpSurvey)
+@Html.Hidden("hdnSelectedContractId")
+@Html.Hidden("hdnSurveyId")
+@Html.Hidden("hdnSelectedQuarter")
+@Html.Hidden("hdnSelectedYear")
+@Html.Hidden("hdnSelectedMarketList")
+@Html.Hidden("hdnSelectedQuestionId")
+@Html.Hidden("hdnSelectedQuestionTypeId")
+@Html.Hidden("hdnSelectedQuestionText")
+@Html.Hidden("hdnSelectedQuestionSettingId")
+@Html.Hidden("hdnSelectedQuestionColumnText")
+@Html.Hidden("hdnSelectedQuestionColumnValueId")
+@Html.Hidden("hdnSelectedQuestionColumnValueText")
+@(Html.Kendo().Window()
+                    .Name("WndSurveyInvitesPopup")
+                    .Title("Select Markets")
+                    .Actions(actions => actions
+                        .Close()
+                    )
+                    .Visible(false)
+                    .Draggable()
+                            .Resizable()
+                            .Width(600)
+                            .Height(200)
+                            .Modal(true)
+                                .Events(e => e.Open("ConstructFormula.OnOpenSurveyInvitesPopup")
+                                    .Refresh("ConstructFormula.OnRefreshSurveyInvitesPopup")
+
+                                    )
+)
+
+
+@section scripts
+{
+    <script type="text/x-kendo-tmpl" id="TemplateConstructFormula">
+        <tr style="width:100%">
+            <td width="0" hidden class="text-center">#:ConstructFormulaId#</td>
+            <td width="15%" class="text-center">#:Quarter#-#:Year#</td>
+            <td width="25%" class="text-center">#:ContractName#</td>
+            <td width="55%" class="text-center">#:MarketName#</td>
+            <td width="10%" class="text-center redText"><a onclick="EditConstructFormula('#=ConstructFormulaId#')"> Edit </a></td>
+        </tr>
+    </script>
+
+    <script type="text/javascript">
+        var TreeControlUrl = '@Url.Action("ParseMarketTreeViewControl", "Home", new { Area = "" })';
+        var AjaxCallUrl =
+                {
+                    MarketUrl: '@Url.Action("ParseMarketControl", "NCPRebateReport", new { Area = "Admin" })',
+                    IsEnrollmentSurveyAvailableUrl: '@Url.Action("IsEnrollmentSurveyAvailable", "Survey", new { Area = "Admin" })',
+                    MarketPopupUrl: '@Url.Action("ShowMarketPopup", "NCPRebateReport", new { Area = "Admin" })',
+                    RedirectConstructFormulaUrl: '@Url.Action("ConstructFormulaEdit", "NCPRebateReport", new { Area = "Admin", ConstructFormulaId = "ConstructFormulaIdParam" })',
+                    GetQuestionUrl: '@Url.Action("GetQuestionList", "NCPRebateReport", new { Area = "Admin"})',
+                    SaveConstructFormulaUrl: '@Url.Action("SaveConstructFormula", "NCPRebateReport", new { Area = "Admin" })',
+                    ProcessVolumeFeeRebate: '@Url.Action("CalculateVolumeFeeRebate", "NCPRebateReport", new { Area = "Admin" })',
+                };
+    </script>
+    <script src="@Url.Content("~/Scripts/Custom/AdminVolumeFeeCalculation.js")"></script>
+    <script src="@Url.Content("~/Scripts/Custom/CustomControlZoneStateList.js?v=" + System.Configuration.ConfigurationManager.AppSettings["JsVersion"])"></script>
+}

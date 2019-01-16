@@ -1,0 +1,90 @@
+﻿<div class="row maginTop20">
+    <div class="col-md-3">
+        @(Html.Kendo().DropDownList()
+                    .Name("QuarterDDL")
+                    .DataTextField("QuarterYear")
+                    .DataValueField("QuarterId")
+                    .HtmlAttributes(new
+                    {
+                        @class = "form-control"
+                    })
+                    .DataSource(source =>
+                    {
+                        source.Read(read =>
+                        {
+                            read.Action("GetQuarterList", "NonResponderReport", new { Area = "Admin" });
+                        })
+                        .ServerFiltering(true);
+                    })
+                    .Events(e =>
+                    {
+                        e.DataBound("onQuarterDataBound");
+                        e.Select("onSelectQuarter");
+                    })
+        )
+    </div>
+    <div class="col-md-3"></div>
+    <div class="col-md-9">
+        <a id="lnkDownload" href="@Url.Action("DownloadNonResponderReport", "NonResponderReport", new { quarterid = 'q' })" class="btn btn-info pull-left">Download</a>
+    </div>
+    <div class="clearfix"></div>
+</div>
+<div class="block-div maginTop10">
+    <div class="table-responsive croseDivSecondAfterFirst">
+        <table class="table" id="secondDiv">
+            <thead class="thead-bg">
+                <tr>
+                    <th width="0%" hidden>MarketId</th>
+                    <th width="10%" class="text-center">Market</th>
+                    <th hidden>BuilderId</th>
+                    <th width="20%" class="text-center">Builder</th>
+                    <th width="38%" class="text-center">Contract(s) Enrolled</th>
+                    <th width="10%" class="text-center">No. Of Enrolled Contracts</th>
+                    <th width="12%" class="text-center">No. Of Quarters Reported</th>
+                </tr>
+            </thead>
+            @(Html.Kendo().ListView<CBUSA.Areas.Admin.Models.NonResponderViewModel>()
+                .Name("listViewNonResponderList")
+                .TagName("tbody")
+                .ClientTemplateId("TemplateNonResponder")
+                .Pageable(pageable => pageable
+                .Refresh(true)
+                .PageSizes(true)
+                )
+                .DataSource(dataSource =>
+                {
+                    dataSource.Read(read => read.Action("GetNonResponderList", "NonResponderReport").Data("SendQuarterIdAsParameter"));
+                    dataSource.PageSize(10);
+                })
+                .AutoBind(true)
+            )
+        </table>
+    </div>
+    <div class="clearfix"></div>
+</div>
+
+<input type="hidden" id="hdnSelectedQuarterId" value="@ViewBag.CurrQuarter" />
+
+@section scripts
+{
+    <script type="text/x-kendo-tmpl" id="TemplateNonResponder">
+        <tr>
+            <td width="0%" hidden class="text-center">#:MarketId#</td>
+            <td width="10%" class="text-center">#:MarketName#</td>
+            <td width="0%" hidden class="text-center">#:BuilderId#</td>
+            <td width="20%" class="text-center">#:BuilderName#</td>
+            <td width="40%" class="text-center">#:ContractList#</td>
+            <td width="10%" class="text-center">#:CountOfParticipatingContracts#</td>
+            <td width="10%" class="text-center">#:NumberOfReportingQuarters#</td>
+        </tr>
+    </script>
+
+    <script type="text/javascript">
+        var AjaxCallUrl =
+                {
+                    NonResponderReportUrl: '@Url.Action("GetNonResponderList", "NonResponderReport", new { Area = "Admin", QuarterId = "quarterId" })',
+                    DownloadReportUrl: '@Url.Action("DownloadNonResponderReport", "NonResponderReport", new { Area = "Admin", QuarterId = "quarterId" })'
+                };
+    </script>
+    <script src="@Url.Content("~/Scripts/Custom/Admin/NonResponderReport/AdminNonResponderReport.js?v="+@DateTime.Now.ToFileTime().ToString())"></script>
+}

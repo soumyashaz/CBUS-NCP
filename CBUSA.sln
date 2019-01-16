@@ -1,0 +1,81 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.26228.9
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CBUSA", "CBUSA\CBUSA.csproj", "{1466B55C-BF45-4292-802D-636D8CE3ED6F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CBUSA.Domain", "CBUSA.Domain\CBUSA.Domain.csproj", "{D6F729AB-CDB3-4CEC-9FBF-33DA80F886CD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CBUSA.Repository", "CBUSA.Repository\CBUSA.Repository.csproj", "{0D6832A3-BA2A-44D4-8D7A-30294EE1B27B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CBUSA.Services", "CBUSA.Services\CBUSA.Services.csproj", "{3EEF1B18-93DA-4F0E-A523-4B11E4CEE3B1}"
+EndProject
+Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "CBUSA.DB", "CBUSA.DB\CBUSA.DB.sqlproj", "{68C961D3-04F7-4AB5-B2EC-3F1504864D63}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UI", "UI\UI.csproj", "{C70904E5-05E9-48B2-BEEB-4E3C72C356AD}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{1466B55C-BF45-4292-802D-636D8CE3ED6F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1466B55C-BF45-4292-802D-636D8CE3ED6F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1466B55C-BF45-4292-802D-636D8CE3ED6F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1466B55C-BF45-4292-802D-636D8CE3ED6F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D6F729AB-CDB3-4CEC-9FBF-33DA80F886CD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D6F729AB-CDB3-4CEC-9FBF-33DA80F886CD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D6F729AB-CDB3-4CEC-9FBF-33DA80F886CD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D6F729AB-CDB3-4CEC-9FBF-33DA80F886CD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0D6832A3-BA2A-44D4-8D7A-30294EE1B27B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0D6832A3-BA2A-44D4-8D7A-30294EE1B27B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0D6832A3-BA2A-44D4-8D7A-30294EE1B27B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0D6832A3-BA2A-44D4-8D7A-30294EE1B27B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3EEF1B18-93DA-4F0E-A523-4B11E4CEE3B1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3EEF1B18-93DA-4F0E-A523-4B11E4CEE3B1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3EEF1B18-93DA-4F0E-A523-4B11E4CEE3B1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3EEF1B18-93DA-4F0E-A523-4B11E4CEE3B1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{68C961D3-04F7-4AB5-B2EC-3F1504864D63}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{68C961D3-04F7-4AB5-B2EC-3F1504864D63}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{68C961D3-04F7-4AB5-B2EC-3F1504864D63}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{68C961D3-04F7-4AB5-B2EC-3F1504864D63}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{68C961D3-04F7-4AB5-B2EC-3F1504864D63}.Release|Any CPU.Build.0 = Release|Any CPU
+		{68C961D3-04F7-4AB5-B2EC-3F1504864D63}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{C70904E5-05E9-48B2-BEEB-4E3C72C356AD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C70904E5-05E9-48B2-BEEB-4E3C72C356AD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C70904E5-05E9-48B2-BEEB-4E3C72C356AD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C70904E5-05E9-48B2-BEEB-4E3C72C356AD}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {1051A561-1AF9-4601-8004-550B2078AE01}
+	EndGlobalSection
+	GlobalSection(TeamFoundationVersionControl) = preSolution
+		SccNumberOfProjects = 7
+		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
+		SccTeamFoundationServer = https://medullus.visualstudio.com/defaultcollection
+		SccLocalPath0 = .
+		SccProjectUniqueName1 = CBUSA\\CBUSA.csproj
+		SccProjectName1 = CBUSA
+		SccLocalPath1 = CBUSA
+		SccProjectUniqueName2 = CBUSA.Domain\\CBUSA.Domain.csproj
+		SccProjectName2 = CBUSA.Domain
+		SccLocalPath2 = CBUSA.Domain
+		SccProjectUniqueName3 = CBUSA.Repository\\CBUSA.Repository.csproj
+		SccProjectName3 = CBUSA.Repository
+		SccLocalPath3 = CBUSA.Repository
+		SccProjectUniqueName4 = CBUSA.Services\\CBUSA.Services.csproj
+		SccProjectName4 = CBUSA.Services
+		SccLocalPath4 = CBUSA.Services
+		SccProjectUniqueName5 = CBUSA.DB\\CBUSA.DB.sqlproj
+		SccProjectName5 = CBUSA.DB
+		SccLocalPath5 = CBUSA.DB
+		SccProjectUniqueName6 = UI\\UI.csproj
+		SccProjectName6 = UI
+		SccLocalPath6 = UI
+	EndGlobalSection
+EndGlobal

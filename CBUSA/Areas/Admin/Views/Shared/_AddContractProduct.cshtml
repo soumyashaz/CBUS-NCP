@@ -1,0 +1,87 @@
+﻿<!-- Start popup -->
+
+<div id="DivAddContractProduct">
+    <div class="block-div">
+        @*Closed By Rabi on 29 Marcha 2017
+                 <div class="form-group">
+                <label class="col-sm-3 control-label">Product Category:</label>
+                <div class="col-sm-9 ">
+
+                    <div class="CustomControl-Div-Parent classpdtcategory" id="DivProductCategory">
+                        <div class="CustomControl-Div" id="DivProductcategoryHeader">
+                            <span class="k-select select-arrow" id="DivProductCategoryDropdown"><span class="k-icon k-i-arrow-s">select</span></span>
+                        </div>
+                        <span class="k-invalid-msg" id="DivValidationProductCategory"></span>
+                    </div>
+                </div>
+                <div class="clearfix"></div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">Product:</label>
+                <div class="col-sm-9 addContProSelect">
+                    <div class="CustomControl-Div-Parent" data-role='contracproduct' id="DivProduct">
+                        <div class="CustomControl-Div" id="DivProductcategoryHeader">
+                            <span class="k-select select-arrow" id="DivProductDropdown"><span class="k-icon k-i-arrow-s">select</span></span>
+                        </div>
+                    </div>
+                    <span class="k-invalid-msg" data-for="DivProduct"></span>
+                    <input type="hidden" id="ProductIdHistory" />
+                </div>
+                <div class="clearfix"></div>
+            </div>*@
+        <div class="form-group">
+            <label class="col-sm-3 control-label">Product:</label>
+            <div class="col-sm-9 ">
+                @Html.TextArea("ProductList", new { data_productlist = true, @class = "form-control textareaForm", required = "required" })
+            </div>
+            <div class="clearfix"></div>
+        </div>
+        <button type="button" class="btn btn-info" id="BtnAddContractProduct">Save</button>
+        <button type="button" class="btn btn-default new-btn" data-dismiss="modal" id="BtnCancelContractProduct">Close</button>
+    </div>
+</div>
+
+<!-- End popup -->
+@*<div id="DivAddContractProduct">
+        <table>
+            <tr>
+                <td style="width:15%">Product Category</td>
+                <td style="width:35%">
+
+                    <div class="CustomControl-Div-Parent" id="DivProductCategory">
+                        <div class="CustomControl-Div" id="DivProductcategoryHeader">
+                            <span class="k-select select-arrow" id="DivProductCategoryDropdown"><span class="k-icon k-i-arrow-s">select</span></span>
+                        </div>
+                        <span class="k-invalid-msg" id="DivValidationProductCategory"></span>
+                    </div>
+
+                </td>
+                <td style="width:15%"></td>
+                <td style="width:35%"> </td>
+            </tr>
+
+            <tr>
+                <td style="width:15%">Product</td>
+                <td style="width:35%">
+                    <div class="CustomControl-Div-Parent" data-role='contracproduct' id="DivProduct">
+                        <div class="CustomControl-Div" id="DivProductcategoryHeader">
+                            <span class="k-select select-arrow" id="DivProductDropdown"><span class="k-icon k-i-arrow-s">select</span></span>
+                        </div>
+                    </div>
+                    <span class="k-invalid-msg" data-for="DivProduct"></span>
+                    <input type="hidden" id="ProductIdHistory" />
+                </td>
+                <td style="width:15%"></td>
+                <td style="width:35%"> </td>
+            </tr>
+
+        </table>
+
+
+
+        <div style="float:right">
+            <button type="button" class="btn btn-primary btn-sm" id="BtnAddContractProduct">Save</button>
+            <button type="button" class="btn btn-primary btn-sm" id="BtnCancelContractProduct">Cancel</button>
+        </div>
+
+    </div>*@

@@ -1,0 +1,390 @@
+﻿@using CBUSA.Models;
+
+<div id="ncpQuartlyRebateReport">
+    <div class="row margin-top5 btm-top-padding5">
+        <div class="col-md-6">
+        </div>
+        <div class="col-md-7 col-md-offset-5 maginTop10">
+            @if (ViewBag.projectcount == "yes")
+            {
+                <div class="row">
+                    <div class="col-md-5">
+                        @*<a href="@Url.Action("NcpRebateReportHistory","Builder")" title="NCP Rebate Report History"><i class="fa fa-folder-open editPreSarvyIcon pull-left" aria-hidden="true"></i> <div class="pull-left marginTop2">NCP Rebate Report History</div></a>*@
+                    </div>
+                    @*<div class="col-md-3">
+                         <a href="@Url.Action("Index","OfflineReporting")" title="Offline Reporting"><i class="fa fa-file-text editPreSarvyIcon pull-left" aria-hidden="true"></i> <div class="pull-left marginTop2">Offline Reporting</div></a>
+                    </div>*@
+                    <div class="col-md-3">
+                        <a href="@Url.Action("AddProject","Project")" title="Add Projects"><i class="fa fa-plus-circle editPreSarvyIcon pull-left" aria-hidden="true"></i><div class="pull-left marginTop2">Add Projects</div></a>
+                    </div>
+                </div>
+            }
+            else
+            {
+                <div class="row">
+                    @*<div class="col-md-4">
+                          <a href="@Url.Action("Index","OfflineReporting")" title="Offline Reporting"><i class="fa fa-file-text editPreSarvyIcon pull-left" aria-hidden="true"></i> <div class="pull-left marginTop2">Offline Reporting</div></a>
+                    </div>*@
+                    <div class="col-md-5">
+                        <a href="@Url.Action("NcpRebateReportHistory","Builder")" title="NCP Rebate Report History"><i class="fa fa-folder-open editPreSarvyIcon pull-left" aria-hidden="true"></i> <div class="pull-left marginTop2">NCP Rebate Report History</div></a>
+                    </div>
+                    <div class="col-md-3 imgHover">
+                        <a href="@Url.Action("AddProject","Project")" title="Manage Projects"><img class="pull-left maginRight10" src="~/content/images/copy-icon.png" /><div class="pull-left marginTop2">Manage Projects</div></a>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+    <div class="btm-top-padding15">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="wayne-dalton-title">
+                    <h3 class="text-upper">NCP Quarterly Rebate Report - @ViewBag.QuaterName @ViewBag.Year</h3>
+                    @*<h4>Due on: mm/dd/yy</h4>*@
+                </div>
+            </div>
+            <div class="col-md-3 width20 prgbarReportStatusView">
+                <div id="prgbarReportStatus" style="width:200px;border-style:solid;border-width:thin"></div>
+            </div>
+            <div class="col-md-3 pull-right width30">
+                @*<button type="button" class="btn btn-default " onclick="updateAllContract(@ViewBag.QuaterId)">NOTHING TO REPORT THIS QUARTER</button>*@
+                @if (ViewBag.data != "No")
+                {
+                    if (ViewBag.IsReportAllreadySubmited == "Yes")
+                    {
+                        <button type="button" id="btnNTRTQ" class="btn btn-default " onclick="updateAllContract(@ViewBag.QuaterId)" disabled>NOTHING TO REPORT THIS QUARTER</button>
+                    }
+                    else
+                    {
+                        <button type="button" id="btnNTRTQ" class="btn btn-default @ViewBag.EnableReporting" onclick="updateAllContract(@ViewBag.QuaterId)" @ViewBag.EnableReporting>NOTHING TO REPORT THIS QUARTER</button>
+                    }
+                }
+            </div>
+        </div>
+    </div>
+    <div class="table-responsive subReportGrid npcQuaRebateReportBtn">
+        <table class="table">
+            @(Html.Kendo().ListView<CBUSA.Areas.Admin.Models.ActiveContractViewModel>()
+        .Name("listViewContractActiveAsc")
+        .TagName("tbody")
+        .ClientTemplateId("TemplateActiveContract")
+        .Events(e => e.DataBound("OnDataBound"))
+        .DataSource(dataSource =>
+        {
+            dataSource.Read(read => read.Action("ActiveContractListViewAscCon", "Builder"));
+            dataSource.PageSize(21);
+        })
+        //.Pageable()
+        .AutoBind(true)
+            )
+        </table>
+    </div>
+    <div>
+        @if (ViewBag.data != "No")
+        {
+            if (ViewBag.Flag == "No")
+            {
+                @*<button type="button" class="btn btn-info" onclick="SubmitReport()" disabled>SUBMIT NCP Quarterly Rebate Report</button>*@
+                <button type="button" class="btn btn-info" id="submitreport" disabled>SUBMIT NCP Quarterly Rebate Report</button>
+            }
+            else
+            {
+                <button type="button" class="btn btn-info text-uppercase @ViewBag.EnableReporting" id="submitreport" @ViewBag.EnableReporting>SUBMIT NCP Quarterly Rebate Report</button>
+            }
+        }
+    </div>
+    <!-- Start popup -->
+    <div id="reportFirstTime" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Report for NCP Quarterly Rebate Report</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="block-div centerAlignPosition">
+                        <div><img src="../content/images/logo.png" class="logo" style="display:inline;" alt="CBUSA" /></div>
+                        <h5>You do NOT have any projects to report for.</h5>
+                        <h5>Please click the 'Add Projects' link to add projects.</h5>
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="modal-footer">
+
+                        @*<button type="button" class="btn btn-info">Okay</button>*@
+                        <button type="button" class="btn btn-default" data-dismiss="modal" id="btnClose">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    @(Html.Kendo().Window()
+                                    .Name("ManageReport")
+                                    .Title("Submit Project Report")
+                                    .Actions(actions => actions
+                                        .Close()
+                                    )
+                                    .Visible(false)
+                                    .Height(220)
+                                            // .Content("Loading...")
+                                            .Draggable()
+                                            .Resizable()
+                                            .Width(600)
+                                            .Modal(true)
+                                             .Events(e => e.Open("OnOpenManageStatus").Refresh("OnRefreshManageStatus"))
+
+            //     .LoadContentFrom("LoadManageStatus", "Contract", new { Area = "Admin" })
+
+    )
+    @(Html.Kendo().Window()
+                                    .Name("ManageProjectPopUp")
+                                    .Title("ProjectStatus")
+                                    .Actions(actions => actions
+                                        .Close()
+                                    )
+                                    .Visible(false)
+                                    .Height(400)
+                                            // .Content("Loading...")
+                                            .Draggable()
+                                            .Resizable()
+                                            .Width(600)
+                                            .Modal(true)
+                                             .Events(e => e.Open("OnOpenManageProjectStatus").Refresh("OnRefreshManageProjectStatus"))
+
+            //     .LoadContentFrom("LoadManageStatus", "Contract", new { Area = "Admin" })
+
+    )
+</div>
+
+<input type="hidden" value="@ViewBag.projectcount" id="HdnProjectCount" />
+
+@section scripts
+{
+    <script src="@Url.Content("~/Scripts/Custom/CbusaBuilderProject.js?v="+@DateTime.Now.ToFileTime().ToString())"></script>
+    <script type="text/javascript">
+
+        var AjaxCallUrl =
+                {
+                    InsertQuaterAdminReport: '@Url.Action("InsertQuaterAdminReport", "Project", new { Area = "CbusaBuilder" })',
+                    ChangeQuaterAdminReport: '@Url.Action("ChangeQuaterAdminReport", "Project", new { Area = "CbusaBuilder" })',
+                    LoadManageReport: '@Url.Action("LoadManageReport", "Builder", new { Area = "CbusaBuilder" })',
+                    SuccessReport: '@Url.Action("ReportThankYou", "BuilderReport", new { Area = "CbusaBuilder" })',
+                    ProjectPopUp: '@Url.Action("ProjectPopUp", "Builder", new { Area = "CbusaBuilder" })',
+                    RedirectContractUrl: '@Url.Action("AddProjectStatus", "Builder", new { Area = "CbusaBuilder", ContractId = "****ContractId****" })',
+                    UpdateNoReportSelectedContract: '@Url.Action("UpdateNoReportToContract", "Project", new { Area = "CbusaBuilder" })',
+                    UpdateNoReportAllContract: '@Url.Action("UpdateNoReportAllContract", "Project", new { Area = "CbusaBuilder" })',
+                    GetNCPReportStatusCount:'@Url.Action("GetNCPReportStatusCount", "Builder", new { Area = "CbusaBuilder" })',
+                };
+    </script>
+
+    <script type="text/x-kendo-tmpl" id="TemplateActiveContract">
+        <tr>
+            <td width="2%" class="text-center">
+                <span id="spnRowNumber">#:rowcount#</span>
+            </td>
+            <td width="17%">
+                #if (Icon!="")
+                {#
+                <span>
+                    <img src="#:Icon#" class="wayne-dalton-logo2" />
+                </span>
+                #}else{#
+                @*<img src="@Url.Content("~/content/images/default.png")" id="ContractLogo" class="wayne-dalton-logo2" alt="CBUSA" />*@
+                #:ManuFacturerName#
+                #}#
+            </td>
+            <td width="33%">#:ConractName#</td>
+            @*<td width="15%">
+                    <div>#:Estimated#</div>
+                    <div class="status online pull-left"></div>
+                    <div class="pull-left">(#:Percentage#%)</div>
+                </td>*@
+            <td width="20%">
+                <div style="color:#:ReportingLabelColor#">
+                    #:ReportingLabel#
+                </div>
+            </td>
+            <td width="15%">
+                #if (checksubmit=="Yes")
+                {#
+                <button type="button" id="btnNoReport" class="btn btn-default " onclick="updateContract(@ViewBag.QuaterId,'#:ConractId#', '#:ConractName#')" disabled>No Report</button>
+                #}else{#
+                <button type="button" id="btnNoReport" class="btn btn-default @ViewBag.EnableReporting" onclick="updateContract(@ViewBag.QuaterId,'#:ConractId#', '#:ConractName#')" @ViewBag.EnableReporting>No Report</button>
+                #}#
+            </td>
+            <td width="15%">
+                #if (checksubmit=="Yes")
+                {#
+                <button type="button" class="btn btn-info btnreport" onclick="RedirectToProject(@ViewBag.QuaterId,'#:ConractId#')" disabled>#:ReportStatus#</button>
+                #}else{#
+                <button type="button" class="btn btn-info btnreport @ViewBag.EnableReporting" onclick="RedirectToProject(@ViewBag.QuaterId,'#:ConractId#')" @ViewBag.EnableReporting>#:ReportStatus#</button>
+                @*<button type="button" class="btn btn-info btnreport" onclick="RedirectToProject(@ViewBag.QuaterId,'#:ConractId#')" disabled>#:ReportStatus#</button>*@
+                #}#
+            </td>
+        </tr>
+
+    </script>
+
+    <script>
+
+        function OnOpenManageProjectStatus(e) {
+            var wnd = $("#ManageProjectPopUp").data("kendoWindow");
+            kendo.ui.progress(wnd.element, true);
+        }
+
+        function OnRefreshManageProjectStatus(e) {
+            var wnd = $("#ManageProjectPopUp").data("kendoWindow");
+            kendo.ui.progress(wnd.element, false);
+            AssignEventpop();
+        }
+
+        var AssignEventpop = function () {
+            $("#cancelall").on("click", function () {
+                var wnd = $("#ManageProjectPopUp").data("kendoWindow");
+                wnd.close();
+            });
+        };
+
+        function RedirectToProject(qtrid, contractid) {
+            if ($("#HdnProjectCount").val() == "yes") {
+                var wnd = $("#ManageProjectPopUp").data("kendoWindow");
+                wnd.refresh({
+                    url: AjaxCallUrl.ProjectPopUp, // returns JSON, { firstName: "Alyx", lastName: "Vance" }
+                    // data: { ResourceId: dataValue.ResourceId },
+                });
+                wnd.open().center();
+            }
+            else {
+                $.ajax({
+                    type: "POST",
+                    dataType: "json",
+                    contentType: "application/json; charset=utf-8",
+                    url: AjaxCallUrl.InsertQuaterAdminReport,
+                    data: "{ qauterid: " + qtrid + " }",
+                    success: function (res) {
+                        if (res == true) {
+                        }
+                        else {                          // alert('You have already report on this project');
+                        }
+                    }
+                });
+                var url = AjaxCallUrl.RedirectContractUrl.replace("****ContractId****", contractid);
+                window.location.href = url;
+            }
+
+        }
+
+        function updateContract(qtrid, contractid, ConractName) {
+            var message = "You are about to mark all of your available projects as having no purchases to report for " + ConractName + " this quarter. Are you sure you want to do this? Are you positive you made no purchases for this contract this quarter?";
+            var Confirm = confirm(message);
+            if (!Confirm) {
+                return;
+            }
+
+            $('#btnNoReport').addClass('disabled');
+            kendo.ui.progress($("#ncpQuartlyRebateReport"), true);
+            $.ajax({
+                type: "POST",
+                url: AjaxCallUrl.UpdateNoReportSelectedContract,
+                data: { QuaterId: qtrid, ContractId: contractid },
+                cache: false,
+                success: function (result) {
+                    kendo.ui.progress($("#ncpQuartlyRebateReport"), false);
+                    $('#btnNoReport').removeClass('disabled');
+                    var DataUpdateWindow = $("#DataUpdateMessage").data("kendoWindow");
+                    if (result.Success) {
+                        if (DataUpdateWindow) {
+                            DataUpdateWindow.title("Update Information");
+                            DataUpdateWindow.content("<div class='msgboxSuccess'><i class='fa fa-exclamation-triangle' aria-hidden='true'></i>Project status updated successfully.</div>");
+                            DataUpdateWindow.open();
+                            //redirect to listing page
+                            window.location.href = window.location.href;
+                        }
+                    }
+                    else {
+                        kendo.ui.progress($("#ncpQuartlyRebateReport"), false);
+                        $('#btnNoReport').removeClass('disabled');
+                        if (DataUpdateWindow) {
+                            DataUpdateWindow.title("Update Information");
+                            if (result.DataMessage != '') {
+                                DataUpdateWindow.content("<div class='msgboxError'><i class='fa fa-exclamation-triangle' aria-hidden='true'></i>" + result.DataMessage + " </div>");
+                            }
+                            else {
+                                DataUpdateWindow.content("<div class='msgboxError'><i class='fa fa-exclamation-triangle' aria-hidden='true'></i>Unable to update project status.</div>");
+                            }
+                            DataUpdateWindow.open();
+                        }
+                    }
+                },
+                error: function (request, error) {
+                    kendo.ui.progress($("#ncpQuartlyRebateReport"), false);
+                    $('#btnNoReport').removeClass('disabled');
+                    if (DataUpdateWindow) {
+                        DataUpdateWindow.title("Error Information");
+                        DataUpdateWindow.content("<div class='msgboxError'><i class='fa fa-exclamation-triangle' aria-hidden='true'></i> Error Occured </div>");
+                        DataUpdateWindow.open();
+                    }
+                }
+            });
+        }
+
+        function updateAllContract(qtrid) {
+            var Confirm = confirm("You are about to mark all of your available projects as having no purchases for any contract this quarter. Are you sure you want to do this?");
+            if (!Confirm) {
+                return;
+            }
+            Confirm = confirm("Are you positive you made no eligible contract purchases at all this quarter?");
+            if (!Confirm) {
+                return;
+            }
+
+            $('#btnNTRTQ').addClass('disabled');
+            kendo.ui.progress($("#ncpQuartlyRebateReport"), true);
+            $.ajax({
+                type: "POST",
+                url: AjaxCallUrl.UpdateNoReportAllContract,
+                data: { QuaterId: qtrid },
+                cache: false,
+                success: function (result) {
+                    kendo.ui.progress($("#ncpQuartlyRebateReport"), false);
+                    $('#btnNTRTQ').removeClass('disabled');
+                    var DataUpdateWindow = $("#DataUpdateMessage").data("kendoWindow");
+                    if (result.Success) {
+                        if (DataUpdateWindow) {
+                            DataUpdateWindow.title("Update Information");
+                            DataUpdateWindow.content("<div class='msgboxSuccess'><i class='fa fa-exclamation-triangle' aria-hidden='true'></i> Project(s) for all contract(s) are updated successfully as 'Nothing To Report This Quarter'.</div>");
+                            DataUpdateWindow.open();
+                            //redirect to listing page
+                            window.location.href = window.location.href;
+                        }
+                    }
+                    else {
+                        kendo.ui.progress($("#ncpQuartlyRebateReport"), false);
+                        $('#btnNTRTQ').removeClass('disabled');
+                        if (DataUpdateWindow) {
+                            DataUpdateWindow.title("Update Information");
+                            if (result.DataMessage != '') {
+                                DataUpdateWindow.content("<div class='msgboxError'><i class='fa fa-exclamation-triangle' aria-hidden='true'></i>" + result.DataMessage + " </div>");
+                            }
+                            else {
+                                DataUpdateWindow.content("<div class='msgboxError'><i class='fa fa-exclamation-triangle' aria-hidden='true'></i>Unable to update project status.</div>");
+                            }
+                            DataUpdateWindow.open();
+                        }
+                    }
+                },
+                error: function (request, error) {
+                    kendo.ui.progress($("#ncpQuartlyRebateReport"), false);
+                    $('#btnNTRTQ').removeClass('disabled');
+                    if (DataUpdateWindow) {
+                        DataUpdateWindow.title("Error Information");
+                        DataUpdateWindow.content("<div class='msgboxError'><i class='fa fa-exclamation-triangle' aria-hidden='true'></i> Error Occured </div>");
+                        DataUpdateWindow.open();
+                    }
+                }
+            });
+        }
+
+    </script>
+}
+
+

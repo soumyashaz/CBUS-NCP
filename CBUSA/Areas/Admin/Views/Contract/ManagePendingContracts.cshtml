@@ -1,0 +1,141 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>ManagePendingContracts</title>
+</head>
+<body>
+    @*<div class="main-body-wrapper">
+        <div class="container">*@
+            <div class="block-div btm-top-padding15">
+                <div class="mang-cont-head">
+                    <ul>
+                        <li><a href="@Url.Action("ManageActiveContracts", "Contract")" title="Active Contracts">Active Contracts</a></li>
+                        <li class="active-mang-cont"><a href="@Url.Action("ManagePendingContracts", "Contract")" title="Pending Contracts">Pending Contracts</a></li>
+                    </ul>
+                    <div class="clearfix"></div>
+                </div>
+                <div class="clearfix"></div>
+            </div>
+            <div class="block-div btm-top-padding15">
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead class="thead-bg">
+                            <!--<tr style="width:1100">-->
+                            <tr style="width:100%">
+                                <!-- Done by Rita on 11thOct,2017-->
+                                <th width="2%" class="text-center">#</th>
+                                <th width="16%"><a href="#" id="asccon"><span id="ascicon"><i class="fa fa-caret-down" aria-hidden="true"></i></span></a><a href="#" id="desccon"><span id="descicon" hidden="hidden"><i class="fa fa-caret-up" aria-hidden="true"></i></span></a> Contract</th>
+                                <th class="text-center" width="16%"><a href="#" id="ascncp"><span id="ascincp"><i class="fa fa-caret-down" aria-hidden="true"></i></span></a><a href="#" id="descncp"><span id="descincp" hidden="hidden"><i class="fa fa-caret-up" aria-hidden="true"></i></span></a> Manufacturers Invited</th>
+                                <th class="text-center" width="20%"><a href="#" id="ascpc"><span id="ascipc"><i class="fa fa-caret-down" aria-hidden="true"></i></span></a><a href="#" id="descpc"><span id="descipc" hidden="hidden"><i class="fa fa-caret-up" aria-hidden="true"></i></span></a> Product</th>
+                                <th class="text-center" width="13%"><a href="#" id="ascbj"><span id="ascibj"><i class="fa fa-caret-down" aria-hidden="true"></i></span></a><a href="#" id="descbj"><span id="descibj" hidden="hidden"><i class="fa fa-caret-up" aria-hidden="true"></i></span></a> Builders joined</th>
+                                <th class="text-center" width="15%"><a href="#" id="ascst"><span id="ascist"><i class="fa fa-caret-down" aria-hidden="true"></i></span></a><a href="#" id="descst"><span id="descist" hidden="hidden"><i class="fa fa-caret-up" aria-hidden="true"></i></span></a> Status</th>
+                                <th class="text-center" width="15%"><a href="#" id="ascct"><span id="ascict"><i class="fa fa-caret-down" aria-hidden="true"></i></span></a><a href="#" id="descct"><span id="descict" hidden="hidden"><i class="fa fa-caret-up" aria-hidden="true"></i></span></a> Estimated start</th>
+                            </tr>
+                        </thead>
+                        @(Html.Kendo().ListView<CBUSA.Areas.Admin.Models.ActiveContractViewModel>()
+                            .Name("listViewContractActiveAsc")
+.TagName("tbody")
+.ClientTemplateId("TemplateActiveContract")
+                                    .Events(x => x.DataBound("ManagePendingContractDataBound"))
+.DataSource(dataSource =>
+{
+dataSource.Read(read => read.Action("PendingContractListView", "Contract").Data("SendContractIdAsParameterOrder"));
+dataSource.PageSize(15);
+})
+.Events(e => e.DataBound("listViewContractActiveAsc_dataBound"))
+//.Pageable()
+.AutoBind(true)
+                        )
+                    </table>
+                    <input type="hidden" id="HdnResourcePageValue" value="1" />
+                </div>
+            </div>
+        @*</div>
+    </div>*@
+    <input type="hidden" id="hdnPageName" value="PendingContracts" />
+</body>
+</html>
+@(Html.Kendo().Window()
+                        .Name("BuilderDetails")
+                        .Title("Builder Details")
+                        .Actions(actions => actions
+                            .Close()
+                        )
+                        .Visible(false)
+                        .Draggable()
+                                .Resizable()
+                                .Width(800)
+                                .Height(410)
+                                .Modal(true)
+                                .Events(e => e.Open("OnOpenContactResource").Refresh("OnRefreshContractResource"))
+
+
+
+)
+
+@section scripts
+{
+<script type="text/javascript">
+
+    function ManagePendingContractDataBound() {
+        if (this.dataSource.data().length == 0) {
+            //custom logic
+            $("#listViewContractActiveAsc").append("<h4>There are no Pending Contracts</h4>");
+        }
+    }
+
+
+    var AjaxCallUrl =
+            {
+
+                archievedcontracts: '@Url.Action("ManageArchievedContracts", "Contract", new { Area = "Admin" })',
+                RedirectContractUrl: '@Url.Action("ViewContract", "Contract", new { Area = "Admin", ContrcatId = "****ContractId****" })',
+                BuilderDetailsUrl: '@Url.Action("BuilderDetails", "Contract", new { Area = "Admin" })'
+            };
+</script>
+
+<script type="text/javascript">
+        function listViewContractActiveAsc_dataBound() {
+            $(".MoreSpan").shorten({
+                "showChars": 100,
+                "moreText": "More...",
+                "lessText": "Less...",
+            });
+        }
+</script>
+
+    <script type="text/x-kendo-tmpl" id="TemplateActiveContract">
+        <tr>
+            <td width="2%" class="text-center">
+                <span id="spnRowNumber">#:rowcount#</span>
+            </td>
+            <td width="18%"><a onclick="RedirecttoContract('#:ConractId#')" id="view">#:ConractName#</a></td>
+            <td width="18%" class="text-center">
+                #for(var z=0; z < Manufactererlist.length; z++){#
+             
+                <ul class="cont-delver-icon">
+                    <li><i class="fa fa-check StatusLiveCheck" aria-hidden="true"></i><a href="http://#:Websiteslist[z]#" title="Vendor 1" target="_blank">  #:Manufactererlist[z]# </a> </li>
+                </ul>
+
+                #}#
+            
+            @*<a href="http://#:Website#" title="Vendor 1" target="_blank"> #:ManuFacturerName# </a>*@</td>
+            <td width="25%" class="text-center"><span class="MoreSpan">#:ProductList#</span></td>
+            @*<td class="text-center"><a>#:BuilderCount#</a></td>*@
+            <td width="10%" class="text-center"><a onclick="popup('#=ConractId#')">#:BuilderCount#</a></td>
+            <td width="15%" class="text-center">#:ContractStatus#</td>
+            <td width="10%" class="text-center">#:ContractFrom#</td>
+        </tr>
+    </script>
+<script type="text/x-kendo-tmpl" id="TemplateBuilder">
+    <tr>
+        <td class="text-center">#:BuilderName#</td>
+        <td class="text-center">#:MarketName#</td>
+    </tr>
+</script>
+
+<script src="@Url.Content("~/Scripts/Custom/AdminContractShorting.js?v="+@DateTime.Now.ToFileTime().ToString())"></script>
+<script src="@Url.Content("~/Scripts/Custom/jquery.shorten.1.0.js?v="+@DateTime.Now.ToFileTime().ToString())"></script>
+
+}

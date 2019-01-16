@@ -1,0 +1,85 @@
+﻿<div class="row maginTop20">
+    <div class="col-md-5">
+        @(Html.Kendo().DropDownList()
+                        .Name("AllBuilderList")
+                        .DataTextField("BuilderName")
+                        .DataValueField("BuilderId")
+                        .HtmlAttributes(new
+                        {
+                            @class = "form-control"
+                        })
+                        .DataSource(source =>
+                        {
+                            source.Read(read =>
+                            {
+                                read.Action("GetAllBuilders", "Contract", new { Area = "Admin" });
+                            })
+                            .ServerFiltering(true);
+                        })
+                        .Events(e =>
+                        {
+                            e.DataBound("onBuilderDataBound");
+                            e.Select("onSelectBuilder");
+                        })
+        )
+    </div>
+    <div class="col-md-3"></div>    
+    <div class="clearfix"></div>
+</div>
+<div class="block-div maginTop10">
+    <div class="table-responsive croseDivSecondAfterFirst">
+        <table class="table" id="secondDiv">
+            <thead class="thead-bg">
+                <tr style="width:100%">
+                    <th width="0" hidden>ContractId</th>
+                    <th width="25%" class="text-center">Contract</th>
+                    <th width="25%" class="text-center">National Contract Partner</th>
+                    <th width="25%" class="text-center">Product</th>
+                    <th width="10%" class="text-center">Status</th>
+                    <th width="170px" class="text-center">End Date</th>
+                </tr>
+            </thead>
+            @(Html.Kendo().ListView<CBUSA.Areas.Admin.Models.ContractViewModel>()
+                .Name("listViewBuilderContractList")
+                .TagName("tbody")
+                .ClientTemplateId("TemplateBuilderContract")
+                .Pageable(pageable => pageable
+                .Refresh(true)
+                .PageSizes(true)
+                )
+                .DataSource(dataSource =>
+                {
+                    dataSource.Read(read => read.Action("GetBuilderContractList", "Contract").Data("SendBuilderIdAsParameter"));
+                    dataSource.PageSize(10);
+                })
+                //.AutoBind(true)
+            )
+        </table>
+    </div>
+
+    <div class="clearfix"></div>
+</div>
+
+<input type="hidden" id="hdnSelectedBuilderId" value="0" />
+
+@section scripts
+{
+    <script type="text/x-kendo-tmpl" id="TemplateBuilderContract">
+        <tr style="width:100%">
+            <td width="0%" hidden class="text-center">#:ConractId#</td>
+            <td width="25%" class="text-center">#:ConractName#</td>
+            <td width="25%" class="text-center">#:ManuFacturerName#</td>
+            <td width="25%" class="text-center">#:ProductList#</td>
+            <td width="10%" class="text-center">#:ContractStatus#</td>
+            <td width="170px" class="text-center">#:ContractTerm#</td>
+        </tr>
+    </script>
+
+    <script type="text/javascript">
+        var AjaxCallUrl =
+                {
+                    BuilderContractListUrl: '@Url.Action("GetBuilderContractList", "Contract", new { Area = "Admin", BuilderId = "builderId" })'
+                };
+    </script>
+    <script src="@Url.Content("~/Scripts/Custom/AdminBuilderContract.js?v="+@DateTime.Now.ToFileTime().ToString())"></script>
+}

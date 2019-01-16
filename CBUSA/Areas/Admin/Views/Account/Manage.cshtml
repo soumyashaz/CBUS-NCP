@@ -1,0 +1,71 @@
+﻿@*@using CBUSA.Models;*@
+@using Microsoft.AspNet.Identity;
+
+@*@Model CBUSA.Areas.Admin.Models.ManageUserViewModel*@
+
+@*@{
+    ViewBag.Title = "Manage Account";
+}
+
+<h2>@ViewBag.Title.</h2>*@
+
+<p class="text-success">@ViewBag.StatusMessage</p>
+<div class="row">
+    <div class="col-md-12">
+        @*@if (ViewBag.HasLocalPassword)
+        {*@
+            @Html.Partial("_ChangePasswordPartial")
+        @*}*@
+        @*else
+        {
+            @Html.Partial("_SetPasswordPartial")
+        }*@
+
+        @*<section id="externalLogins">
+                @Html.Action("RemoveAccountList")
+                @Html.Partial("_ExternalLoginsListPartial", new ExternalLoginListViewModel { Action = "LinkLogin", ReturnUrl = ViewBag.ReturnUrl })
+            </section>*@
+    </div>
+</div>
+@*@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}*@
+
+<script>
+        $(document).ready(function () {
+            $('#passwordMsg').hide()
+            var val = $('.type').text().trim();
+            if (val === "Offender") {
+
+                //$('#City').removeAttr("disabled")S
+                $("#Gender").data("kendoDropDownList").readonly();
+                $("#State").data("kendoDropDownList").readonly()
+                $("#SelectedQuestionId1").data("kendoDropDownList").readonly();
+                $("#SelectedQuestionId2").data("kendoDropDownList").readonly();
+                $("#SelectedQuestionId3").data("kendoDropDownList").readonly();
+
+                //$('.dis').attr("disabled", "disabled");
+                $('.dis').attr('readonly', true);
+                $('#validationfalse').hide()
+            }
+        });
+
+        $("#NewPassword").mouseover(function () {
+            $('#passwordMsg').show()
+
+        });
+
+        $("#NewPassword").mouseout(function () {
+
+            $('#passwordMsg').hide()
+        });
+
+        $("#NewPassword").focus(function () {
+            $('#passwordMsg').show()
+        });
+
+        $('input').blur(function () {
+            $('#passwordMsg').hide()
+        });
+
+</script>

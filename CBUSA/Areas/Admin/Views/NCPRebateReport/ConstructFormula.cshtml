@@ -1,0 +1,341 @@
+﻿@model CBUSA.Areas.Admin.Models.ConstructFormulaViewModel
+
+<section class="create_survey-step-body maginTop40">
+    <div id="ConstructFormula" class="row">
+        <div class="col-md-8">
+            <div class="row">
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">Contract name:</label>
+                    <div class="col-sm-6">
+                        @(Html.Kendo().DropDownListFor(x => x.ContractId)
+                            .Name("ContractList")
+                                .DataTextField("ContractName")
+                                  .DataValueField("ContractId")
+                                .Events(e =>
+                                {
+                                    e.Select("ConstructFormula.onSelectContract");
+                                    e.DataBound("ConstructFormula.onDataBoundContract");
+                                })
+                                .DataSource(source =>
+                                {
+                                    source.Read(read =>
+                                    {
+                                        read.Action("GetActivePendingContract", "Survey", new { Area = "Admin" }).Data("ConstructFormula.SendDataBeforeLoadDropDown");
+                                    });
+                                    // .ServerFiltering(true);
+                                })
+                                //.OptionLabel("--Select Contract--")
+                                //.SelectedIndex(0)
+                                .HtmlAttributes(new { @class = "form-control" })
+                                .Value(Model.ContractId.ToString())
+                        )
+
+                        <div>
+                            <span class="k-invalid-msg" data-for="ContractId"></span>
+                        </div>
+                    </div>
+                    <div class="col-sm-3"></div>
+                    <div class="clearfix"></div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">Quarter/Report:</label>
+                    <div class="col-sm-6">
+                        @*<select class="form-control">
+                                <option>-- Select --</option>
+                            </select>*@
+                        @(Html.Kendo().DropDownListFor(x => x.Quarter)
+                            .Name("QuarterDDL")
+                            .DataTextField("Text")
+                            .DataValueField("Value")
+                            .Events(e =>
+                            {
+                                e.Select("ConstructFormula.onSelectQuarter");
+                            })
+                            .BindTo(Model.QuarterList)
+                            //.SelectedIndex(0)
+                            .HtmlAttributes(new
+                            {
+                                @class = "form-control"
+                            })
+                        .Value(Model.Quarter)
+                        )
+                    </div>
+                    <div class="col-sm-3"></div>
+                    <div class="clearfix"></div>
+                </div>
+                <div class="form-group" id="DivConfigureSurveyInvite">
+                    <label class="col-sm-3 control-label">Markets:</label>
+                    <div class="col-sm-9 classZoneMarket">
+                        @*<div class="CustomControl-Div customControlDivSecond" id="DivMarketHeader">
+
+                                <span class="k-select select-arrow" id="a_openaddinvitespopup"><span class="k-icon k-i-arrow-s">select</span></span>
+                            </div>*@
+                        <div class="CustomControl-Div-Parent" data-role='ZoneSate' id="DivZoneState">
+                            <div class="CustomControl-Div" id="DivZoneStateHeader">
+                                <span class="k-select select-arrow" id="DivZoneStateDropdown"><span class="k-icon k-i-arrow-s">select</span></span>
+                            </div>
+                        </div>
+                        <span class="k-invalid-msg" data-for="DivMarket"></span>
+                        <input type="hidden" id="MarketIdHistory" />
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">Questions:</label>
+                    <div class="col-sm-9">
+                        @(Html.Kendo().DropDownListFor(x => x.QuestionId)
+                          .Name("QuestionDDL")
+                          .HtmlAttributes(new { @class = "form-control" })
+                          .DataTextField("QuestionValue")
+                          .DataValueField("QuestionId")
+                          .OptionLabel(new  { QuestionValue = "--Select Question--", QuestionId = "-1"})
+                          .DataSource(source =>
+                          {
+                              source.Read(read =>
+                              {
+                                  read.Action("GetQuestionListForFormula", "NCPRebateReport")
+                                      .Data("SendSurveyIdQuarterAsParameter");
+                              })
+                              .ServerFiltering(true);
+                          })
+
+                          .Enable(false)
+                          .AutoBind(false)
+                          //.SelectedIndex(0)
+                          //.OptionLabel("--- Select Question ---")
+                          .CascadeFrom("QuarterDDL")
+                          .Events(e =>
+                          {
+                              e.Change("ConstructFormula.onSelectQuestion");
+                              e.DataBound("ConstructFormula.onDataBoundQuestion");
+                          })
+                          .Value(Model.QuestionId.ToString())
+                        )
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">Select Col:</label>
+                    <div class="col-sm-9">
+                        @(Html.Kendo().DropDownListFor(x => x.QuestionColumn)
+                          .Name("QuestionColumnDDL")
+                          .HtmlAttributes(new { @class = "form-control" })
+                          .DataTextField("QuestionColumnText")
+                          .DataValueField("QuestionColumnId")
+                          //.OptionLabel(new { QuestionColumnText = "--Select Question Column--", QuestionColumnId = "-1" })
+                          .DataSource(source =>
+                          {
+                              source.Read(read =>
+                              {
+                                  read.Action("GetQuestionColumnList", "NCPRebateReport")
+                                      .Data("SendSurveyIdQuestionIdAsParameter");
+                              })
+                              .ServerFiltering(true);
+                          })
+                          .Enable(false)
+                          .AutoBind(false)
+                          .CascadeFrom("QuestionDDL")
+                          .Events(e =>
+                          {
+                              e.Change("ConstructFormula.onSelectQuestionColumn");
+                              e.DataBound("ConstructFormula.onDataBoundQuestionColumn");
+                          })
+                            .Value(Model.QuestionColumn)
+                        )
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">Select Col-Value:</label>
+                    <div class="col-sm-9">
+                        <div id="divQuestionColumnValueList">
+                            @(Html.Kendo().DropDownListFor(x => x.QuestionColumnValue)
+                          .Name("QuestionColumnValueDDL")
+                          .HtmlAttributes(new { @class = "form-control" })
+                          .DataTextField("QuestionColumnValueText")
+                          .DataValueField("QuestionColumnValueId")
+                          //.OptionLabel(new { QuestionColumnValueText = "--Select Question Col-Value--", QuestionColumnValueId = "-1" })
+                          .DataSource(source =>
+                          {
+                              source.Read(read =>
+                              {
+                                  read.Action("GetQuestionColumnValueList", "NCPRebateReport")
+                                      .Data("SendSurveyIdQuestionSettingIdAsParameter");
+                              })
+                              .ServerFiltering(true);
+                          })
+                          .Enable(false)
+                          .AutoBind(false)
+                          .CascadeFrom("QuestionColumnDDL")
+                          .Events(e =>
+                          {
+                              e.Change("ConstructFormula.onSelectQuestionColumnValue");
+                              e.DataBound("ConstructFormula.onDataBoundQuestionColumnValue");
+                          })
+                            .Value(Model.QuestionColumnValue)
+                            )
+                        </div>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-3 control-label"></label>
+                    <div class="col-sm-9">
+                        <button id="BtnInsertFormula" type="button" class="btn btn-default new-btn pull-right">Insert selection in Formula Bar</button>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+                <div class="form-group" style="display:none">
+                    <label class="col-sm-3 control-label">Formula:</label>
+                    <div class="col-sm-6">
+                        @*<select class="form-control">
+                                <option>-- Select --</option>
+                            </select>*@
+                        @(Html.Kendo().DropDownListFor(x => x.Quarter)
+                            .Name("SameAsQuarterDDL")
+                            .DataTextField("Text")
+                            .DataValueField("Value")
+                            .Events(e =>
+                            {
+                                e.Select("ConstructFormula.onSelectSameAsQuarter");
+                            })
+                            .BindTo(Model.QuarterList)
+                            //.SelectedIndex(0)
+                            .HtmlAttributes(new
+                            {
+                                @class = "form-control"
+                            })
+                        .Value(Model.Quarter)
+                        )
+                    </div>
+                    <div class="col-sm-3"></div>
+                    <div class="clearfix"></div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-3 control-label"></label>
+                    <div class="col-sm-9">
+                        <textarea id="TxtFormula" class="form-control" rows="6" value=@ViewBag.FormulaDesc></textarea>
+                    </div>
+                    <div class="col-sm-9" style="display:none;">
+                        @*style="display:none;"*@
+                        <textarea id="TxtFormulaActual" class="form-control" rows="6" value=@ViewBag.FormulaBuild></textarea>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-3 control-label"></label>
+                    <div class="col-sm-9">
+                        <button id="BtnSaveConstructFormula" type="button" class="btn btn-info pull-left">Save</button>
+                        <button id="BtnCancelConstructFormula" type="button" class="btn btn-default new-btn pull-left marginLeft12">Cancel</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4"></div>
+    </div>
+</section>
+@if (ViewBag.IsEdit == true)
+{
+    @Html.Hidden("hdnIsEditDocument", "Yes")
+    @Html.Hidden("hdnSurveyId", (object)ViewBag.SurveyId)
+    @Html.Hidden("hdnSelectedQuarter", (object)ViewBag.Quarter)
+    @Html.Hidden("hdnSelectedYear", (object)ViewBag.Year)
+    @Html.Hidden("hdnSelectedQuestionId", (object)ViewBag.QuestionId)
+    @Html.Hidden("hdnSelectedContractId", (object)ViewBag.ContractId)
+    @Html.Hidden("hdnFormulaDesc", (object)ViewBag.FormulaDesc)
+    @Html.Hidden("hdnFormulaBuild", (object)ViewBag.FormulaBuild)
+    <script type="text/javascript">
+        var FormulaDesc = $("#hdnFormulaDesc").val();
+        var FormulaBuild = $("#hdnFormulaBuild").val();
+
+        $("#TxtFormula").val(FormulaDesc);
+        $("#TxtFormulaActual").val(FormulaBuild);
+    </script>
+}
+@Html.Hidden("hdnIsEditDocument", "")
+@Html.HiddenFor(x => x.ConstructFormulaId, Model.ConstructFormulaId)
+@Html.HiddenFor(x => x.SurveyId, Model.SurveyId)
+@Html.HiddenFor(x => x.ContractId, Model.ContractId)
+@Html.HiddenFor(x => x.MarketId, Model.MarketId)
+@Html.HiddenFor(x => x.MarketList, Model.MarketList)
+@Html.HiddenFor(x => x.FormulaBuild, Model.FormulaBuild)
+@Html.HiddenFor(x => x.IsNcpSurvey, Model.IsNcpSurvey)
+
+@Html.Hidden("hdnIsNcpSurvey", (object)ViewBag.IsNcpSurvey)
+@Html.Hidden("hdnSelectedContractId")
+@Html.Hidden("hdnContractFormulaId", Model.ConstructFormulaId)
+@Html.Hidden("hdnSurveyId")
+@Html.Hidden("hdnSelectedQuarter")
+@Html.Hidden("hdnSelectedYear")
+@Html.Hidden("hdnSelectedMarketList", Model.MarketList)
+@Html.Hidden("hdnSelectedQuestionId")
+@Html.Hidden("hdnSelectedQuestionTypeId")
+@Html.Hidden("hdnSelectedQuestionText")
+@Html.Hidden("hdnSelectedQuestionSettingId")
+@Html.Hidden("hdnSelectedQuestionColumnIndex")
+@Html.Hidden("hdnSelectedQuestionColumnText")
+@Html.Hidden("hdnSelectedQuestionColumnValueId")
+@Html.Hidden("hdnSelectedQuestionRowIndex")
+@Html.Hidden("hdnSelectedQuestionColumnValueText")
+@Html.Hidden("hdnSelectedQuestionData")
+@Html.Hidden("HdnSelectedMarketControl", Model.MarketList)
+
+@(Html.Kendo().Window()
+                        .Name("WndSurveyInvitesPopup")
+                        .Title("Select Markets")
+                        .Actions(actions => actions
+                            .Close()
+                        )
+                        .Visible(false)
+                        .Draggable()
+                                .Resizable()
+                              .Width(600)
+                             .Height(200)
+                                .Modal(true)
+                                    .Events(e => e.Open("ConstructFormula.OnOpenSurveyInvitesPopup")
+                                        .Refresh("ConstructFormula.OnRefreshSurveyInvitesPopup"))
+)
+@*@(Html.Kendo().Window().Width(400)
+        .Name("DataUpdateMessage")
+        .Title("Update Information")
+        .Content(@<text>
+            <p>
+
+            </p>
+            <p></p>
+        </text>)
+            .Visible(false)
+            .Modal(true)
+            .Draggable()
+            .Resizable()
+            .Events(ev => { ev.Close("onCloseSaveMessage"); ev.Open("centerWindowSaveMessage"); })
+    )*@
+<input type="hidden" value="@ViewBag.IsValidationSummaryMsgAvail" id="HdnValidationSummaryFlag" />
+
+<span style="display:none" id="HdnValidationSummaryMsg">
+    @Html.Raw(@ViewBag.IsValidationSummaryMsg)
+</span>
+
+@section scripts
+{
+    <script type="text/javascript">
+        var TreeControlUrl = '@Url.Action("ParseMarketTreeViewControl", "Home", new { Area = "" })';
+        var AjaxCallUrl =
+                {
+                    MarketUrl: '@Url.Action("ParseMarketControl", "NCPRebateReport", new { Area = "Admin" })',
+                    IsEnrollmentSurveyAvailableUrl: '@Url.Action("IsEnrollmentSurveyAvailable", "Survey", new { Area = "Admin" })',
+                    MarketPopupUrl: '@Url.Action("ShowSurveyAddInvitesPopup", "Survey", new { Area = "Admin" })',
+                    GetSurveyUrl: '@Url.Action("GetSurveyByContract", "NCPRebateReport", new { Area = "Admin" })',
+                    GetQuestionUrl: '@Url.Action("GetQuestionListForFormula", "NCPRebateReport", new { Area = "Admin"})',
+                    BuildFormulaActualUrl: '@Url.Action("BuildConstructFormula", "NCPRebateReport", new { Area = "Admin" })',
+                    SaveConstructFormulaUrl: '@Url.Action("SaveConstructFormula", "NCPRebateReport", new { Area = "Admin" })',
+                    GetSameAsQuarterUrl: '@Url.Action("GetFormulaByQuarter", "NCPRebateReport", new { Area = "Admin" })',
+                    RedirectToThisPageUrl: '@Url.Action("ConstructFormula", "NCPRebateReport", new { Area = "Admin" })',
+                    GetQuestionTypeIdUrl: '@Url.Action("GetQuestionTypeId", "NCPRebateReport", new { Area = "Admin"})',
+                    //ZoneControlUrl = '@Url.Action("ParseZoneStateControl", "Home", new { Area = "" })',
+                    FormulaListingPageUrl: '@Url.Action("VolumeFee", "NCPRebateReport", new { Area = "Admin"})',
+                };
+    </script>
+    @*<script src="@Url.Content("~/Scripts/Custom/Caret.js")" ></script>*@
+    <script src="@Url.Content("~/Scripts/Custom/AdminConstructFormula.js")"></script>
+
+}

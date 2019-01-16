@@ -1,0 +1,354 @@
+﻿@model CBUSA.Areas.Admin.Models.AddQuestionViewModel
+
+<h3>@Session["ContractName"] : @Session["SurveyName"]</h3>
+@Html.Partial("_SurveyStepHeader", Model.ObjQuestion.SurveyId)
+
+
+@*@(ViewBag.IsSurveyPublish == true ? "disabledDiv" : "")*@
+
+<section class="row create_survey-step-body " id="SectionAddQuestion">
+    <div class="col-md-11">
+        <div class="form-group">
+            <label class="col-sm-3 control-label">Question Type:</label>
+            <div class="col-sm-9 select-height">
+                @(Html.Kendo().DropDownListFor(x => x.ObjQuestion.QuestionTypeId)
+                               .DataTextField("TypeName")
+                                  .DataValueField("QuestionTypeId")
+                        //.OptionLabel("--Select--")
+                        .HtmlAttributes(new
+                        {
+                            @class = "form-control"
+                        })
+                        .Events(e =>
+                    {
+
+                        e.Select("SurveyAddQuestion.OnSelectControlType");
+                        e.DataBound("SurveyAddQuestion.OnDataBoundControlType");
+                    })
+                           .DataSource(source =>
+                                      {
+                                          source.Read(read =>
+                                          {
+                                              read.Action("GetQuestionType", "Survey", new { Area = "Admin" });
+                                          });
+                                          // .ServerFiltering(true);
+                                      })
+                                                            .Value(Model.ObjQuestion.QuestionTypeId.ToString())
+                )
+
+            </div>
+            <div class="clearfix"></div>
+        </div>
+        <!-- Start Text Box -->
+        <div class="row block-div select-box textBox" style="display:block;">
+            <div class="col-md-3"></div>
+            <div class="col-md-9">
+                <div class="div-bodear-box">
+                    <div class="form-group" data-role="TextBoxType">
+                        <label class="col-sm-3 control-label">Textbox Type:</label>
+                        <div class="col-sm-9 select-height">
+                            @(Html.Kendo().DropDownListFor(x => x.ObjTextBoxType.TextBoxTypeId)
+                               .DataTextField("TextBoxTypeName")
+                                  .DataValueField("TextBoxTypeId")
+                                           .HtmlAttributes(new
+                                {
+                                    @class = "form-control"
+                                })
+                                    //.OptionLabel("--Select--")
+                        .Events(e =>
+                    {
+
+                        e.Select("SurveyAddQuestion.OnSelectTextBoxType");
+                        e.DataBound("SurveyAddQuestion.OnDataBoundTextBoxType");
+                    })
+                           .DataSource(source =>
+                                      {
+                                          source.Read(read =>
+                                          {
+                                              read.Action("GetTextBoxType", "Survey", new { Area = "Admin" });
+                                          });
+                                          // .ServerFiltering(true);
+                                      })
+                                                            .Value(Model.ObjTextBoxType.TextBoxTypeId.ToString())
+                            )
+
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">Question:</label>
+                        <div class="col-sm-9">
+                            @*<textarea class="form-control" rows="3" placeholder="Separate manufacturers with commas"></textarea>*@
+                            @Html.TextAreaFor(x => x.ObjQuestion.QuestionValue, new { @class = "form-control", rows = "3", required = "required" })
+
+                            <div>
+                                <span class="k-invalid-msg" data-for="ObjQuestion_QuestionValue"></span>
+                            </div>
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="form-group" data-role="DropDownType">
+                        <label class="col-sm-3 control-label">Choices:</label>
+                        <div class="col-sm-9">
+                            @*<textarea class="form-control" rows="3"></textarea>
+                                <p>Comma separated list of all answer choices</p>*@
+                            @Html.TextAreaFor(x => x.ObjDropDownSetting.Value, new { @class = "form-control", rows = "3", required = "required" })
+                            <div><span>Comma separated list of all answer choices</span></div>
+                            <div>
+                                <span class="k-invalid-msg" data-for="ObjDropDownSetting_Value"></span>
+                            </div>
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="form-group" data-role="CommonType">
+                        <label class="col-sm-3 control-label">Is mandatory?:</label>
+                        <div class="col-sm-9">
+                            @*<input type="radio"> Yes &nbsp; &nbsp; <input type="radio"> No*@
+                            @Html.RadioButtonFor(x => x.ObjQuestion.IsMandatory, "Yes", Model.ObjQuestion.IsMandatory == true
+                            ? new { @checked = "checked" } : null) Yes
+                            &nbsp; &nbsp; @Html.RadioButtonFor(x => x.ObjQuestion.IsMandatory, "No", Model.ObjQuestion.IsMandatory ==
+                            false ? new { @checked = "checked" } : null) No
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="form-group addRowCols" data-role="TextBoxType" data-subrole="Number">
+                        <label class="col-sm-3 control-label">Allow Only:</label>
+                        <div class="col-sm-9">
+                            <div class="row">
+                                <div class="col-md-2 maginTop5">
+                                    <span>Between</span>
+                                </div>
+                                <div class="col-md-10">
+                                    @Html.Kendo().NumericTextBoxFor(x => x.ObjTextBoxSetting.LowerLimit).Format("#").Decimals(0).Min(0)
+                                    <span>&nbsp;- &nbsp;</span>
+                                    @Html.Kendo().NumericTextBoxFor(x => x.ObjTextBoxSetting.UpperLimit).Format("#").Decimals(0).Min(0).HtmlAttributes(new
+                               {
+                                   data_greaternumerictextbox = true,
+                                   data_lesserrnumericfield = "ObjTextBoxSetting.LowerLimit"
+                               })
+
+                                    <div>
+                                        <span class="k-invalid-msg" data-for="ObjTextBoxSetting.UpperLimit"></span>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="form-group" data-role="TextBoxType" data-subrole="Text">
+                        <label class="col-sm-3 control-label">Allow Only:</label>
+                        <div class="col-sm-9" data-checkrequired="required" id="DivAllowOnlyCheckBox" name="DivAllowOnlyCheckBox">
+                            @*<input type="checkbox"> Alphabets &nbsp; &nbsp; <input type="checkbox"> Numbers &nbsp; &nbsp; <input type="checkbox"> Special characters*@
+
+                            @Html.CheckBoxFor(x => x.ObjTextBoxSetting.IsAlphabets, new { checkrequired = "required" }) Alphabets &nbsp; &nbsp;
+                            @Html.CheckBoxFor(x => x.ObjTextBoxSetting.IsNumber, new { checkrequired = "required" })
+                            Numbers &nbsp; &nbsp;
+                            @Html.CheckBoxFor(x => x.ObjTextBoxSetting.IsSpecialCharecter, new { checkrequired = "required" }) Special characters
+                            <div>
+                                <span class="k-invalid-msg" data-for="DivAllowOnlyCheckBox"></span>
+                            </div>
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="form-group" data-role="CommonType">
+                        <label class="col-sm-3 control-label">Upload files:</label>
+                        <div class="col-sm-9">
+                            @Html.CheckBoxFor(x => x.ObjQuestion.IsFileNeedtoUpload)
+                            Enable Builder to upload files
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="form-group addRowCols" data-role="GridType">
+                        <label class="col-sm-3 control-label">No. of rows:</label>
+                        <div class="col-sm-9">
+                            <div class="row addQusNoCol">
+                                <div class="col-md-3">
+                                    @Html.Kendo().NumericTextBoxFor(x => x.ObjGridSetting.Row).Format("#").Decimals(0).Min(0).HtmlAttributes(new
+                               {
+                                   data_greaterthanzero = true,
+
+                               })
+                                    <span class="k-invalid-msg" data-for="ObjGridSetting.Row"></span>
+                                </div>
+                                <div class="col-md-3"><label class="control-label">No. of cols:</label></div>
+                                <div class="col-md-3">
+                                    @Html.Kendo().NumericTextBoxFor(x => x.ObjGridSetting.Column).Format("#").Decimals(0).Min(0).HtmlAttributes(new
+                               {
+                                   data_greaterthanzero = true,
+
+                               })
+                                    <span class="k-invalid-msg" data-for="ObjGridSetting.Column"></span>
+                                </div>
+                                <div class="col-md-3"><button type="button" class="btn btn-info" style="padding:5px !important;" id="BtnGenarateGrid">Generate Grid</button></div>
+                            </div>
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
+
+                    <!-- Start Generate Grid Div -->
+                    <div class="" data-role="GridType" data-subrole="GridTypeGenarateRow" data-gridrowcoloumnvalidation="required" id="DivGridTypeQuestionContainer" name="DivGridTypeQuestionContainer">
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label">Row headings:</label>
+                            <div class="col-sm-4" data-role="GridAddRowHeaderControl">
+                                @*<input class="form-control marginbtm10" type="text" placeholder="Row 1">
+                                    <input class="form-control marginbtm10" type="text" placeholder="Row 2">
+                                    <input class="form-control marginbtm10" type="text" placeholder="Row 3">*@
+                            </div>
+                            <div class="col-md-3"></div>
+                            <div class="col-md-2"></div>
+                            <div class="clearfix"></div>
+                        </div>
+
+
+                        <div class="form-group" data-subrole="GridTypeGenarateColumn">
+                            <div class="col-md-3">
+                                <label class="control-label">Col Headings:</label>
+                            </div>
+                            <div class="col-md-9" data-role="GridAddColumnHeaderControl">
+                                @*<div class="row">
+                                        <div class="col-md-5">
+                                            <input class="form-control marginbtm10" type="text" placeholder="Col 1">
+                                        </div>
+                                        <div class="col-md-4">
+                                            <select class="form-control marginbtm10">
+                                                <option value="1">Text box</option>
+                                                <option value="2">DropList</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <a href="javascript:void(0)" data-toggle="modal" data-target="#addValuesPop" title="Add Values">Add Values</a>
+                                        </div>
+                                    </div>*@
+                                @*<div class="row">
+                                        <div class="col-md-5">
+                                            <input class="form-control marginbtm10" type="text" placeholder="Col 1">
+                                        </div>
+                                        <div class="col-md-4">
+                                            <select class="form-control marginbtm10">
+                                                <option value="1">Text box</option>
+                                                <option value="2">DropList</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <a href="javascript:void(0)" data-toggle="modal" data-target="#addValuesPop" title="Add Values">Add Values</a>
+                                        </div>
+                                    </div>*@
+                            </div>
+
+                            <!-- Start popup -->
+                            @*<div id="addValuesPop" class="modal fade" role="dialog">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                                <h4 class="modal-title">Add Values</h4>
+                                            </div>
+                                            <div class="modal-body">
+                                                <div class="block-div">
+                                                    <div class="col-md-2">Coll</div>
+                                                    <div class="col-md-10">
+                                                        <textarea class="form-control" rows="3"></textarea>
+                                                        Enter comma separated list of values
+                                                    </div>
+                                                </div>
+                                                <div class="clearfix"></div>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-info">Save</button>
+                                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>*@
+                            <!-- End popup -->
+
+                            <div class="clearfix"></div>
+                        </div>
+                        <!-- End Edit Design -->
+
+
+                        <span class="k-invalid-msg" data-for="DivGridTypeQuestionContainer"></span>
+                    </div>
+                    <!-- End Generate Grid Div -->
+
+
+
+                </div>
+            </div>
+        </div>
+
+        <div class="clearfix"></div>
+        <div class="form-group margin-top20">
+            <label class="col-sm-3 control-label"></label>
+            <div class="col-sm-9">
+                <button type="button" class="btn btn-info" id="Btn_AddQuestion">Save &amp; Next</button>
+                <button type="button" class="btn btn-default new-btn" id="Btn_save_addnew_question">Save &amp; Add new</button>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+    </div>
+    <div class="col-md-1"></div>
+</section>
+
+@Html.Hidden("HdnSurveyId", Model.ObjQuestion.SurveyId)
+@Html.Hidden("HdnQuestionId", Model.ObjQuestion.QuestionId)
+
+
+@Html.Hidden("HdnIsCopy", (int)@ViewBag.IsCopy)
+
+@Html.Hidden("HdnRowHeaderValue", Model.ObjQuestionGridSettingHeader.RowHeaderValue)
+@Html.Hidden("HdnColoumnHeaderValue", Model.ObjQuestionGridSettingHeader.ColoumnHeaderValue)
+
+@*<input type="hidden" value="@Model.ObjQuestion.SurveyId" id="HdnSurveyId" />
+    <input type="hidden" value="@Model.ObjQuestion.QuestionId" id="HdnQuestionId" />*@
+
+<input type="hidden" value="1" id="HdnGridMaxHeaderRowHistory" />
+<input type="hidden" value="1" id="HdnGridMaxHeaderColHistory" />
+<input type="hidden" value="" id="HdnLatestAddDropdownControlAdd" />
+
+<input type="hidden" value="0" id="IsPageLoadComplete" />
+<input type="hidden" id="HdnButtonId" />
+
+@Html.Hidden("HdnIsNcpSurvey", (bool)@ViewBag.IsNcpSurvey)
+
+@(Html.Kendo().Window()
+                        .Name("WndGridColoumnDropdownAddValye")
+                        .Title("Add Value")
+                        .Actions(actions => actions
+                            .Close()
+                        )
+                        .Visible(false)
+                        .Draggable()
+                                .Resizable()
+                                  .Width(600)
+                                 .Height(200)
+                                .Modal(true)
+                            .Events(e => e.Open("SurveyAddQuestion.OnOpenAddGridColoumnDropDownvalue")
+                                .Refresh("SurveyAddQuestion.OnRefreshAddGridColoumnDropDownvalue"))
+
+
+
+)
+
+
+
+
+@section scripts
+{
+    <script type="text/javascript">
+        var AjaxCallUrl =
+                {
+                    AddGridColoumnDropDownvalueUrl: '@Url.Action("ShowAddGridColoumnDropDownvalue", "Survey", new { Area = "Admin" })',
+                    SaveQuestionUrl: '@Url.Action("SaveQuestion", "Survey", new { Area = "Admin" })',
+                    SurvaySettingUrl: '@Url.Action("SurveySettings", "Survey", new { Area = "Admin", SurveyId = "****SurveyId****" })',
+                    PreviewQustionUrl: '@Url.Action("PreviewQuestion", "Survey", new { Area = "Admin", SurveyId = "****SurveyId****" })',
+                    OwnPageUrl: '@Url.Action("AddQuestion", "Survey", new { Area = "Admin", SurveyId = "****SurveyId****" })',
+                    ConfigureInviteeUrl: '@Url.Action("ConfigureInvites", "Survey", new { Area = "Admin", SurveyId = "****SurveyId****" })',
+                   // ConfigureInviteeUrl: '@Url.Action("ConfigureInvites", "Survey", new { Area = "Admin", SurveyId = "****SurveyId****" })',
+                };
+    </script>
+
+    <script src="@Url.Content("~/Scripts/Custom/AdminSurveyAddQuestion.js?v="+@DateTime.Now.ToFileTime().ToString())"></script>
+}

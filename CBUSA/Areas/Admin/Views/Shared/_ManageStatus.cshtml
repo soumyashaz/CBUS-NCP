@@ -1,0 +1,169 @@
+﻿<!-- Start popup -->
+<!-- Start Manage Status -->
+@*<div id="manageStatus" class="modal fade" role="dialog">
+    <div class="modal-dialog">*@
+@*<div id="DivContractStatus">
+    <div class="modal-header">
+             <button type="button" class="close" data-dismiss="modal">&times;</button>
+             <h4 class="modal-title">Manage Contract Status</h4>
+         </div>*@
+    <div class="modal-body" id="DivContractStatus">
+        <div class="row">
+            <div class="form-group">
+                <label class="col-sm-3 control-label">Add New Status:</label>
+                <div class="col-sm-9">
+                    @*<input class="form-control" type="text">*@
+
+                    @(Html.Kendo().TextBox().Name("ContractStatusName")
+                 .HtmlAttributes(new
+                  {
+                      validationmessage = "*",
+                      //@class = "width50",
+                      required = "required",
+                      @class="form-control"
+                  })
+                    )
+                    <label><span class="k-invalid-msg" id="rr" data-for="ContractName"></span></label>
+                </div>
+                <div class="clearfix"></div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">Manage Status:</label>
+                <div class="col-sm-9">
+                    <div class="table-responsive manageContractStatusPopTable">
+                        @(Html.Kendo().Grid<CBUSA.Areas.Admin.Models.ContractStatusViewModel>()
+                            .Name("ContractStatusGrid").HtmlAttributes(new { style = "height:255px" })
+                            .Columns(columns =>
+                            {
+                                columns.Bound(c => c.ContractStatusName).Width(50).Title("Contract Status");
+                                columns.Template(command => { }).HeaderTemplate("").ClientTemplate(@"
+                            <a href='javascript: void(0)' class='abuttonEditSymbol' onclick='EditRow(this)' title='Edit'>Edit</a>
+                            &nbsp;
+                            <a href='javascript: void(0)' class='abuttonDeleteSymbol' onclick='DeleteRow(this)' title='Delete'>Delete</a>")
+                                .Width(50).Title("Action");
+                            })
+                            .Editable(editing => editing.Mode(GridEditMode.InLine))
+                            .Scrollable()
+                            .Sortable()
+                                //.Filterable()
+                                    .Events(events => { events.Edit("onEdit"); events.DataBound("dataBound"); })
+                                //.Events(e => e.Edit("onEdit"))
+                            .DataSource(dataSource => dataSource
+                            .Ajax()
+                            .Model(model => model.Id(p => p.ContractStatusId))
+                             .Events(events => events.RequestEnd("onRequestEndContractStatus"))
+                                    .Read(read => read.Action("ContractStatus_Read", "Contract"))
+                                            .Update("ContractStatus_Edit", "Contract")
+                                            .Destroy("ContractStatus_Delete", "Contract")
+                            )
+                        )
+
+
+
+
+
+
+                        @*<table class="table">
+                <thead class="thead-bg">
+                    <tr>
+                        <th width="60%">Contract Status</th>
+                        <th width="40%">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Data Collection</td>
+                        <td>
+                            <ul class="editDeletLink text-center">
+                                <li><a href="#" title="Edit">Edit</a></li>
+                                <li><a href="#" title="Delete">Delete</a></li>
+                            </ul>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Data Collection</td>
+                        <td>
+                            <ul class="editDeletLink">
+                                <li><a href="#" title="Edit">Edit</a></li>
+                                <li><a href="#" title="Delete">Delete</a></li>
+                            </ul>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>*@
+                    </div>
+                </div>
+                <div class="clearfix"></div>
+            </div>
+        </div>
+        <div class="clearfix"></div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-info" id="SaveContractStatus">Save</button>
+            <button type="button" class="btn btn-default new-btn" id="CancelContractStatus">Close</button>
+            @*<button type="button" class="btn btn-info">Save</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>*@
+        </div>
+    </div>
+@*</div>
+    </div>
+        </div>*@
+<!-- End Manage Status -->
+@*<div id="DivContractStatus">
+
+        <div class="fldRow">
+            <label>Add New Status</label>
+            @(Html.Kendo().TextBox().Name("ContractStatusName")
+                     .HtmlAttributes(new
+                      {
+                          validationmessage = "*",
+                          //@class = "width50",
+                          required = "required"
+
+                      })
+            )
+            <label><span class="k-invalid-msg" id="rr" data-for="ContractName"></span></label>
+
+        </div>
+        <div class="fldRow">
+            <label>Manage Status</label>
+        </div>
+
+        <div class="fldRow">
+            @(Html.Kendo().Grid<CBUSA.Areas.Admin.Models.ContractStatusViewModel>()
+                            .Name("ContractStatusGrid").HtmlAttributes(new { style = "height:300px" })
+                            .Columns(columns =>
+                            {
+                                columns.Bound(c => c.ContractStatusName).Width(50).Title("Contract Status");
+                                columns.Template(command => { }).HeaderTemplate("").ClientTemplate(@"
+                            <a href='javascript: void(0)' class='abuttonEditSymbol' onclick='EditRow(this)' title='button create'>Edit</a>
+                            &nbsp;
+                            <a href='javascript: void(0)' class='abuttonDeleteSymbol' onclick='DeleteRow(this)' title='button create'>Delete</a>")
+                                .Width(50).Title("Action");
+                            })
+                            .Editable(editing => editing.Mode(GridEditMode.InLine))
+                            .Scrollable()
+                            .Sortable()
+                            .Filterable()
+                                    .Events(events => { events.Edit("onEdit"); events.DataBound("dataBound"); })
+                    //.Events(e => e.Edit("onEdit"))
+                            .DataSource(dataSource => dataSource
+                            .Ajax()
+                            .Model(model => model.Id(p => p.ContractStatusId))
+                             .Events(events => events.RequestEnd("onRequestEndContractStatus"))
+                                    .Read(read => read.Action("ContractStatus_Read", "Contract"))
+                                            .Update("ContractStatus_Edit", "Contract")
+                                            .Destroy("ContractStatus_Delete", "Contract")
+                            )
+            )
+
+
+        </div>
+
+        <div style="height:50px;width:100%;margin-top:10px;">
+            <div style="float:right">
+                <button type="button" class="btn btn-primary btn-sm" id="SaveContractStatus">Save</button>
+                <button type="button" class="btn btn-primary btn-sm" id="CancelContractStatus">Cancel</button>
+            </div>
+        </div>
+
+    </div>*@

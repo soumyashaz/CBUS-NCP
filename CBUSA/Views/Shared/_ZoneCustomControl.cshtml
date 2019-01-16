@@ -1,0 +1,98 @@
+﻿@using CBUSA.Domain
+@model IEnumerable<CBUSA.Domain.Zone>
+
+@{
+    int Flag = 0;
+    int Count = 1;
+   
+
+}
+
+
+<div id="DivCustomProductSearch">
+    <input type="text" id="TxtStateSearch" />
+</div>
+
+<div id="DivCustomProductSelect">
+    @*<div style="float:left; margin:0px 10px 0px 30%;"><input type="checkbox" id="StateChkSelectAll" /> <span> Select All</span> </div>
+    <div style="float:left;">  <input type="checkbox" id="StateChkClearAll" /> <span> Clear All</span></div>*@
+
+    <div style="float:left; margin:0px 10px 0px 30%;"><a id="StateChkSelectAll"><span> Select All</span></a> </div>
+    <div style="float:left;"><a id="StateChkClearAll"> <span> Clear All</span></a></div>
+    <div class="clearfix"></div>
+</div>
+
+@foreach (var Item in Model)
+{
+
+   
+    
+    @*@{
+
+           if(Flag%3==0){
+               <div>
+           }
+            //if ((Flag % 3) == 0){<div>     }
+        }*@
+
+    if (Count > 3)
+    {
+        Count = 1;
+    }
+
+
+    if ((Flag % 3) == 0)
+    {
+
+        @:<div class="ss">
+     }
+
+
+    if (Item.Market.Count > 0)
+    {
+
+        <div style="width:33.3%;float:left;">
+            <div>
+                <h5>@Item.ZoneName</h5>
+                <table style="width:100%" class="ShowZoneStateTable">
+                    @foreach (var Itemchild in Item.Market.Where(x => x.RowStatusId == (int)RowActiveStatus.Active).OrderBy(x=>x.MarketName))
+                    {
+                        <tr>
+                            <td style="width:20%" align="center">
+                                <input type="checkbox" name="ChkStateSelect" />
+                                <input type="hidden"  value="@Itemchild.MarketId" />
+                            </td>
+                            <td style="width:80%">
+                                <span>@Itemchild.MarketName</span>
+
+                            </td>
+                        </tr>
+                    }
+                </table>
+            </div>
+        </div>
+
+    }
+
+
+    if ((Count % 3 == 0))
+    {
+        @:</div>
+    <div style="clear:both"></div>
+    }
+
+
+    Flag = Flag + 1;
+    Count = Count + 1;
+
+
+
+
+}
+
+<input type="hidden" name="HdnSelectedMarket" id="HdnSelectedMarketControl" value="@ViewBag.SelectedMarket" />
+
+
+
+
+

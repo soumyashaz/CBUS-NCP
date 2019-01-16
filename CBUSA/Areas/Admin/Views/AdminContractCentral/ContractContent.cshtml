@@ -1,0 +1,492 @@
+﻿@using CBUSA.Models;
+<div class="title-bar">
+    <h2>CONTRACT CONTENT ADMINISTRATION</h2>
+    <ul class="title-sub-menu">
+        <li>
+            <a id="lnkSelectAContract">
+                <span id="spnSelectedContract">Select a Contract</span>
+                <i class="fa fa-caret-down" aria-hidden="true"></i>
+            </a>
+            <ul id="ulContractList" style="display:none;z-index:100;">
+                @for (int i = 0; i < ViewBag.AllActiveContractLogos.Count; i++)
+                {
+                    <li class="list-contract-name" data-current-contract="@(ViewBag.ContractId == ViewBag.AllActiveContractLogos[i].ContractId ? 1 : 0)"><a href="@Url.Action("ContractContent", "AdminContractCentral", new { Area = "Admin", ContractId = ViewBag.AllActiveContractLogos[i].ContractId })">@ViewBag.AllActiveContractLogos[i].ContractName</a></li>
+                }
+            </ul>
+        </li>
+    </ul>
+    @{
+        string SelectedContractLogoImageBase64 = "";
+        SelectedContractLogoImageBase64 = Convert.ToBase64String(ViewBag.ContractIcon);
+        SelectedContractLogoImageBase64 = string.Format("data:image/png;base64,{0}", SelectedContractLogoImageBase64);
+    } 
+
+    <img style="float:right;margin-top:20px;margin-right:25px;height:30px;" src="@SelectedContractLogoImageBase64" />
+</div>
+
+<div class="administration-body">
+    <div class="hvac-area">
+        <h2 class="side-header">
+            <label id="lblContractName">@ViewBag.ContractName</label>
+            <a id="lnkAddSection" href="" class="add-icon"><i class="fa fa-plus-square" aria-hidden="true"></i></a>
+        </h2>
+
+        <ul class="hvac-top ul-content-section above-bar-section">
+            @foreach (CBUSA.Repository.Model.ContentSectionRepository objCS in ViewBag.AboveBarContentSection)
+            {
+                <li class="li-content-section" title="@objCS.ToolTip" data-section-id="@objCS.SectionId" data-section="@objCS.DisplayValue" data-icon="@objCS.Icon" style="@((objCS.AutoAdd == true || objCS.ContentCount > 0) ? "display:block;" : "display:none;" )">
+                    <a class="a-content-section">
+                        <span>
+                            <i class="@objCS.Icon" aria-hidden="true"></i>
+                        </span>
+                        @objCS.DisplayValue
+                    </a>
+                    <a class="delete-icon" style="float:right;display:none;" data-section-id="@objCS.SectionId" data-section="@objCS.DisplayValue">
+                        <i class="fa fa-trash-o" aria-hidden="true"></i>
+                    </a>
+                </li>
+            }
+        </ul>
+        <ul class="hvac-bottom ul-content-section below-bar-section">
+            @foreach (CBUSA.Repository.Model.ContentSectionRepository objCS in ViewBag.BelowBarContentSection)
+            {
+                <li class="li-content-section" title="@objCS.ToolTip" data-section-id="@objCS.SectionId" data-section="@objCS.DisplayValue" data-icon="@objCS.Icon" style="@((objCS.AutoAdd == true || objCS.ContentCount > 0) ? "display:block;" : "display:none;" )">
+                    <a href="#" style="@(objCS.InternalOnly ? "color:darkred;" : "" )">
+                        <span>
+                            <i class="@objCS.Icon" aria-hidden="true"></i>
+                        </span>
+                        @objCS.DisplayValue
+                    </a>
+                    <a class="delete-icon" style="float:right;display:none" data-section-id="@objCS.SectionId" data-section="@objCS.DisplayValue">
+                        <i class="fa fa-trash-o" aria-hidden="true"></i>
+                    </a>
+                </li>
+            }
+        </ul>
+    </div>
+    
+    <div class="variation-area">
+        <div class="variation-heading">
+            <span><i id="iSelectedSection" class="" aria-hidden="true"></i></span>
+            <label id="lblSelectedSection"></label>
+            <input type="hidden" id="hdnSectionId" value="" />
+        </div>
+        <div class="variation-header">
+            <div class="variation-left">
+                <label>Variation</label>
+                <select id="ddlVariationList" class="variation-list">
+                </select>
+            </div>
+            <div class="variation-right" style="float:left;">
+                <a id="lnkAddVariation" class="add-icon" title="Add New Variation"><i class="fa fa-plus-square" aria-hidden="true"></i></a>
+                <a id="lnkEditVariation" class="add-icon" title="Edit Variation"><i class="fa fa-pencil" aria-hidden="true"></i></a>
+                <a id="lnkDeleteVariation" class="add-icon" title="Delete Content"><i class="fa fa-trash" aria-hidden="true"></i></a>
+                <a id="lnkCopyContent" class="add-icon" title="Copy Content"><i class="fa fa-copy" aria-hidden="true"></i></a>
+            </div>
+            <div class="variation-right">
+                <a id="lnkSaveContentText">Save</a>
+                <a id="lnkSaveContent" class="add-icon" title="Save Content"><i class="fa fa-floppy-o" aria-hidden="true"></i></a>
+            </div>
+        </div>
+        <div class="variation-tab">
+            <ul class="validation-menu">
+                <li id="liTextualContent" class="li-content-tab" data-tab="content"><a id="lnkTextualContent">Textual Content</a></li>
+                <li id="liEmbeddedItems" class="li-content-tab"><a id="lnkEmbeddedItems" style="color:lightgray;cursor:not-allowed;">Embedded Items</a></li>
+                <li id="liAttachments" class="li-content-tab" data-tab="attachment"><a id="lnkAttachmentsTab">Attachments</a></li>
+            </ul>
+            <div class="variation-tab-body tab-panel" data-tab="content">
+                <textarea id="txtEdContractContent" rows="10" cols="30" style="height:350px" aria-label="editor"></textarea>
+            </div>
+            <div class="variation-tab-body tab-panel" data-tab="attachment" style="display:none;">
+                <div class="attachment-block">
+                    <div id="divNewAttachment" class="list-wrapper selected" style="display:none;">
+                        <div class="list-wrapper-left red">
+
+                        </div>
+                        <div class="attachments-areasss">
+                            <input type="text" id="txtContentAttachmentTitle" placeholder="The Name/Title of the File Goes Here" class="input-style">
+                            <div class="">
+                                <textarea id="txtContentAttachmentDesc" rows="3" cols="10" class="textarea-style" placeholder=""></textarea>
+                            </div>
+                            <div class="multi-form">
+                                <div class="multi-form-row">
+                                    <input type="radio" name="optAttachmentType" id="rbtnExternalLink" value="1">
+                                    <label>External URL</label>
+                                </div>
+                                <div class="multi-form-row">
+                                    <input type="radio" name="optAttachmentType" id="rbtnLibraryItem" value="2">
+                                    <label>Library Item</label>
+                                    <button type="button" id="btnSelectLibraryAttachment" class="btn btn-default new-attachment disabled" disabled>SELECT</button>
+                                </div>
+                                <div class="multi-form-row">
+                                    <input type="radio" name="optAttachmentType" id="rbtnNewFile" value="3">
+                                    <label>New File</label>
+                                    <button type="button" id="btnUploadLibraryAttachment" class="btn btn-default new-attachment disabled" disabled>UPLOAD</button>
+                                </div>
+                            </div>
+                            <input type="text" id="txtExternalURL" placeholder="" class="input-style" style="display:none;">
+                            <div class="attachment-buttom">
+                                <span class="version-left">
+                                    <label>Version</label>
+                                    <input type="text" id="txtContentAttachmentVersion" placeholder="" class="input-style">
+                                </span>
+                                <span class="btn-funcion-area">
+                                    <input type="hidden" id="hdnContentAttachmentId" value="0" />
+                                    <button type="button" id="btnCancelAttachment" class="btn btn-default new-attachment">CANCEL</button>
+                                    <button type="button" id="btnSaveAttachment" class="btn btn-default new-attachment disabled" disabled>SAVE</button>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="divContentAttachmentList">
+                        
+                    </div>
+                </div>
+
+                <button id="btnAddNewAttachment" class="btn btn-default new-attachment">NEW ATTACHMENT</button>
+            </div>
+        </div>
+        <div class="markets-area">
+            <h2 class="side-header">
+                Markets
+                <a id="lnkDeselectAllMarket">None</a> <a id="lnkSelectAllMarket">All</a>
+                <label>Select:</label>
+            </h2>
+            <ul class="markets-area-top">
+                @foreach (CBUSA.Domain.Market Market in ViewBag.AllMarketList)
+                {
+                    <li><a href="#"><input type="checkbox" class="check-area chk-market" data-market-id="@Market.MarketId" data-content-id="0">&nbsp;@Market.MarketName</a></li>
+                }
+            </ul>
+        </div>
+    </div>
+    <span id="popupNotification"></span>
+</div>
+
+<!-- Start Contract Logo Window popup -->
+<div id="divContractLogoList" class="modal fade attachment-library" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="contract-logo-pop-up-area">
+                <div class="pop-up-header">
+                    <span class="pop-up-header-left">SELECT A CONTRACT</span>
+                    <div class="pop-up-header-right">
+                        <div class="close-icon">
+                            <i class="fa fa-times" aria-hidden="true" data-dismiss="modal"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="contract-logo-pop-body">
+                    <div>
+                        @{
+                            int TotalContracts = ViewBag.AllActiveContractLogos.Count;
+                            int RemainderPage = 0;
+                            if (TotalContracts % 4 > 0)
+                            {
+                                RemainderPage = 1;
+                            }
+
+                            int TotalPages = (TotalContracts / 4) + RemainderPage;
+
+                            for (int i = 0; i < TotalPages; i++)
+                            {
+                                <ul class="multi-link-area">
+                                    @for (int j = 0; j < 4; j++)
+                                    {
+                                        int k = (i * 4) + j;
+
+                                        if (k < TotalContracts)
+                                        {
+                                            string LogoImageBase64 = "";
+                                            if (ViewBag.AllActiveContractLogos[(i * 4) + j].ContractIcon != null)
+                                            {
+                                                LogoImageBase64 = Convert.ToBase64String(ViewBag.AllActiveContractLogos[(i * 4) + j].ContractIcon);
+                                                LogoImageBase64 = string.Format("data:image/png;base64,{0}", LogoImageBase64);
+                                            }
+
+                                            <li class="pop-up-contract-logo">
+                                                <a href="@Url.Action("ContractContent", "AdminContractCentral", new { Area = "Admin", ContractId = ViewBag.AllActiveContractLogos[(i * 4) + j].ContractId })">
+                                                    <span><img src="@LogoImageBase64"></span>
+                                                </a>
+                                                <i class="image-caption">@ViewBag.AllActiveContractLogos[(i * 4) + j].ContractName</i>
+                                            </li>
+                                        }
+                                    }
+                                </ul>
+                            }
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- End Contract Logo Window popup -->
+
+<!-- Start Variation Window popup -->
+<div id="divVariation" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"> x </button>
+                <h4 id="h4VariationModalHeading" class="modal-title">Add New Variation</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="form-group">
+                        <div class="col-sm-6">
+                            <label class="control-label" style="font-weight:bold;text-align:center">Variation Name:</label>
+                            <input type="text" id="txtVariationName" class="form-control" placeholder="Enter Variation Name" style="width:210%" /><br />
+                            <input type="hidden" id="hdnContentId" value="0" />
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-info" id="btnSaveVariation">SAVE</button>
+                    <button type="button" class="btn btn-default" id="btnCloseVariationDiv">CLOSE</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- End Variation Window popup -->
+
+<!-- Start Add Section Window popup -->
+<div id="divSection" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"> x </button>
+                <h4 class="modal-title">Add Section</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="form-group">
+                        <div class="col-sm-6">
+                            <label class="control-label" style="font-weight:bold;text-align:center">Select Section:</label>
+                            <select id="ddlSection" class="variation-list">
+                                @foreach (CBUSA.Repository.Model.ContentSectionRepository objCS in ViewBag.AboveBarContentSection)
+                                {
+                                    <option value="@objCS.SectionId" data-position="@objCS.AboveBar">@objCS.DisplayValue</option>
+                                }
+
+                                @foreach (CBUSA.Repository.Model.ContentSectionRepository objCS in ViewBag.BelowBarContentSection)
+                                {
+                                    <option value="@objCS.SectionId" data-position="@objCS.AboveBar">@objCS.DisplayValue</option>
+                                }
+                            </select>
+                            <br />
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-info" id="btnAddSection">ADD</button>
+                    <button type="button" class="btn btn-default" id="btnCloseSectionDiv">CLOSE</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- End Add Section Window popup -->
+
+<!-- Start Copy Content From Window popup -->
+<div id="divCopyContent" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"> x </button>
+                <h4 class="modal-title">Copy Contract Content</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="form-group">
+                        <div class="col-sm-6">
+                            <label class="control-label" style="font-weight:bold;text-align:center">Select Variation to Copy from:</label>
+                            <select id="ddlCopyFromVariation" class="variation-list">
+                            </select>
+                            <br />
+                        </div>
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-info" id="btnCopyVariation">COPY</button>
+                    <button type="button" class="btn btn-default" id="btnCloseCopyVariation">CLOSE</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- End Copy Content From Window popup -->
+
+<!-- Start Attachment Library Window popup -->
+<div id="divAttachmentLibrary" class="modal fade attachment-library" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="pop-up-area">
+                <div class="pop-up-header">
+                    <span class="pop-up-header-left">SELECT A FILE</span>
+                    <div class="pop-up-header-right">
+                        <div class="search-box">
+                            <input type="text" id="txtAttachmentSearch" value="" class="text-search" placeholder="Search by file name, title, description or tag">
+                            <button id="btnSearchAttachment" class="search-icon"><i class="fa fa-search" aria-hidden="true"></i></button>
+                        </div>
+                        <div class="close-icon">
+                            <i class="fa fa-times" aria-hidden="true" data-dismiss="modal"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="pop-body">
+                    <div class="pop-body-left">
+                        <div class="pop-left-header">
+                            <div class="uoload-area">
+                                <input name="UploadAttachment" id="UploadAttachment" type="file" aria-label="files" class="upload-btn" />
+                            </div>
+                            <div class="icon-right-area">
+                                <ul>
+                                    <li><a id="lnksFileDetailView" title="Details View"><i class="fa fa-list-ul" aria-hidden="true"></i></a></li>
+                                    <li><a id="lnkFileListView" title="List View"><i class="fa fa-compress" aria-hidden="true"></i></a></li>
+                                    <li><a id="lnkFilterSort" title="Sort by File Type"><i class="fa fa-sliders" aria-hidden="true"></i></a></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div id="divAttachmentListArea" class="list-area">
+                            
+                        </div>
+                    </div>
+                    <div class="pop-body-right">
+                        <div class="pop-left-header">
+                            <div class="pop-right-header">
+                                <div id="divLibAttachmentToolbar" style="display:none;">
+                                    <ul>
+                                        <li><a id="lnkAttachmentInfo"><i class="fa fa-info" aria-hidden="true"></i></a></li>
+                                        <li><a id="lnkAttachmentDownload" href="@Url.Action("DownloadAttachment", "AdminContractCentral", new { AttachmentId = "aid" })"><i class="fa fa-download" aria-hidden="true"></i></a></li>
+                                        <li><a id="lnkAttachmentReplace"><i class="fa fa-upload" aria-hidden="true"></i></a></li>
+                                        <li><a id="lnkAttachmentEdit"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a></li>
+                                        <li><a id="lnkAttachmentDelete"><i class="fa fa-trash-o" aria-hidden="true"></i></a></li>
+                                    </ul>
+                                    <div style="display:none;">
+                                        <input name="ReplaceAttachment" id="ReplaceAttachment" type="file" aria-label="files" class="upload-btn" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="pop-right-content">
+                            <div id="divLibAttachmentDetails" style="display:none;">
+                                <h2 class="pop-heading"><b>Title</b></h2>
+                                <h3 id="h3FileTitle" class="pop-heading"></h3>
+                                <div class="description-area">
+                                    <h2 class="pop-heading"><b>Description</b></h2>
+                                    <div class="description-overflow">
+                                        <p id="pAttachmentDescription"></p>
+                                    </div>
+                                </div>
+                                <div class="file-path">
+                                    <h2 class="pop-heading"><b>File Path</b></h2>
+                                    <a id="lnkAttachmentPath" href="">Link</a>
+                                </div>
+                                <div class="bottom-description">
+                                    <div class="version-left">
+                                        <h4 class="pop-heading"><b>Version</b></h4>
+                                        <p id="pAttachmentVersion">June 2018</p>
+                                    </div>
+                                    <div class="version-right">
+                                        <h4 class="pop-heading"><b>File Size</b></h4>
+                                        <p id="pAttachmentSize"></p>
+                                    </div>
+                                    @*<p class="tag-area"><span><i class="fa fa-tags" aria-hidden="true"></i></span><span id="spnAttachmentTags"></span></p>*@
+                                </div>
+                                <div class="buttons-area">
+                                    <ul>
+                                        <li><button id="btnCancelAttachmentLibraryPopup" class="new-attachment">CANCEL</button></li>
+                                        <li><button id="btnSelectAttachmentLibraryPopup" class="new-attachment disabled" disabled>SELECT</button></li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <div id="divEditAttachmentDetails" style="display:none;">
+                                <h2 class="pop-heading"><b>Title</b></h2>
+                                <input type="text" id="txtAttachmentTitle" placeholder="" class="input-style">
+                                <div class="description-area mrg-top15">
+                                    <h2 class="pop-heading"><b>Description</b></h2>
+                                    <div class="">
+                                        <textarea id="txtAttacmentDesc" class="textarea-style"></textarea>
+                                    </div>
+                                </div>
+                                <div class="file-path mrg-top15">
+                                    <h2 class="pop-heading"><b>File Path</b></h2>
+                                    <input type="text" id="txtAttachmentFilePath" class="input-style" readonly>
+                                </div>
+                                <div class="bottom-description full-width mrg-top15">
+                                    <div class="version-left width-45">
+                                        <h4 class="pop-heading"><b>Version</b></h4>
+                                        <input type="text" id="txtAttachmentVersion" class="input-style">
+                                    </div>
+                                    <div class="version-right width-45" style="display:none;">
+                                        <h4 class="pop-heading">Tags</h4>
+                                        <input type="text" id="" class="input-style">
+                                    </div>
+                                </div>
+                                <div class="buttons-area">
+                                    <ul>
+                                        <li>
+                                            <button type="button" id="btnCancelEditAttachment" class="btn btn-default new-attachment">CANCEL</button>
+                                        </li>
+                                        <li>
+                                            <button type="button" id="btnSaveAttachmentDetails" class="btn btn-default new-attachment">SAVE</button>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+
+</div>
+<!-- End Attachment Library Window popup -->
+
+<input type="hidden" id="hdnContractId" value="@ViewBag.ContractId" />
+<input type="hidden" id="hdnSelectedAttachmentId" value="" />
+<input type="hidden" id="hdnLastSavedAttachmentId" value="0" />
+
+@section scripts
+{
+    <script type="text/javascript">
+        var AjaxCallUrl =
+            {
+                ContractLogoListUrl: '@Url.Action("LoadContractLogoList", "AdminContractCentral", new { Area = "Admin" })',
+                GetVariationList: '@Url.Action("GetVariationList", "AdminContractCentral", new { Area = "Admin" })',
+                PopulateContentUrl: '@Url.Action("GetVariationContent", "AdminContractCentral", new { Area = "Admin", ContentId = "pContentId" })',
+                GetContentMarketUrl: '@Url.Action("GetContentMarket", "AdminContractCentral", new { Area = "Admin", ContentId = "pContentId" })',
+                GetMarketListForOtherVariationsUrl: '@Url.Action("GetMarketListForOtherVariations", "AdminContractCentral", new { Area = "Admin", ContentId = "pContentId" })',
+                SaveVariationUrl: '@Url.Action("SaveVariation", "AdminContractCentral", new { Area = "Admin" })',
+                DeleteVariationUrl: '@Url.Action("DeleteVariation", "AdminContractCentral", new { Area = "Admin" })',
+                SaveContentUrl: '@Url.Action("SaveContent", "AdminContractCentral", new { Area = "Admin" })',
+                SaveContentMarketUrl: '@Url.Action("SaveContentMarket", "AdminContractCentral", new { Area = "Admin" })',
+                DisassociateContentMarketUrl: '@Url.Action("DisassociateContentMarket", "AdminContractCentral", new { Area = "Admin" })',
+                DeleteSectionUrl: '@Url.Action("DeleteSection", "AdminContractCentral", new { Area = "Admin" })',
+                GetContentAttachmentCountUrl: '@Url.Action("GetContentAttachmentCount", "AdminContractCentral", new { Area = "Admin" })',
+                GetContentAttachmentListHTMLUrl: '@Url.Action("GetContentAttachmentListHTML", "AdminContractCentral", new { Area = "Admin" })',
+                GetAttachmentLibraryHTMLUrl: '@Url.Action("GetAttachmentLibraryHTML", "AdminContractCentral", new { Area = "Admin" })',
+                GetAttachmentLibraryHTMLFilterFileTypeUrl: '@Url.Action("GetAttachmentLibraryHTMLFilterFileType", "AdminContractCentral", new { Area = "Admin" })',
+                UploadLibraryFileUrl: '@Url.Action("UploadFileToLibrary", "AdminContractCentral", new { Area = "Admin" })',
+                ReplaceLibraryFileUrl: '@Url.Action("ReplaceFileInLibrary", "AdminContractCentral", new { Area = "Admin" })',
+                DownloadAttachmentFileUrl: '@Url.Action("DownloadAttachment", "AdminContractCentral", new { AttachmentId = "aid" })',
+                SaveAttachmentDetailsUrl: '@Url.Action("SaveAttachmentDetails", "AdminContractCentral", new { Area = "Admin" })',
+                DeleteAttachmentUrl: '@Url.Action("DeleteAttachment", "AdminContractCentral", new { Area = "Admin" })',
+                SaveContentAttachmentUrl: '@Url.Action("SaveContentAttachment", "AdminContractCentral", new { Area = "Admin" })',
+                DeleteContentAttachmentUrl: '@Url.Action("DeleteContentAttachment", "AdminContractCentral", new { Area = "Admin" })',
+                CopyVariationUrl: '@Url.Action("CopyVariation", "AdminContractCentral", new { Area = "Admin" })'
+            };
+    </script>
+    <script src="@Url.Content("~/Scripts/Custom/Admin/ContractCentral/ContractContent.js?v="+@DateTime.Now.ToFileTime().ToString())"></script>
+}

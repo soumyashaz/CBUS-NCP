@@ -1,0 +1,73 @@
+﻿ 
+@{
+    ViewBag.Title = "Get Reported Documents";
+}
+
+<h2>Get Reported Documents</h2>
+<br />
+<fieldset>
+    <legend>Download Details</legend>
+    <div class="row">
+        <div class="col-lg-3"> <input class="form-control width235p" id="DdlQuater" required /></div>
+       
+        <div class="col-lg-3">
+            <button id="BtnDownload" class="btn btn-info pull-left">Download</button>
+        </div>
+
+
+    </div>
+        
+</fieldset>
+
+@section scripts
+{
+    <script type="text/javascript">
+        var AjaxCallUrl =
+            {
+                GetQuaterlist: '@Url.Action("GetQuaterlist", "Dashboard", new { Area = "Admin" })',
+                GetDownloadableReportedDocument: '@Url.Action("GetDownloadableReportedDocument", "Dashboard", new { Area = "Admin", QuaterId = "QuatrId" })',
+
+        }
+
+    </script>
+    <script>
+        $(document).ready(function () {
+            $("#DdlQuater").kendoDropDownList({
+                dataTextField: "QuaterName",
+                dataValueField: "QuaterId",
+                dataSource: {
+                    transport: {
+                        read: {
+                            dataType: "Json",
+                            url: AjaxCallUrl.GetQuaterlist,
+                        }
+                    }
+                }
+            });
+        });
+        $('#BtnDownload').click(function () {
+            var QuaterId = $("#DdlQuater").data("kendoDropDownList").value();
+            var DownLoad =
+                AjaxCallUrl.GetDownloadableReportedDocument.replace("QuatrId", QuaterId);
+            window.location.href = DownLoad;
+
+            //$.ajax({
+            //    type: "POST",
+            //    url: AjaxCallUrl.GetDownloadableReportedDocument,
+            //    dataType: "json",
+            //    data: { "QuaterId": QuaterId},
+            //    beforeSend: function () {
+            //        $('#BtnDownload').attr('disable', true);
+            //    },
+            //    success: function (data) {
+
+            //    },
+            //    complete: function () {
+            //        $('#BtnDownload').removeAttr('disable');
+            //    }
+            //});
+        });
+
+    </script>
+
+}

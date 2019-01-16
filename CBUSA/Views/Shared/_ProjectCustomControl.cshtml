@@ -1,0 +1,47 @@
+﻿@model  CBUSA.Models.CustomProjectControlVm
+
+
+<div id="DivCustomProjectSearch" class="searchSeconDiv">
+    <input type="text" id="TxtProjectSearch" />
+</div>
+
+<div id="DivCustomProjectSelect">
+    <div style="float:left; margin:0px 10px 0px 30%;">
+      
+        <a href="javascript:void(0)" id="ChkSelectAll"><span> Select All</span></a>
+    </div>
+    <div style="float:left;">
+       
+        @*<a href="javascript:void(0)" id="ChkClearAll"> <span> Clear All</span></a>*@
+    </div>
+    <div class="clearfix"></div>
+</div>
+<div>
+    @if (Model.ProjectList != null)
+    {
+        <table style="width:100%" class="ShowProductTable">
+            @foreach (var Itemchild in Model.ProjectList)
+            {
+                var IsSeleceted = Model.SelectedProject != null ? Model.SelectedProject.Any(x => x == Itemchild.ProjectId) : false;
+
+                <tr>
+                    <td style="width:20%" align="center">
+                        @if (IsSeleceted)
+                        {
+                            <input type="checkbox" name="ChkProjectSelect"  checked disabled="disabled" />
+                        }
+                        else
+                        {
+                            <input type="checkbox" name="ChkProjectSelect"   />
+                        }
+                        
+                        <input type="hidden" value="@Itemchild.ProjectId" name="HdnProjectId" />
+                    </td>
+                    <td style="width:80%">
+                        <span style="@(IsSeleceted==true?"color:green":"")">@(Itemchild.ProjectName + ", " + Itemchild.LotNo + ", " + Itemchild.State + ", " + Itemchild.Address)</span>
+                    </td>
+                </tr>
+            }
+        </table>
+    }
+</div>

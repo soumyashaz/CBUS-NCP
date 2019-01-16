@@ -1,0 +1,384 @@
+﻿@model CBUSA.Models.ContractView
+
+<script type="text/jscript">
+    $(document).ready(function () {
+        //$('#AEProductCategoryId').change(function () {
+        //    var ProductCategorySelected = $('#AEProductCategoryId :selected').val();
+        //    ProductCategorySelected = ProductCategorySelected == "" ? 0 : ProductCategorySelected;
+        //    var items = '<option>------- Select a Product -------</option>';
+        //    if (ProductCategorySelected != 0) {
+        //        $.getJSON('/Contract/ProductList/' + $('#AEProductCategoryId').val(), function (data) {
+
+        //            $.each(data, function (i, product) {
+        //                items += "<option value='" + product.Value + "'>" + product.Text + "</option>";
+        //            });
+        //            $('#Product').html(items);
+        //        });
+        //    }
+        //    else {
+        //        $('#Product').empty();
+        //    }
+        //});
+
+         //Change according to Status 
+        $(".Active").show();
+        $(".Others").hide();
+        
+        $("#StatusId").change(function () {
+            var status = $("#StatusId option:selected").text();
+            if (status == 'Active') {
+                $(".Active").show();
+                $(".Others").hide();
+            }
+            else {
+                $(".Others").show();
+                $(".Active").hide();
+            }
+        });
+
+        // Comparing Form date and End date fields
+        $("#Create").click(function () {
+            $("#ToFromDateError").empty();
+            var startDate = $('#ContrctFrom').val()
+            var endDate = $('#ContrctTo').val()
+
+            var dt = new Date();
+            if (dt < new Date(startDate))
+            {
+                $("#ToFromDateError").text("From Date cannot be less than the current date");
+                return false;
+            }
+
+            if (new Date(startDate) >= new Date(endDate)) {
+                $("#ToFromDateError").text("Start date cannot be greater than the End date");
+                return false;
+            }
+
+        })
+    });
+</script>
+<style>
+    body {
+        font-family: 'Open Sans' Arial, Helvetica, sans-serif;
+    }
+
+    ul, li {
+        margin: 0;
+        padding: 0;
+        list-style: none;
+    }
+
+    .label {
+        color: #000;
+        font-size: 16px;
+    }
+
+    span.k-in > span.highlight {
+        background: #7EA700;
+        color: #ffffff;
+        border: 1px solid green;
+        padding: 1px;
+    }
+</style>
+
+<style>
+    .Active
+    {
+
+    }
+
+    .Others
+    {
+
+    }
+</style>
+<link href="~/Content/jquery.multiselect.css" rel="stylesheet" />
+
+@using (Html.BeginForm()) 
+{
+    @Html.AntiForgeryToken()
+    <div id="my-dialog"></div>
+    <div class="form-horizontal">
+        <h4>Contract</h4>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="form-group">
+            @Html.LabelFor(model => model.ContractName, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.ContractName, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.ContractName, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Label, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Label, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Label, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.StatusId, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownListFor(model => model.StatusId, ViewBag.Status as SelectList, htmlAttributes: new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.StatusId, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="Others">
+            <div class="form-group">
+                @Html.LabelFor(model => model.EstimatedStartDate, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.EstimatedStartDate, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.EstimatedStartDate, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.EntryDeadline, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.EntryDeadline, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.EntryDeadline, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+
+        <div class="Active">
+            <div class="form-group">
+                @Html.LabelFor(model => model.ContrctFrom, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.ContrctFrom, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.ContrctFrom, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.ContrctTo, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.ContrctTo, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.ContrctTo, "", new { @class = "text-danger" })
+                    <label id="ToFromDateError" class="text-danger"></label>
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.ContractDeliverables, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.ContractDeliverables, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.ContractDeliverables, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+        
+        <div class="Others">
+            <div class="form-group">
+                @Html.LabelFor(model => model.Manufacturer, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.Manufacturer, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.Manufacturer, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+
+        <div class="Active">
+            <div class="form-group">
+                @Html.LabelFor(model => model.ManufacturerId, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @*@Html.EditorFor(model => model.ManufacturerId, new { htmlAttributes = new { @class = "form-control" } })*@
+                    @Html.DropDownListFor(model => model.ManufacturerId, ViewBag.Manufacturer as SelectList, "------ Select manufacturer ------", htmlAttributes: new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.ManufacturerId, "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Website, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Website, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Website, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+
+            @Html.LabelFor(model => model.AEProductCategoryId, htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.Hidden("CategoryList")
+            <div class="col-md-10">
+                @*@Html.DropDownListFor(model => model.AEProductCategoryId, ViewBag.Category as SelectList, "------ Select product categorty ------", htmlAttributes: new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.AEProductCategoryId, "", new { @class = "text-danger" })*@
+                <input id="treeViewSearchInput" />
+                <div id="example">
+                    <div class="demo-section k-content">
+                        <div>
+                            <h4>Check nodes</h4>
+                            <div id="treeview"></div>
+                        </div>
+                        <div style="padding-top: 2em;">
+                            <h4>Status</h4>
+                            <p id="result">No node selected</p>
+                        </div>
+                    </div>
+
+                    <script>
+                        $("#treeview").kendoTreeView({
+                            checkboxes: {
+                                checkChildren: true
+                            },
+
+                            check: onCheck,
+
+                            dataSource: $("#CategoryList").val()
+                        });
+
+                        // function that gathers IDs of checked nodes
+                        function checkedNodeIds(nodes, checkedNodes) {
+                            for (var i = 0; i < nodes.length; i++) {
+                                if (nodes[i].checked) {
+                                    checkedNodes.push(nodes[i].id);
+                                }
+
+                                if (nodes[i].hasChildren) {
+                                    checkedNodeIds(nodes[i].children.view(), checkedNodes);
+                                }
+                            }
+                        }
+
+                        // show checked node IDs on datasource change
+                        function onCheck() {
+                            var checkedNodes = [],
+                                treeView = $("#treeview").data("kendoTreeView"),
+                                message;
+
+                            checkedNodeIds(treeView.dataSource.view(), checkedNodes);
+
+                            if (checkedNodes.length > 0) {
+                                message = "IDs of checked nodes: " + checkedNodes.join(",");
+                            } else {
+                                message = "No nodes checked.";
+                            }
+
+                            $("#result").html(message);
+                        }
+                    </script>
+
+                    <style>
+                            #treeview .k-sprite {
+                                background-image: url("../content/web/treeview/coloricons-sprite.png");
+                            }
+
+                            /*.rootfolder {
+                            background-position: 0 0;
+                        }
+
+                        .folder {
+                            background-position: 0 -16px;
+                        }*/
+
+                            /*.pdf {
+                            background-position: 0 -32px;
+                        }
+
+                        .html {
+                           background-position: 0 -48px;
+                        }
+
+                        .image {
+                            background-position: 0 -64px;
+                        } */
+                    </style>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.AEProductId, htmlAttributes: new { @class = "control-label col-md-2" })
+            @*<div class="col-md-10">
+                @Html.EditorFor(model => model.AEProductId, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.AEProductId, "", new { @class = "text-danger" })
+            </div>*@
+
+            @*<select id="Product" name="Product"></select><br />*@
+
+            @Html.ListBox("ProductList", null, new { name = "ProductList[]" })
+        </div>
+        <script src="~/Scripts/jquery.multiselect.js"></script>
+
+        <script>
+            $('#ProductList').multiselect({
+                columns: 1,
+                placeholder: 'Select a Product',
+                search: true,
+                selectAll: true
+            });
+
+            // Treview Search
+            function InitSearch(treeViewId, searchInputId) {
+
+                var tv = $(treeViewId).data('kendoTreeView');
+
+                $(searchInputId).on('keyup', function () {
+
+                    $(treeViewId + ' li.k-item').show();
+
+                    $('span.k-in > span.highlight').each(function () {
+                        $(this).parent().text($(this).parent().text());
+                    });
+
+                    // ignore if no search term
+                    if ($.trim($(this).val()) === '') {
+                        return;
+                    }
+
+                    var term = this.value.toUpperCase();
+                    var tlen = term.length;
+
+                    $(treeViewId + ' span.k-in').each(function (index) {
+                        var text = $(this).text();
+                        var html = '';
+                        var q = 0;
+                        var p;
+
+                        while ((p = text.toUpperCase().indexOf(term, q)) >= 0) {
+                            html += text.substring(q, p) + '<span class="highlight">' + text.substr(p, tlen) + '</span>';
+                            q = p + tlen;
+                        }
+
+                        if (q > 0) {
+                            html += text.substring(q);
+                            $(this).html(html);
+
+                            $(this).parentsUntil('.k-treeview').filter('.k-item').each(function (index, element) {
+                                tv.expand($(this));
+                                $(this).data('SearchTerm', term);
+                            });
+                        }
+                    });
+
+                    $(treeViewId + ' li.k-item:not(:has(".highlight"))').hide();
+
+                    $(treeViewId + ' li.k-item').expand(".k-item");
+                });
+            }
+
+            //var $tv = $("#treeview").kendoTreeView();
+
+            InitSearch("#treeview", "#treeViewSearchInput");
+        </script>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" id="Create" value="Create" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+}
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>
+
+@*@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}*@

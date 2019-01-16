@@ -1,0 +1,83 @@
+﻿<div class="wrapper-body builder-contract-logo-list">
+    <div class="wrapper-top">
+        <h3>ENROLLED</h3>
+    </div>
+    <div class="wrapper-content">
+        <p>
+            You are enrolled in the following Contracts. Click a logo to view more information about the Contract's terms, pricing,
+            rebates, reporting requirements, and special programs.
+        </p>
+
+        @for (int i = 0; i < ViewBag.TotalEnrolledPages; i++)
+        {
+            <ul class="multi-link-area">
+                @for (int j = 0; j < 4; j++)
+                {
+                    int k = (i * 4) + j;
+
+                    if (k < ViewBag.TotalEnrolledContracts)
+                    {
+                        string LogoImageBase64 = "";
+                        if (ViewBag.EnrolledContractLogos[(i * 4) + j].ContractIcon != null)
+                        {
+                            LogoImageBase64 = Convert.ToBase64String(ViewBag.EnrolledContractLogos[(i * 4) + j].ContractIcon);
+                            LogoImageBase64 = string.Format("data:image/png;base64,{0}", LogoImageBase64);
+                        }
+
+                        <li class="contract-logo">
+                            <a href="@Url.Action("ViewDetail", "ContractCentral", new { Area = "CbusaBuilder", ContractId = ViewBag.EnrolledContractLogos[(i * 4) + j].ContractId })">
+                                <span><img src="@LogoImageBase64"></span>
+                            </a>
+                            <i class="image-caption">@ViewBag.EnrolledContractLogos[(i * 4) + j].ContractName</i>
+                            <span class="contract-details">
+                                <a href="@Url.Action("ViewDetail", "ContractCentral", new { Area = "CbusaBuilder", ContractId = ViewBag.EnrolledContractLogos[(i * 4) + j].ContractId })" class="more-info-button">Click for Contract Details</a>
+                            </span>
+                        </li>
+                    }
+                }
+            </ul>
+        }
+    </div>
+
+    <div class="wrapper-bottom">
+        <div class="wrapper-top">
+            <h3>NOT ENROLLED</h3>
+        </div>
+        <div class="wrapper-bottom-content">
+            <p>
+                You are not enrolled in these Contracts, but you can click a logo to view basic information to decide whether to enroll.
+            </p>
+
+            @for (int i = 0; i < ViewBag.TotalNonEnrolledPages; i++)
+            {
+                <ul class="multi-link-area">
+                @for (int j = 0; j < 5; j++)
+                {
+                    int k = (i * 5) + j;
+
+                    if (k < ViewBag.TotalNonEnrolledContracts)
+                    {
+                        string LogoImageBase64 = "";
+                        if (ViewBag.NonEnrolledContractLogos[(i * 5) + j].ContractIcon != null)
+                        {
+                            LogoImageBase64 = Convert.ToBase64String(ViewBag.NonEnrolledContractLogos[(i * 5) + j].ContractIcon);
+                            LogoImageBase64 = string.Format("data:image/png;base64,{0}", LogoImageBase64);
+                        }
+                        <li class="contract-logo">
+                            <a href="@Url.Action("ViewDetail", "ContractCentral", new { Area = "CbusaBuilder", ContractId = ViewBag.NonEnrolledContractLogos[(i * 5) + j].ContractId })">
+                                <span><img src="@LogoImageBase64"></span>
+                            </a>
+                            <i class="image-caption">@ViewBag.NonEnrolledContractLogos[(i * 5) + j].ContractName</i>
+                            <span class="contract-details">
+                                <a href="@Url.Action("ViewDetail", "ContractCentral", new { Area = "CbusaBuilder", ContractId = ViewBag.NonEnrolledContractLogos[(i * 5) + j].ContractId })" class="more-info-button">Click for Contract Details</a>
+                            </span>
+                        </li>
+                        }
+                    }
+                </ul>
+            }
+        </div>
+    </div>
+</div>
+
+

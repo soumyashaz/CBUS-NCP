@@ -1,0 +1,192 @@
+﻿@using CBUSA.Areas.Admin.Models;
+@using CBUSA.Models;
+
+<div class="title-bar">
+    <h2>NCP CONTRACTS CENTRAL</h2>
+    <ul class="title-sub-menu">
+        <li>
+            <a id="lnkSelectAContract">
+                <span id="spnSelectedContract">Select a Contract</span>
+                <i class="fa fa-caret-down" aria-hidden="true"></i>
+            </a>
+            <ul id="ulContractList" style="display:none;z-index:100;">
+                @for (int i = 0; i < ViewBag.EnrolledContractLogos.Count; i++)
+                {
+                    <li class="list-contract-name" data-current-contract="@(ViewBag.ContractId == ViewBag.EnrolledContractLogos[i].ContractId ? 1 : 0)"><a href="@Url.Action("ViewDetail", "ContractCentral", new { Area = "CbusaBuilder", ContractId = ViewBag.EnrolledContractLogos[i].ContractId })">@ViewBag.EnrolledContractLogos[i].ContractName</a></li>
+                }
+            </ul>
+        </li>
+    </ul>
+    <img style="float:right;margin-right:-140px;height:30px;" src="@ViewBag.ContractLogo" />
+</div>
+
+<div class="wrapper-container">
+    <div class="administration-body builder-contract-detail">
+        <div class="hvac-area">
+            <ul class="hvac-top">
+                @foreach (CBUSA.Domain.Lu_App_ContentSection objCS in ViewBag.AboveBarContentSection)
+                {
+                    <li class="li-content-section" title="@objCS.ToolTip" data-section-id="@objCS.SectionId" data-section="@objCS.DisplayValue" data-icon="@objCS.Icon">
+                        <a href="#">
+                            <span>
+                                <i class="@objCS.Icon" aria-hidden="true"></i>
+                            </span>
+                            @objCS.DisplayValue
+                        </a>
+                    </li>
+                }
+            </ul>
+
+            <ul class="hvac-bottom">
+                @foreach (CBUSA.Domain.Lu_App_ContentSection objCS in ViewBag.BelowBarContentSection)
+                {
+                    <li class="li-content-section" title="@objCS.ToolTip" data-section-id="@objCS.SectionId" data-section="@objCS.DisplayValue" data-icon="@objCS.Icon">
+                        <a href="#">
+                            <span>
+                                <i class="@objCS.Icon" aria-hidden="true"></i>
+                            </span>
+                            @objCS.DisplayValue
+                        </a>
+                    </li>
+                }
+            </ul>
+        </div>
+
+        <div class="variation-area contact-overview">
+            <div class="variation-header">
+                <div class="variation-left">
+                    @if (ViewBag.IsContractActive == true)
+                    {
+                        <label><i class="fa fa-retweet" aria-hidden="true"></i>@ViewBag.ContractName</label>
+                    }
+                    else
+                    {
+                        <label>@ViewBag.ContractName</label>
+                    }
+                </div>
+                <div class="variation-right">
+                    <div class="contact-term">
+                        <span>@ViewBag.ContractTerm</span>
+                    </div>
+                    <ul class="contact-link">
+                        <li><a title="Partner in Quality"><i class="fa fa-trophy" aria-hidden="true"></i></a></li>
+                        <li><a href="@Url.Action("PrintContentPDF", "ContractCentral", new { ContractId = ViewBag.ContractId })" id="lnkPrintContent" title="Print PDF"><i class="fa fa-print" aria-hidden="true"></i></a></li>
+                        <li><a id="lnkDownloadAttachment" title="Download Attachments Zip"><i class="fa fa-download" aria-hidden="true"></i></a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="overflow-area">
+                @foreach (CBUSA.Domain.Lu_App_ContentSection objCS in ViewBag.AboveBarContentSection)
+                {
+                    <div id="divSectionContent_@objCS.SectionId" class="variation-heading" data-section-id="@objCS.SectionId" data-section="@objCS.DisplayValue">
+                        <span><i class="@objCS.Icon" aria-hidden="true"></i></span>
+                        @objCS.DisplayValue
+                    </div>
+                    <div class="overview-content-area">
+                        @Html.Raw(ViewData["Content_" + objCS.DisplayValue])
+                    </div>
+                    var ContentAttachmentList = ViewData["ContentAttachment_" + objCS.DisplayValue] as System.Collections.Generic.IEnumerable<ContentAttachmentViewModel>;
+
+                    foreach (ContentAttachmentViewModel CA in ContentAttachmentList)
+                    {
+                        <div class="pricing-bottom">
+                            <div class="pricing-cols">
+                                <div class="cols-icon">
+                                    @Html.FileIcon(CA.FileName)
+                                </div>
+                                <div class="cols-content">
+                                    @if (CA.VirtualAttachment == false)
+                                    {
+                                        <h2>@System.IO.Path.GetFileNameWithoutExtension(CA.FileName)</h2>
+                                        <ul>
+                                            <li>@CA.FileSize @CA.CreatedDate.ToShortDateString() @CA.CreatedDate.ToShortTimeString()</li>
+                                            <li><a class="con-att-download" data-content-attachment-id="@CA.ContentAttachmentId" data-attachment-id="@CA.AttachmentId" href="@Url.Action("DownloadAttachment", "AdminContractCentral", new { Area = "Admin", AttachmentId = CA.AttachmentId })"><i class="fa fa-download" aria-hidden="true"></i></a></li>
+                                            <li><a href="@CA.AbsolutePath" target="_blank"><i class="fa fa-eye" aria-hidden="true"></i></a></li>
+                                        </ul>
+                                    }
+                                    else
+                                    {
+                                        <h2>@CA.DisplayValue</h2>
+                                        <ul>
+                                            <li><a href="@CA.VirtualAttachment" target="_blank"><i class="fa fa-eye" aria-hidden="true"></i></a></li>
+                                        </ul>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    }
+                    <br /><br />
+                }
+
+                @foreach (CBUSA.Domain.Lu_App_ContentSection objCS in ViewBag.BelowBarContentSection)
+                {
+                    <div id="divSectionContent_@objCS.SectionId" class="variation-heading" data-section-id="@objCS.SectionId" data-section="@objCS.DisplayValue">
+                        <span><i class="@objCS.Icon" aria-hidden="true"></i></span>
+                        @objCS.DisplayValue
+                    </div>
+                    <div class="overview-content-area">
+                        @Html.Raw(ViewData["Content_" + objCS.DisplayValue])
+                    </div>
+                    var ContentAttachmentList = ViewData["ContentAttachment_" + objCS.DisplayValue] as System.Collections.Generic.IEnumerable<ContentAttachmentViewModel>;
+
+                    foreach (ContentAttachmentViewModel CA in ContentAttachmentList)
+                    {
+                        <div class="pricing-bottom">
+                            <div class="pricing-cols">
+                                <div class="cols-icon">
+                                    @Html.FileIcon(CA.FileName)
+                                </div>
+                                <div class="cols-content">
+                                @if (CA.VirtualAttachment == false)
+                                {
+                                    <h2>@System.IO.Path.GetFileNameWithoutExtension(CA.FileName)</h2>
+                                    <ul>
+                                        <li>@CA.FileSize @CA.CreatedDate.ToShortDateString() @CA.CreatedDate.ToShortTimeString()</li>
+                                        <li><a class="con-att-download" data-content-attachment-id="@CA.ContentAttachmentId" data-attachment-id="@CA.AttachmentId" href="@Url.Action("DownloadAttachment", "AdminContractCentral", new { Area = "Admin", AttachmentId = CA.AttachmentId })"><i class="fa fa-download" aria-hidden="true"></i></a></li>
+                                        <li><a href="@CA.AbsolutePath" target="_blank"><i class="fa fa-eye" aria-hidden="true"></i></a></li>
+                                    </ul>
+                                }
+                                else
+                                {
+                                    <h2>@CA.DisplayValue</h2>
+                                    <ul>
+                                        <li><a href="@CA.VirtualAttachment" target="_blank"><i class="fa fa-eye" aria-hidden="true"></i></a></li>
+                                    </ul>
+                                }   
+                                </div>
+                            </div>
+                        </div>
+                    }
+                    <br /><br />
+                }
+            </div>
+        </div>
+    </div>
+</div>
+<input type="hidden" id="hdnBuilderId" value="@ViewBag.BuilderId" />
+<input type="hidden" id="hdnContractId" value="@ViewBag.ContractId" />
+
+<!-- Start Contract Logo Window popup -->
+<div id="divContractLogoList" class="modal fade contract-selection-pop-up" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div id="divBuilderContractLogos" class="contract-logo-pop-up-area">
+                
+            </div>
+        </div>
+    </div>
+</div>
+<!-- End Contract Logo Window popup -->
+
+@section scripts
+{
+    <script type="text/javascript">
+        var AjaxCallUrl =
+            {
+                ContractLogoListUrl: '@Url.Action("LoadContractLogoList", "ContractCentral", new { Area = "CbusaBuilder" })',
+                GetAttachmentsZipUrl: '@Url.Action("GetAttachmentsZipFile", "ContractCentral", new { Area = "CbusaBuilder", ContractId = "conid" })',
+            };
+    </script>
+    <script src="@Url.Content("~/Scripts/Custom/CbusaBuilder/ContractCentral/ViewDetail.js?v="+@DateTime.Now.ToFileTime().ToString())"></script>
+}

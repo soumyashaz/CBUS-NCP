@@ -1,0 +1,46 @@
+﻿@model IEnumerable<CBUSA.Areas.CbusaBuilder.Models.ProjectViewModel>
+
+<div>
+    <input type="hidden" id="hdnPageName" value="OfflineMode" />
+    <div id="addproject">
+        <h4 class="text-upper">OFFLINE REPORTING</h4>
+        <div class="block-div">
+            <div class="mang-cont-head">
+                <div class="clearfix"></div>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+        <div class="btm-top-padding15">
+            <ol style="line-height: 3em;">
+                <li>
+                    <i class="fa fa-download editPreSarvyIcon" aria-hidden="true"></i>&nbsp;<a href="@Url.Action("ProjectList", "OfflineReporting")" title="Download Project List Excel">DOWNLOAD PROJECT LIST</a>
+                </li>
+                <li>
+                    <i class="fa fa-upload editPreSarvyIcon" aria-hidden="true"></i>&nbsp;UPLOAD PROJECT LIST
+                    <input name="UploadProjectFile" id="UploadProjectFile" type="file" aria-label="files" class="btn btn-info" />
+                </li>
+                <li>
+                    <i class="fa fa-download editPreSarvyIcon" aria-hidden="true"></i>&nbsp;<a href="@Url.Action("QuarterReport", "OfflineReporting")" title="Download Reporting Excel">DOWNLOAD REPORTING EXCEL</a>
+                </li>
+                <li>
+                    <i class="fa fa-upload editPreSarvyIcon" aria-hidden="true"></i>&nbsp;UPLOAD REPORTING EXCEL
+                    <input name="UploadQuarterReportFile" id="UploadQuarterReportFile" type="file" aria-label="files" class="btn btn-info" />
+                </li>
+            </ol>
+        </div>
+    </div>
+</div>
+
+@section scripts
+{
+    <script type="text/javascript">
+        var AjaxCallUrl =
+            {
+                UpdateProjectList: '@Url.Action("UpdateProjectList", "OfflineReporting", new { Area = "CbusaBuilder" })',
+                AddProject: '@Url.Action("AddProject", "Project", new { Area = "CbusaBuilder" })',
+                UploadQuarterReport: '@Url.Action("UploadQuarterReport", "OfflineReporting", new { Area = "CbusaBuilder" })',
+                SubmitNCPRebateReport: '@Url.Action("RegularReporting", "Builder", new { Area = "CbusaBuilder" })',
+            };
+    </script>
+    <script src="@Url.Content("~/Scripts/Custom/CbusaBuilder/OfflineReporting/OfflineReportingIndex.js")"></script>
+}

@@ -1,0 +1,335 @@
+﻿@model CBUSA.Areas.Admin.Models.SurveySettingsViewModel
+
+<h3>@Session["ContractName"] : @Session["SurveyName"]</h3>
+@Html.Partial("_SurveyStepHeader", Model.SurveyId)
+
+<div class="clearfix"></div>
+<!-- Start number Step Body -->
+@*<section class="create_survey-step-body @(ViewBag.IsSurveyPublish == true ? "disabledDiv" :"") " id="DivSurveymainContainer">*@
+<section class="create_survey-step-body" id="DivSurveymainContainer">
+    <div class="row">
+        <div class="form-group">
+            <label class="col-sm-3 control-label">Configure Emails:</label>
+            <div class="col-sm-7">
+                <div class="row">
+                    <div class="col-md-4"><a id="a_ConfigureInviteEmail">Configure Invite Email</a></div>
+                    <div class="col-md-4"><a id="a_ConfigureRemainderEmail">Configure Reminder Email</a></div>
+                    <div class="col-md-4"><a id="a_ConfigureSaveContinueEmail">Configure 'Save & Continue' Email</a></div>
+                </div>
+            </div>
+            <div class="col-md-2"></div>
+            <div class="clearfix"></div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-3 control-label">Sender Email:</label>
+            <div class="col-sm-7">
+                @*<input class="form-control" type="text">*@
+                @Html.TextBoxFor(cltr => cltr.SenderEmail, new { @class = "form-control", type = "emai" })
+                <span class="k-invalid-msg" data-for="SenderEmail"></span>
+            </div>
+            <div class="col-md-2"></div>
+            <div class="clearfix"></div>
+        </div>
+        <div class="form-group ">
+            <label class="col-sm-3 control-label">Reminder settings:</label>
+            <div class="col-sm-9">
+                <div class="row margin-top5">
+                    <div class="col-md-4">
+                        @*<input type="checkbox">*@
+                        @Html.CheckBoxFor(x => x.RemainderForTakeSurvey)    &nbsp; &nbsp; Send reminder 
+                    </div>
+                    <div class="col-md-3">
+                        @*<input class="form-control" type="text">*@
+                        @*@Html.TextBoxFor(cltr => cltr.DayBeforeSurveyEnd, new { @class = "form-control" })*@
+                        @Html.Kendo().NumericTextBoxFor(cltr => cltr.DayBeforeSurveyEnd).Format("#").Decimals(0).Min(0).Value(Model.DayBeforeSurveyEnd)
+                    </div>
+                    <div class="col-md-5 margin-top5">Days before Survey End date</div>
+                </div>
+                <div class="row margin-top5">
+                    <div class="col-md-4">
+                        @*<input type="checkbox">*@
+                        @Html.CheckBoxFor(x => x.RemainderForTakeSurveySecond)    &nbsp; &nbsp; Send reminder 
+                    </div>
+                    <div class="col-md-3">
+                        @*<input class="form-control" type="text">*@
+                        @*@Html.TextBoxFor(cltr => cltr.DayBeforeSurveyEnd, new { @class = "form-control" })*@
+                        @Html.Kendo().NumericTextBoxFor(cltr => cltr.DayBeforeSurveyEndSecond).Format("#").Decimals(0).Min(0).Value(Model.DayBeforeSurveyEndSecond)
+                    </div>
+                    <div class="col-md-5 margin-top5">Days before Survey End date</div>
+                </div>
+                <div class="row margin-top5">
+                    <div class="col-md-4">
+                        @*<input type="checkbox">*@
+                        @Html.CheckBoxFor(x => x.RemainderForTakeSurveyThird)    &nbsp; &nbsp; Send reminder
+                    </div>
+                    <div class="col-md-3">
+                        @*<input class="form-control" type="text">*@
+                        @*@Html.TextBoxFor(cltr => cltr.DayBeforeSurveyEnd, new { @class = "form-control" })*@
+                        @Html.Kendo().NumericTextBoxFor(cltr => cltr.DayBeforeSurveyEndThird).Format("#").Decimals(0).Min(0).Value(Model.DayBeforeSurveyEndThird)
+                    </div>
+                    <div class="col-md-5 margin-top5">Days before Survey End date</div>
+                </div>
+                <div class="row margin-top5">
+                    <div class="col-md-4">
+                        @*<input type="checkbox">*@
+                        @Html.CheckBoxFor(x => x.RemainderForContinueSurvey) &nbsp; &nbsp; Send reminder 
+                    </div>
+                    <div class="col-md-3">
+                        @*<input class="form-control" type="text">*@
+                        @*@Html.TextBoxFor(cltr => cltr.DayAfterSurveyEnd, new { @class = "form-control" })*@
+                        @Html.Kendo().NumericTextBoxFor(cltr => cltr.DayAfterSurveyEnd).Format("#").Decimals(0).Min(0).Value(Model.DayAfterSurveyEnd)
+                    </div>
+                    <div class="col-md-5 margin-top5">days after 'Save & Continue later' date</div>
+                </div>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+        <div class="col-md-2"></div>
+        <div class="clearfix"></div>
+    </div>
+    <div class="clearfix"></div>
+    <div class="form-group margin-top20">
+        <label class="col-sm-3 control-label"></label>
+        <div class="col-sm-9">
+            <button type="button" class="btn btn-info" id="BtnSurveyEmailStiing">Save &amp; Next</button>
+
+        </div>
+        <div class="clearfix"></div>
+    </div>
+</section>
+<!-- End number Step Body -->
+<input type="hidden" id="HdnSurveyId" value="@Model.SurveyId" />
+
+<input type="hidden" id="HdnInviteEmailDumpId" value="0" />
+<input type="hidden" id="HdnRemainderEmailDumpId" value="0" />
+<input type="hidden" id="HdnContinueEmailDumpId" value="0" />
+
+@(Html.Kendo().Window()
+                                .Name("WndConfigureInviteEmailPopup")
+                        .Title("Configure Invite Email")
+                        .Actions(actions => actions
+                            .Close()
+                        )
+                        .Visible(false)
+                        .Draggable()
+                                .Resizable()
+          .Width(600)
+         .Height(450)
+                                .Modal(true)
+                                            .Events(e => e.Open("SurveySettings.OnOpenConfigureInviteEmailPopup")
+                                                    .Refresh("SurveySettings.OnRefreshConfigureInviteEmailPopup"))
+)
+
+@(Html.Kendo().Window()
+                            .Name("WndConfigureRemainderEmailPopup")
+                            .Title("Configure Reminder Email")
+                        .Actions(actions => actions
+                            .Close()
+                        )
+                        .Visible(false)
+                        .Draggable()
+                                .Resizable()
+          .Width(600)
+         .Height(450)
+                                .Modal(true)
+                                        .Events(e => e.Open("SurveySettings.OnOpenConfigureRemainderEmailPopup")
+                                            .Refresh("SurveySettings.OnRefreshConfigureRemainderEmailPopup"))
+)
+
+@(Html.Kendo().Window()
+                            .Name("WndConfigureSaveContinueEmailPopup")
+                            .Title("Configure Save & Continue Email")
+                        .Actions(actions => actions
+                            .Close()
+                        )
+                        .Visible(false)
+                        .Draggable()
+                                .Resizable()
+          .Width(600)
+         .Height(450)
+                                .Modal(true)
+                                        .Events(e => e.Open("SurveySettings.OnOpenConfigureSaveContinueEmailPopup")
+                                            .Refresh("SurveySettings.OnRefreshConfigureSaveContinueEmailPopup"))
+)
+@Html.Hidden("hdnUrlRoot", @Request.Url.GetLeftPart(UriPartial.Authority))
+
+@section scripts
+{    
+    <script type="text/javascript">
+        function GetBaseUrl()
+        {
+            @*return window.applicationBaseUrl = @Html.Raw(HttpUtility.JavaScriptStringEncode(new Uri(new Uri(this.Context.Request.Url.GetLeftPart(UriPartial.Authority)), Url.Content("~/")).ToString(), true))*@
+            return @Html.Raw(HttpUtility.JavaScriptStringEncode(new Uri(new Uri(this.Context.Request.Url.GetLeftPart(UriPartial.Authority)), Url.Content("~/")).ToString(), true))
+        }
+
+    </script>
+    <script type="text/javascript">
+        var AjaxCallUrl =
+                {
+                    LoadSurveyInviteEmailUrl: '@Url.Action("LoadSurveyInviteEmail_Load", "Survey", new { Area = "Admin" })',
+                    LoadSurveyRemainderEmailUrl: '@Url.Action("LoadSurveyRemainderEmailUrl_load", "Survey", new { Area = "Admin" })',
+                    LoadSurveyInviteSaveandContinuelUrl: '@Url.Action("LoadSurveySaveContinueEmailUrl_Load", "Survey", new { Area = "Admin" })',
+                    SaveSurveyInviteEmailUrl: '@Url.Action("SaveInviteEmailSetting", "Survey", new { Area = "Admin" })',
+                    SaveSurveyRemainderEmailUrl: '@Url.Action("SaveRemainderEmailSetting", "Survey", new { Area = "Admin" })',
+                    SaveSurveySaveContinueEmailUrl: '@Url.Action("SaveContinueEmailSetting", "Survey", new { Area = "Admin" })',
+                    SaveSurveyEmailSettingsUrl: '@Url.Action("SaveSurveyEmailSettings", "Survey", new { Area = "Admin" })',
+                    PreviewQustionUrl: '@Url.Action("PreviewQuestion", "Survey", new { Area = "Admin", SurveyId = "****SurveyId****" })',
+                    EditorImageRead: '@Url.Action("Read", "Survey")',
+                    EditorImageCreate: '@Url.Action("Create", "Survey")',
+                    EditorImageUpload: '@Url.Action("Upload", "Survey")',
+                    EditorImageThumbnail: '@Url.Action("Thumbnail", "Survey")',
+                    EditorImageImage: '@Url.Action("Image", "Survey")',
+                };
+    </script>
+
+    <script src="@Url.Content("~/Scripts/Custom/AdminSurveySurveySettings.js?v="+@DateTime.Now.ToFileTime().ToString())"></script>
+}
+
+<style>
+    .k-dialog-insert {
+        text-transform:uppercase;
+        font-weight: bold;
+        color: #fff !important;
+        background-color: #58cff5 !important;
+        border-color: #46b8da !important;
+        display: inline-block;
+        padding: 6px 12px;
+        margin-bottom: 0;
+        font-size: 14px;
+        line-height: 1.42857143;
+        text-align: center;
+        white-space: nowrap;
+        vertical-align: middle;
+        -ms-touch-action: manipulation;
+        touch-action: manipulation;
+        cursor: pointer;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+        background-image: none;
+        border: 1px solid transparent;
+        border-radius: 4px;
+    }
+    .k-dialog-update {
+        text-transform:uppercase;
+        color: #fff !important;
+        background-color: #58cff5 !important;
+        border-color: #46b8da !important;
+        display: inline-block;
+        padding: 6px 12px;
+        margin-bottom: 0;
+        font-size: 14px;
+        font-weight: bold;
+        line-height: 1.42857143;
+        text-align: center;
+        white-space: nowrap;
+        vertical-align: middle;
+        -ms-touch-action: manipulation;
+        touch-action: manipulation;
+        cursor: pointer;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+        background-image: none;
+        border: 1px solid transparent;
+        border-radius: 4px;
+    }
+    .k-dialog-close {
+        background-color: #fff;
+        color: #58cff5 !important;
+        border-color: #40c5ee !important;
+        display: inline-block;
+        padding: 6px 12px;
+        margin-bottom: 0;
+        font-size: 14px;
+        font-weight: bold;
+        line-height: 1.42857143;
+        text-align: center;
+        white-space: nowrap;
+        vertical-align: middle;
+        -ms-touch-action: manipulation;
+        touch-action: manipulation;
+        cursor: pointer;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+        background-image: none;
+        border: 1px solid transparent;
+        border-radius: 4px;
+    }
+    .k-dialog-insert:hover {
+        color: #fff;
+        background-color: #58cff5;
+        border-color: #46b8da;
+        display: inline-block;
+        padding: 6px 12px;
+        margin-bottom: 0;
+        font-size: 14px;
+        font-weight: bold;
+        line-height: 1.42857143;
+        text-align: center;
+        white-space: nowrap;
+        vertical-align: middle;
+        -ms-touch-action: manipulation;
+        touch-action: manipulation;
+        cursor: pointer;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+        background-image: none;
+        border: 1px solid transparent;
+        border-radius: 4px;
+    }
+    .k-dialog-update:hover {
+        color: #fff;
+        background-color: #58cff5;
+        border-color: #46b8da;
+        display: inline-block;
+        padding: 6px 12px;
+        margin-bottom: 0;
+        font-size: 14px;
+        font-weight: bold;
+        line-height: 1.42857143;
+        text-align: center;
+        white-space: nowrap;
+        vertical-align: middle;
+        -ms-touch-action: manipulation;
+        touch-action: manipulation;
+        cursor: pointer;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+        background-image: none;
+        border: 1px solid transparent;
+        border-radius: 4px;
+    }
+    .k-dialog-close:hover {
+        background-color: #fff;
+        color: #58cff5 !important;
+        border-color: #40c5ee !important;
+        display: inline-block;
+        padding: 6px 12px;
+        margin-bottom: 0;
+        font-size: 14px;
+        font-weight: bold;
+        line-height: 1.42857143;
+        text-align: center;
+        white-space: nowrap;
+        vertical-align: middle;
+        -ms-touch-action: manipulation;
+        touch-action: manipulation;
+        cursor: pointer;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+        background-image: none;
+        border: 1px solid transparent;
+        border-radius: 4px;
+    }
+</style>

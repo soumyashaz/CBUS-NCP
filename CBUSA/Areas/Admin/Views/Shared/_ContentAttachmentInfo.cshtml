@@ -1,0 +1,27 @@
+﻿@using CBUSA.Models;
+
+@foreach (CBUSA.Areas.Admin.Models.ContentAttachmentViewModel CA in ViewBag.ContentAttachmentList)
+{
+    <div>
+        <div class="list-wrapper content-attachment">
+            <div class="list-wrapper-left">
+                @Html.FileIcon(CA.FileName)
+                <span data-content-attachment-id="@CA.ContentAttachmentId" data-attachment-id="@CA.AttachmentId" class="file-text con-att-file-size">@CA.FileSize</span>
+            </div>
+            <div class="list-wrapper-right attachments-areasss">
+                <div class="pop-right-header">
+                    <ul>
+                        <li><a class="con-att-info" data-content-attachment-id="@CA.ContentAttachmentId" data-attachment-id="@CA.AttachmentId"><i style="color:blue" class="fa fa-info" aria-hidden="true"></i></a></li>
+                        <li><a class="con-att-download" data-content-attachment-id="@CA.ContentAttachmentId" data-attachment-id="@CA.AttachmentId" href="@Url.Action("DownloadAttachment", "AdminContractCentral", new { AttachmentId = CA.AttachmentId })"><i style="color:darkblue;" class="fa fa-download" aria-hidden="true"></i></a></li>
+                        <li><a class="con-att-edit" data-content-attachment-id="@CA.ContentAttachmentId" data-attachment-id="@CA.AttachmentId" data-content-attachment-title="@CA.DisplayValue" data-content-attachment-desc="@CA.Description" data-content-attachment-version="@CA.VersionName" data-content-attachment-url="@CA.AbsolutePath"><i style="color:green;" class="fa fa-pencil-square-o" aria-hidden="true"></i></a></li>
+                        <li><a class="con-att-disassociate" data-content-attachment-id="@CA.ContentAttachmentId" data-attachment-id="@CA.AttachmentId"><i style="color:red;" class="fa fa-ban" aria-hidden="true"></i></a></li>
+                    </ul>
+                </div>
+                <h2 data-content-attachment-id="@CA.ContentAttachmentId" data-attachment-id="@CA.AttachmentId" class="pop-heading con-att-file-name">@CA.DisplayValue</h2>
+                <div class="">
+                    <p data-content-attachment-id="@CA.ContentAttachmentId" data-attachment-id="@CA.AttachmentId" class="con-att-desc">@CA.Description</p>
+                </div>
+            </div>
+        </div>
+    </div>
+}

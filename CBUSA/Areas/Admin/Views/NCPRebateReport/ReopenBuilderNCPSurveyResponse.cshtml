@@ -1,0 +1,80 @@
+﻿@model CBUSA.Areas.Admin.Models.ReOpenBuilderNCPSurveyResponseViewModel
+
+<div class="row maginTop20">       
+    <div class="col-md-3">
+        <label class="col-sm-3 control-label">Select Contract:</label> 
+        @(Html.Kendo().DropDownListFor(x => x.ContractId)
+                            .Name("ContractDDL")
+                            .DataTextField("ContractName")
+                                .DataValueField("ContractId")
+                                 .OptionLabel(new { ContractName = "--Select Contract--", ContractId = "0" })
+                            //.OptionLabel("--Select--")
+                            .Events(e =>
+                            {
+                                e.Change("ReOpenBuildereNCPSurveyResponse.onSelectContract");
+                                e.DataBound("ReOpenBuildereNCPSurveyResponse.onDataBoundContract");
+                            })
+                            .DataSource(source =>
+                            {
+                                source.Read(read =>
+                                {
+                                    read.Action("GetActivePendingContract", "Survey", new { Area = "Admin" }).Data("ReOpenBuildereNCPSurveyResponse.SendDataBeforeLoadDropDown");                                    
+                                });
+                                // .ServerFiltering(true);
+                            })
+                            .SelectedIndex(0)
+
+                            .HtmlAttributes(new { @class = "form-control" })
+                            .Value(Model.ContractId.ToString())
+        )
+    </div>
+    <div class="col-md-3">
+        <label class="col-sm-3 control-label">Select Builder:</label> 
+        @(Html.Kendo().DropDownListFor(x => x.BuilderId)
+                            .Name("BuilderDDL")
+                            .DataTextField("BuilderName")
+                            .DataValueField("BuilderId")
+                            //.OptionLabel(new { BuilderName = "--Select Builder--", BuildertId = "0" })
+                            //.OptionLabel("--Select--")
+                            .Events(e =>
+                            {
+                                e.Change("ReOpenBuildereNCPSurveyResponse.onSelectBuilder");
+                                e.DataBound("ReOpenBuildereNCPSurveyResponse.onDataBoundBuilder");
+                            })
+                            .DataSource(source =>
+                            {
+                                source.Read(read =>
+                                {
+                                    read.Action("GetBuilders", "NCPRebateReport", new { Area = "Admin" })
+                                    .Data("ReOpenBuildereNCPSurveyResponse.SendDataBeforeLoadDropDownContract");
+                                })
+                                .ServerFiltering(true);
+                            })
+                            .Enable(false)
+                            .AutoBind(false)
+                            .CascadeFrom("ContractDDL")                            
+                            .HtmlAttributes(new { @class = "form-control" })
+                            .Value(Model.BuilderId.ToString())
+        )
+    </div>
+    <div class="col-md-3"></div>
+    <div class="col-md-3">
+        <button id="BtnReOpenBuilderNCPSurveyResponse" type="button" class="btn btn-default new-btn pull-right">Re-open Survey Response</button>
+    </div>
+    <div class="clearfix"></div>
+</div>
+
+@Html.Hidden("hdnSelectedContractId")
+@Html.Hidden("hdnSurveyId")
+@Html.Hidden("hdnSelectedBuilderId")
+
+@section scripts
+{    
+    <script type="text/javascript">        
+        var AjaxCallUrl =
+                {
+                    SaveBuilderNCPSurveyStatus: '@Url.Action("SaveBuilderNCPSurveyResponseStatus", "NCPRebateReport", new { Area = "Admin" })',
+                };
+    </script>
+    <script src="@Url.Content("~/Scripts/Custom/ReopenBuilderNCPSurveyResponse.js?v="+@DateTime.Now.ToFileTime().ToString())"></script>    
+}

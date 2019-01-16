@@ -1,0 +1,31 @@
+﻿
+@using CBUSA.Domain
+
+@model  CBUSA.Models.MarketControlVM
+
+<div class="block-div" id="DivConfigureMarketList">
+    <div class="form-group">
+        <div class="col-md-3 maginTop5"><label class="control-label">Select Markets:</label></div>
+        <div class="col-md-9 classZoneMarket">
+            @*Please don't remove 'classZoneMarket'*@
+            @*<select class="form-control">
+                <option>Select Markets</option>
+                </select>*@
+            <div class="CustomControl-Div-Parent" data-role='ZoneSate' id="DivZoneState">
+                <div class="CustomControl-Div" id="DivZoneStateHeader">
+                    <span class="k-select select-arrow" id="DivZoneStateDropdown"><span class="k-icon k-i-arrow-s">select</span></span>
+                </div>
+            </div>
+            <span class="k-invalid-msg" id="ValidationMsgZoneState" data-for="DivZoneState"></span>
+        </div>
+        @*<div class="col-md-4"><i>* All builders from selected markets will be Invited to take the survey</i></div>*@
+        <div class="clearfix"></div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-info" id="BtnReturnMarketPopup">Return</button>
+        <button type="button" class="btn btn-default new-btn" id="BtnCancelarketPopup">Cancel</button>
+    </div>
+</div>
+
+
+

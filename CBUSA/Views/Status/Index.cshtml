@@ -1,0 +1,29 @@
+﻿
+@(Html.Kendo().Grid<CBUSA.Domain.Status>()
+      .Name("grid")
+      .Columns(columns =>
+      {
+          columns.Bound(c => c.StatusName);
+          columns.Command(command => { command.Edit(); command.Destroy(); }).Width(200);
+      })
+         .HtmlAttributes(new { style = "height: 350px;" })
+                .ToolBar(toolbar => toolbar.Create())
+                .Scrollable()
+        .Editable(editable => editable.Mode(GridEditMode.InLine))
+        .Navigatable()
+        //.Groupable()
+        .Sortable()
+        .Pageable(pageable => pageable
+            .Refresh(true)
+            .PageSizes(true)
+            .ButtonCount(5))
+        .DataSource(dataSource => dataSource
+            .Ajax()
+            .Model(model => model.Id(p => p.StatusId))
+            .Read(read => read.Action("Status_Read", "Status"))
+            .Create(create => create.Action("Status_Create", "Status"))
+            .Update(update => update.Action("Status_Update", "Status"))
+            .Destroy(destroy => destroy.Action("Status_Delete", "Status"))
+            .PageSize(20)
+      )
+)

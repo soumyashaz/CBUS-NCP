@@ -1,0 +1,85 @@
+﻿
+<div id="DivContractResourceCategory">
+
+    <table style="width:100%">
+        <tr>
+            <td style="width:20%">Category</td>
+            <td style="width:80%">
+                @(Html.Kendo().TextBox().Name("CategoryName")
+                 .HtmlAttributes(new
+                  {
+                      validationmessage = "*",
+                      //@class = "width50",
+                      required = "required"
+
+                  })
+                )
+                <span class="k-invalid-msg" data-for="CategoryName"></span>
+            </td>
+        </tr>
+    </table>
+
+    <div style="margin-top:15px;" class="manageResourceCategoryFilter">
+        @*@(Html.Kendo().Grid<CBUSA.Areas.Admin.Models.ResourceCategoryViewModel>()
+                            .Name("ContractResourceCategory").HtmlAttributes(new { style = "height:300px" })
+                            .Columns(columns =>
+                            {
+                                columns.Bound(c => c.ResourceCategoryName).Width(50).Title("Category");
+                                columns.Template(command => { }).HeaderTemplate("").ClientTemplate(@"
+                            <a href='javascript: void(0)'  onclick='EditContractResourceCategoryRow(this)'>Edit</a>
+                            &nbsp;
+                            <a href='javascript: void(0)' onclick='DeleteContractResourceCategoryRow(this)'>Delete</a>")
+                                .Width(50).Title("Action");
+                            })
+                            .Editable(editing => editing.Mode(GridEditMode.InLine))
+                            .Scrollable()
+                            .Sortable()
+                            .Filterable()
+                                            .Events(events => { events.Edit("onContractResourceCategoryEdit"); })
+                             .DataSource(dataSource => dataSource
+                            .Ajax()
+                            .Model(model => model.Id(p => p.ResourceCategoryId))
+                                                     .Events(events => events.RequestEnd("onRequestEndContractResourceCategory"))
+                                                    .Read(read => read.Action("ContractResourceCategory_Read", "Contract"))
+                                                    .Update("ContractResourceCategory_Edit", "Contract")
+                                                    .Destroy("ContractResourceCategory_Delete", "Contract")
+                            )
+            )*@
+
+        @(Html.Kendo().Grid<CBUSA.Areas.Admin.Models.ResourceCategoryViewModel>()
+                                .Name("ContractResourceCategoryGrid").HtmlAttributes(new { style = "height:250px" })
+                        .Columns(columns =>
+                        {
+                            columns.Bound(c => c.ResourceCategoryName).Width(50).Title("Category");
+                            columns.Template(command => { }).HeaderTemplate("").ClientTemplate(@"
+                        <a href='javascript: void(0)' class='abuttonEditSymbol' onclick='EditContractResourceCategoryRow(this)' title='button create'>Edit</a>
+                        &nbsp;
+                        <a href='javascript: void(0)' class='abuttonDeleteSymbol' onclick='DeleteContractResourceCategoryRow(this)' title='button create'>Delete</a>")
+                            .Width(50).Title("Action");
+                        })
+                        .Editable(editing => editing.Mode(GridEditMode.InLine))
+                        .Scrollable()
+                        .Sortable()
+                        .Filterable()
+                                                .Events(events => { events.Edit("onContractResourceCategoryEdit"); events.DataBound("onContractResourceDataBound"); })
+                        //.Events(e => e.Edit("onEdit"))
+                        .DataSource(dataSource => dataSource
+                        .Ajax()
+                        .Model(model => model.Id(p => p.ResourceCategoryId))
+                                 .Events(events => events.RequestEnd("onRequestEndContractResourceCategory"))
+                                                            .Read(read => read.Action("ContractResourceCategory_Read", "Contract"))
+                                                            .Update("ContractResourceCategory_Edit", "Contract")
+                                                            .Destroy("ContractResourceCategory_Delete", "Contract")
+                        )
+        )
+
+
+    </div>
+    <div style="height:50px;width:100%;margin-top:10px;">
+        <div style="float:right">
+            <button type="button" class="btn btn-info" id="SaveContractResourceCategory">Save</button>
+            <button type="button" class="btn btn-default new-btn" id="CancelContractResourceCategory">Cancel</button>
+        </div>
+    </div>
+</div>
+

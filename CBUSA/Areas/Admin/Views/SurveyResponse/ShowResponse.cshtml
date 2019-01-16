@@ -1,0 +1,373 @@
+﻿<div id="DivShowResponse">
+    <div class="row margin-top20 btm-top-padding15">
+        <div class="col-md-12">
+            <div class="wayne-dalton-title">
+                <h3 class="text-upper">@ViewBag.SurveyName</h3>
+            </div>
+        </div>
+        <div class="col-md-12">
+            <div class="row">
+                <div class="col-md-4 classQuestionCustomContrrol">
+                    @* we need this class classQuestionCustomContrrol- Rabi  *@
+                    <div class="CustomControl-Div-Parent" data-role='builderfilterQuestion' id="DivFilterQuestion">
+                        <div class="CustomControl-Div" id="DivFilterQuestiontHeader" style="height:35px;">
+                            <span class="k-select select-arrow" id="DivFilterQuestionDropdown"><span class="k-icon k-i-arrow-s">select</span></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    @(Html.Kendo().DropDownList().Name("DdlFilter")
+                          .DataTextField("Text")
+                          .DataValueField("Value")
+
+                          .Events(e =>
+                            {
+                                e.Select("onFilterServerResponse");
+                            })
+                    .BindTo(ViewBag.FilterList)
+                    .HtmlAttributes(new
+                      {
+                          @class = "form-control"
+                      })
+                      .SelectedIndex(ViewBag.FilterIndex)
+                    )
+                </div>
+                <div class="col-md-2">
+                    @(Html.Kendo().DropDownList().Name("DdlFilterMarket")
+                          .DataTextField("Text")
+                          .DataValueField("Value")
+                          .Events(e =>
+                          {
+                              e.Select("onFilterMarketServerResponse");
+                          })
+                    .BindTo(ViewBag.MarketFilterList)
+                    .HtmlAttributes(new
+                    {
+                        @class = "form-control"
+                    })
+                    .SelectedIndex(0)
+                    )
+                </div>
+                <div class="col-md-2">
+                    @(Html.Kendo().DropDownList().Name("DdlFilterBuilder")
+                          .DataTextField("Text")
+                          .DataValueField("Value")
+                          .Events(e =>
+                          {
+                              e.Select("onFilterBuilderServerResponse");
+                          })
+                    .BindTo(ViewBag.BuilderFilterList)
+                    .HtmlAttributes(new
+                    {
+                        @class = "form-control"
+                    })
+                    .SelectedIndex(0)
+                    )
+                </div>
+                <div class="col-md-2">
+                    <div class="row">
+                        <div class="col-md-3"></div>
+                            <div class="col-md-2"><i class="fa fa-sign-out editPreSarvyIcon" aria-hidden="true" id="BtnExportExcel" title="Download Excel" onclick="$('#tableID').tableExport({ headerOne: getReportName(), type: 'excel', escape: 'false', ignorecolumn: 'Check/Un-Check All' });"></i> </div>
+                            <div class="col-md-2"><i class="fa fa-pencil editPreSarvyIcon" aria-hidden="true" id="BtnEditSurveyRow" title="Edit Survey"></i></div>
+                            <div class="col-md-2"><i class="fa fa-trash-o editPreSarvyIcon" aria-hidden="true" id="BtnDeleteSurveyRow" title="Delete Survey "></i></div>
+                            <div class="col-md-2"><i class="fa fa-cog editPreSarvyIcon" aria-hidden="true" id="BtnChangeSurveyRow" title="Change Status"></i></div>
+                        </div>
+                    </div>                
+            </div>
+        </div>
+    </div>
+    <div class="clearfix"></div>
+    <div class="table-responsive btm-top-padding15">
+        <table id="tableID" class="table showResponseTrBoader">
+            <thead class="thead-bg">
+                @(Html.Kendo().ListView<dynamic>()
+                         .Name("QuestionListww")
+                         .TagName("tr")
+                         .ClientTemplateId("QuestionHeaderTemplate")                         
+                         .DataSource(dataSource =>
+                                        {
+                                            dataSource.Read(read => read.Action("QuestionList_Read", "SurveyResponse", new { Area = "Admin" }).Data("SendSurveyIdAsParameter"));
+                                        }
+                                     )
+                )
+            </thead>
+
+            @(Html.Kendo().ListView<dynamic>()
+                        .Name("QuestionAnswareList")
+                                .Events(e => e.Change("checkSelectAll"))
+                        .TagName("tbody")
+                        .ClientTemplateId("QuestionAnswareTemplate")
+                        .DataSource(dataSource =>
+                                        {
+                                            dataSource.Read(read => read.Action("QuestionAnsware_Read", "SurveyResponse", new { Area = "Admin" }).Data("SendSurveyIdAsParameter"));
+                                        }
+                                    )
+            )
+        </table>
+    </div>
+    <div class="clearfix"></div>
+</div>
+
+@Html.Hidden("HdnSurveyId", (Int64)ViewBag.SurveyId)
+@Html.Hidden("HdnIsCompleted", (Int32)ViewBag.ResponseFilterSet)
+
+@Html.Hidden("HdnShowStatus", (bool)ViewBag.ShowStatus)
+@Html.Hidden("HdnShowFullname", (bool)ViewBag.ShowFullname)
+@Html.Hidden("HdnShowEmail", (bool)ViewBag.ShowEmail)
+
+@Html.Hidden("ExcelHeader", (string)ViewBag.ExcelHeader)
+
+@section scripts
+{
+   
+    
+    <script type="text/javascript">
+        //function IsProjectQuestionExist(Response, ProjectId, QuestionId) {
+        //    var b = false;
+        //    for (var y = 0; y < Response.length; y++) {
+        //        //if (ProjectId + QuestionId == Response[y].ProjectId + Response[y].QuestionId && RowIndex == Response[y].RowIndex +1 && ColIndex == Response[y].ColIndex+1) {
+        //        //    b = true;
+        //        //}             
+        //        if (ProjectId + QuestionId == Response[y].ProjectId + Response[y].QuestionId) {
+        //            b = true;
+        //        }
+        //    }
+        //    //alert('main loop ');
+        //    return b;
+        //}
+
+        //function ResponseElement(Response, ProjectId, QuestionId) {
+        //    var b;
+        //    for (var y = 0; y < Response.length; y++) {
+        //        //if (ProjectId + QuestionId === Response[y].ProjectId + Response[y].QuestionId && RowIndex == Response[y].RowIndex + 1 && ColIndex == Response[y].ColIndex + 1) {
+        //        //    b = Response[y];
+        //        //}
+        //        if (ProjectId + QuestionId == Response[y].ProjectId + Response[y].QuestionId ) {
+        //            b = Response[y];
+        //        }
+        //    }
+        //    return b;
+        //}
+        function IsProjectQuestionExist(Response, ProjectId, QuestionId, RowIndex, ColIndex) {
+            // return if response matched element for particular builder's project and question to get matching answers
+            var b = false;
+            for (var y = 0; y < Response.length; y++) {
+                if (ProjectId == Response[y].ProjectId && QuestionId == Response[y].QuestionId ) {
+                    b = true;
+                    //break;
+                }             
+                //if (ProjectId + QuestionId == Response[y].ProjectId + Response[y].QuestionId) {
+                //    b = true;
+                //}
+            }
+            //alert('main loop ');
+            return b;
+        }
+
+        function ResponseElement(Response, ProjectId, QuestionId, RowIndex, ColIndex) {
+            // return the response matched element for particular project and question to get matching answers
+            var b;
+            for (var y = 0; y < Response.length; y++) {
+                //console.log(Response[y].ProjectId);
+                if (ProjectId == Response[y].ProjectId && QuestionId == Response[y].QuestionId && RowIndex == Response[y].RowIndex + 1 && ColIndex == Response[y].ColIndex + 1) {
+                    b = Response[y];
+                    //console.log(b);
+                    break;
+                    return b;
+                }
+                //if (ProjectId + QuestionId === Response[y].ProjectId + Response[y].QuestionId ) {
+                //    b = Response[y];
+                //}
+            }            
+            return b;
+        }
+
+</script>
+
+     <script type="text/javascript">
+        var AjaxCallUrl =
+                {
+                    AddGridColoumnDropDownvalueUrl: '@Url.Action("ShowAddGridColoumnDropDownvalue", "Survey", new { Area = "Admin" })',
+                    CustomQuestionControlUrl: '@Url.Action("RenderFilterQuestionDropdown", "SurveyResponse", new { Area = "Admin" })',
+                    DeleteSurveyResultUrl: '@Url.Action("DeleteSurveyResult", "SurveyResponse", new { Area = "Admin", SurveyId = "****SurveyId****", BuilderId = "****BuilderId****" })',
+                    EditSurveyUrl: '@Url.Action("EditBuilderSurveyResponse", "SurveyResponse", new { Area = "Admin", SurveyId = "****SurveyId****", BuilderId = "****BuilderId****" })',
+                    EditNCPSurveyUrl: '@Url.Action("EditBuilderReport", "SurveyResponse", new { Area = "Admin", ContractId = "****ContractId****", BuilderId = "****BuilderId****", QuaterId = "****QuaterId****" })',
+                    ChangeStatusSurveyResultUrl: '@Url.Action("ChangeStatusSurveyResult", "SurveyResponse", new { Area = "Admin", SurveyId = "****SurveyId****", BuilderId = "****BuilderId****", QuaterId = "****QuaterId****" })',
+                };
+    </script>
+
+    <script src="@Url.Content("~/Scripts/Custom/CustomControlQuestion.js?v="+@DateTime.Now.ToFileTime().ToString())"></script>
+    <script src="@Url.Content("~/Scripts/Custom/AdminSurveyResponseShowResponse.js?v="+@DateTime.Now.ToFileTime().ToString())"></script>
+
+    <script type="text/x-kendo-tmpl" id="QuestionHeaderTemplate">
+        #if (ColoumnOrder==0)
+        {#        
+        <th width="1%" class="text-center" id="selectAll" > 
+            @*<a onclick="checkSelectAll();">Check/Un-Check All</a>*@
+            <input type="checkbox" id="SelectAll" name="SelectAll" onclick="checkSelectAll();">
+        </th>
+        <th width="10px" class="text-left">Srl.</th>
+        @if (ViewBag.IsNcpSurvey == true)
+        {
+            <th width="50px" class="text-center"><i class="fa fa-caret-down" aria-hidden="true" style="display:none;"></i><input type="hidden" value="#:QuestionId#" />File</th>
+        }
+       
+        @*<th class="text-center" width="5%">Select All</th>*@
+        @*<th class="text-center" width="5%">Market</th>
+            <th class="text-center" width="5%">Company Name</th>*@
+        #}#
+        
+        #if (IsColoumnSortingAvailable)
+        {#
+            #if (QuestionValue == "Builder Market")
+            {#
+                <th width="50px" class="text-center"><i class="fa fa-caret-down" aria-hidden="true" style="display:none;"></i><input type="hidden" value="#:QuestionId#" />Market</th>
+            #}
+            else if (QuestionValue == "Company")
+            {#
+            <th width="150px" class="text-center"><i class="fa fa-caret-down" aria-hidden="true" style="display:none;"></i><input type="hidden" value="#:QuestionId#" />Company</th>
+            #}
+            else if (QuestionValue == "Project Name")
+            {#
+            <th width="150px" class="text-center"><i class="fa fa-caret-down" aria-hidden="true" style="display:none;"></i><input type="hidden" value="#:QuestionId#" />Project Name</th>
+            #}
+            else if (QuestionValue == "Project Address")
+            {#
+            <th width="150px" class="text-center"><i class="fa fa-caret-down" aria-hidden="true" style="display:none;"></i><input type="hidden" value="#:QuestionId#" />Project Address</th>
+            #}
+            else{#
+                <th width="50px" class="text-center"><i class="fa fa-caret-down" aria-hidden="true" style="display:none"></i><input type="hidden" value="#:QuestionId#" />#:QuestionValue#</th>
+            #}#
+        #}else{#
+            <th width="50px" class="text-center">#:QuestionValue#</th>
+        #}#
+    </script>
+   
+    <script type="text/x-kendo-tmpl" id="QuestionAnswareTemplate">
+        <tr>                      
+            <td width="1%">
+                <input type="checkbox" id="SelectRow" name="RadSurvey">
+                <input type="hidden" name="HdnSurvey" value="#:SurveyId#">
+                <input type="hidden" name="HdnContract" value="#:ContractId#">
+                <input type="hidden" name="HdnQuater" value="#:QuaterId#">
+                <input type="hidden" name="HdnProject" value="#:ProjectId#">
+                <input type="hidden" name="HdnBuilder" value="#:BuilderId#">
+                <input type="hidden" name="HdnExcelReportName" value="#:ExcelReportHeader#">
+                <input type="hidden" name="HdnSurveyStatus" value="#:IsSurveyCompleted#">
+            </td>
+            <td width="10px" class="text-center">
+                <span id="spnRowNumber">#:rowcount#</span>
+            </td>  
+            # var FixedCols =0;
+            if(ShowStatus){FixedCols =  FixedCols +1;#
+            #if(IsSurveyCompleted){#
+            <td width="50px" class="text-center">Completed</td>
+            #}else{#
+            <td width="50px" class="text-center">Incomplete</td>
+            #}#
+            #}#
+
+            #if(ShowEmail){FixedCols =  FixedCols +1;#
+            <td width="50px" class="text-center">#:MarketName#</td>
+            #}#
+
+            #if(ShowCity){FixedCols =  FixedCols +1;#
+            <td width="50px" class="text-center">#:BuilderId#</td>
+            #}#
+
+            #if(ShowFullname){FixedCols =  FixedCols +1;#
+            <td width="150px" class="text-center">#:InviteFullName#</td>
+            #}var i;#
+
+            @*#for(var x = 0; x < Response.length; x++){
+            for(var z=0;z < Response[x].ResultSet.length; z++){#
+            <td class="text-center">#:Response[x].ResultSet[z].Answer#</td>
+            #}
+            }#*@
+            @***************checking for normal survey or ncp survey to display if ShowNCP = 1 then normal survey else ncp survey*@
+            #if (ShowNCP == 1)
+            {
+                for(var z=0;z < Response.length; z++){#
+                <td class="text-center ncp">#:Response[z].Answer#</td>
+                #}
+            }
+            else
+            {#
+            @*<td class="text-center">#:ContractName#</td>*@
+            <td width="50px" class="text-center">
+                #if (FileUpload == 1)
+                {#
+                <div>
+                    <i class="fa fa-file StatusLiveCheck" aria-hidden="true"></i>
+                    <div class="text-center" style="display: none;">Yes</div>
+                </div>
+            #}
+            else
+            {#
+            <div>
+                <i style="color:lightgrey" class="fa fa-file" aria-hidden="true"></i>
+                <div class="text-center" style="display: none;">No</div>
+            </div>
+           
+            #}#
+
+            <td width="50px" class="text-center non-ncp">#:MarketName#</td>
+            <td width="50px" class="text-center">#:BuilderId#</td>
+            <td width="150px" class="text-center">#:BuilderCompany#</td>
+            @*#if(RowNumber==1){#
+
+            <td class="text-center">#:BuilderName#</td>
+            #}else{#
+            <td class="text-center"></td>
+
+            #}#*@
+
+            <td width="150px" class="text-center">#:ProjectName#</td>
+            <td width="150px" class="text-center">#:ProjectAddress#</td>
+            #for(var z=0;z < Response.length; z++){#
+            <td class="text-center">#:Response[z].Answer#</td>
+            #}
+
+            @*for(var x = FixedCols; x < ProjectQuestionList.length; x++){
+            if (IsProjectQuestionExist(Response, ProjectQuestionList[x].ProjectId, ProjectQuestionList[x].QuestionId, ProjectQuestionList[x].RowIndex, ProjectQuestionList[x].ColIndex)){
+
+
+            i = ResponseElement(Response, ProjectQuestionList[x].ProjectId, ProjectQuestionList[x].QuestionId, ProjectQuestionList[x].RowIndex, ProjectQuestionList[x].ColIndex);
+
+            for(var z = 0; z < i.ResultSet.length; z++){#
+            <td class="text-center">#:i.ResultSet[z].Answer#</td>
+
+            #}
+            }else{#
+            <td class="text-center">*</td>
+            #}
+            }*@
+
+            }#
+
+            @*#for(var x = FixedCols; x < ProjectQuestionList.length; x++){
+            if (IsProjectQuestionExist(Response, ProjectQuestionList[x].ProjectId, ProjectQuestionList[x].QuestionId, ProjectQuestionList[x].RowIndex, ProjectQuestionList[x].ColIndex)){
+
+
+            i = ResponseElement(Response, ProjectQuestionList[x].ProjectId, ProjectQuestionList[x].QuestionId, ProjectQuestionList[x].RowIndex, ProjectQuestionList[x].ColIndex);
+
+            for(var z = 0; z < i.ResultSet.length; z++){#
+            <td class="text-center">#:i.ResultSet[z].Answer#</td>
+
+            #}
+            }else{#
+            <td class="text-center">*</td>
+            #}
+            }#*@
+
+
+        </tr>
+    </script>
+   
+    @*<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>*@
+    <script src="~/Scripts/Custom/tableExport.js"></script>
+    <script src="~/Scripts/Custom/jquery.base64.js"></script>
+
+    
+
+}

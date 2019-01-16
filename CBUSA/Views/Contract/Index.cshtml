@@ -1,0 +1,93 @@
+﻿@model IEnumerable<CBUSA.Domain.Contract>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        @*<th>
+            @Html.DisplayNameFor(model => model.Product.ProductName)
+        </th>*@
+        <th>
+            @Html.DisplayNameFor(model => model.ContractName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Label)
+        </th>
+        @*<th>
+            @Html.DisplayNameFor(model => model.StatusId)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.EstimatedStartDate)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.EntryDeadline)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ContrctFrom)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ContrctTo)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Manufacturer)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Website)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ProductCategory)
+        </th>*@
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        @*<td>
+            @Html.DisplayFor(modelItem => item.Product.ProductName)
+        </td>*@
+        <td>
+            @Html.DisplayFor(modelItem => item.ContractName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Label)
+        </td>
+        @*<td>
+            @Html.DisplayFor(modelItem => item.StatusId)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.EstimatedStartDate)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.EntryDeadline)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.ContrctFrom)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.ContrctTo)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Manufacturer)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Website)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.ProductCategory)
+        </td>*@
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.ContractId }) |
+            @Html.ActionLink("Details", "Details", new { id=item.ContractId }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.ContractId })
+        </td>
+    </tr>
+}
+
+</table>

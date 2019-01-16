@@ -1,0 +1,302 @@
+﻿@using CBUSA.Models;
+@model CBUSA.Areas.CbusaBuilder.Models.ContractBuilderViewModel
+
+<h4 class="text-upper btm-top-padding15">Active Contracts</h4>
+<div class="table-responsive hasgsdu">
+    <table class="table">
+        <thead class="thead-bg">
+            <tr style="width:100%">
+                <th width="2%" class="text-center">#</th>
+                <th width="10%" class="text-center"><a href="javascript:void(0)" id="asccon"><span id="ascicon"><i class="fa fa-caret-down" aria-hidden="true"></i></span></a><a href="javascript:void(0)" id="desccon"><span id="descicon" hidden="hidden"><i class="fa fa-caret-up" aria-hidden="true"></i></span></a> Contract</th>
+                <th width="20%" class="text-center">National Contract Partner</th>
+                <th width="18%" class="text-center"><a href="javascript:void(0)" id="ascpc"><span id="ascipc"><i class="fa fa-caret-down" aria-hidden="true"></i></span></a><a href="#" id="descpc"><span id="descipc" hidden="hidden"><i class="fa fa-caret-up" aria-hidden="true"></i></span></a> Product </th>
+                <th width="15%" class="text-center"><a href="javascript:void(0)" id="ascyr"><span id="asciyr"><i class="fa fa-caret-down" aria-hidden="true"></i></span></a><a href="javascript:void(0)" id="descyr"><span id="desciyr" hidden="hidden"><i class="fa fa-caret-up" aria-hidden="true"></i></span></a> Contract End Date</th>
+                <th width="18%">Contract Deliverables</th>
+                <th width="8%" class="text-center">Resources</th>
+            </tr>
+        </thead>
+
+        @(Html.Kendo().ListView<CBUSA.Areas.CbusaBuilder.Models.ContractBuilderViewModel>()
+            .Name("listViewContractActiveAsc")
+            .TagName("tbody")
+                    .ClientTemplateId("TemplateActiveContract").Events(x => x.DataBound("SurveyMarketBuilderLlistDataBoundActive"))
+
+            .DataSource(dataSource =>
+            {
+                dataSource.Read(read => read.Action("ActiveContractList", "Builder").Data("SendContractIdAsParameterOrder"));
+                dataSource.PageSize(21);
+            })
+              .Events(e => e.DataBound("listViewContractActiveAsc_dataBound"))
+            .AutoBind(true)
+        )
+    </table>
+    <input type="hidden" id="HdnResourcePageValue" value="1" />
+</div>
+<h4 class="text-upper btm-top-padding15">Pending Contracts</h4>
+@Html.Action("PendingContract", "Builder")
+<div class="block-div btm-top-padding15">
+    <p>* View archived contracts <a href="@Url.Action("ArchivedContract", "Builder")" title="here">here</a>. Contracts ended for more than 30 days are archived automatically.</p>
+</div>
+<!-- Start popup -->
+@(Html.Kendo().Window()
+                            .Name("ContractResource")
+                            .Title("Resource")
+                            .Actions(actions => actions
+                                .Close()
+                            )
+                            .Visible(false)
+                            .Draggable()
+                                    .Resizable()
+                                    .Width(1024)
+                                    .Height(410)
+                                    .Modal(true)
+                                    .Events(e => e.Open("OnOpenContactResource").Refresh("OnRefreshContractResource"))
+)
+
+<div id="DivIframeContainer" style="display:none;"></div>
+
+@section scripts
+{
+    <script type="text/javascript">
+        var TreeControlUrl = '@Url.Action("ParseProductTreeViewControl", "Home", new { Area = "" })';
+        var AjaxCallUrl =
+            {
+                @*ContractResourceUrl: '@Url.Action("LoadContractResource", "Contract", new { Area = "Admin" })'*@
+
+                ContractResourceUrl: '@Url.Action("LoadContractResourceWithCategory", "Builder", new { Area = "CbusaBuilder" })',
+                DownLaodResourceFile: '@Url.Action("DownloadResourceFile", "Builder", new { Area = "CbusaBuilder" })',
+                //RedirectContractUrl: '@Url.Action("SurveyDetails", "Survey", new { Area = "Admin", SurveyId = "****SurveyId****" })'
+                RedirectContractUrl: '@Url.Action("TakeSurvey", "Survey", new { Area = "AttendSurvey", SurveyId = "****SurveyId****",BuilderId="****BuilderId****" })'
+            };
+
+        $(document).ready(function () {
+            // TreeControlUrl = '@Url.Action("ParseProductTreeViewControl", "Home", new { Area = "" })';
+        });
+    </script>
+    <script type="text/javascript">
+        function listViewContractActiveAsc_dataBound() {
+            $(".MoreSpan").shorten({
+                "showChars": 100,
+                "moreText": "More...",
+                "lessText": "Less...",
+            });
+        }
+
+        function listViewContractPendingAsc_dataBound() {
+            $(".MoreSpan").shorten({
+                "showChars": 100,
+                "moreText": "More...",
+                "lessText": "Less...",
+            });
+        }
+    </script>
+
+    <script src="@Url.Content("~/Scripts/Custom/CbusaBuilderContractBuilder.js?v="+@DateTime.Now.ToFileTime().ToString())"></script>
+
+    <script type="text/x-kendo-tmpl" id="TemplateActiveContract">
+        <tr style="width:100%">
+            <td width="2%" class="text-center">
+                <span id="spnRowNumber">#:rowcount#</span>
+            </td>
+            <td width="10%" class="text-center">#:ContractName#</td>
+            <td width="20%" class="text-center">
+                #if (ContractIcon!="")
+                {#
+                <span>
+                    <a href="#:Website#" title="Vendor 1" target="_blank">
+                        <img src="#:ContractIcon#" class="wayne-dalton-logo2" />
+                    </a>
+                </span>
+                #}else{#
+                @*<img src="@Url.Content("~/content/images/default.png")" id="ContractLogo" class="wayne-dalton-logo2" alt="CBUSA" />*@
+                #:NationalContractPartner#
+                #}#
+            </td>
+            <td width="18%" class="text-center">@*<div class="comment moreac">#:ProductList#</div>*@ <div><span class="MoreSpan">#:ProductList#</span></div></td>
+            <td width="15%" class="text-center">#:ContractTo#</td>
+            <td width="15%">
+                # for(var z=0; z < ContractDeliverableslist.length; z++){#
+                <ul class="cont-delver-icon">
+                    <li><i class="fa fa-check StatusLiveCheck" aria-hidden="true"></i> #:ContractDeliverableslist[z]# </li>
+                </ul>
+
+                #}#
+
+                @*#foreach(int i in ContractDeliverables)
+                    {#
+                    <ul>
+                        <li>
+
+
+                            #:ContractDeliverables[i]#
+                        </li>
+                    </ul>
+                    #}#*@
+
+
+            </td>
+            @*<td>
+                    <ul class="cont-delver-icon">
+                        <li><i class="fa fa-check" aria-hidden="true"></i> #:ContractDeliverables#</li>
+                    </ul>
+                </td>*@
+            @*<td width="15%">
+                    <div>#:Estimated#</div>
+                    <div class="status online pull-left"></div> <div class="pull-left">#:Percentage#%</div>
+                </td>*@
+            <td width="10%" class="text-center">
+                <a title="Resources" class="a_ContractResource" onclick="popup('#=ContractId#','#=ResourceCategoryId#')"><i class="fa fa-server editPreSarvyIcon" aria-hidden="true"></i></a>
+            </td>
+        </tr>
+    </script>
+
+    <script>
+        function SendContractIdAsParameterPending() {
+            return { Type: type, PageValue: $("#HdnResourcePageValue3").val() };
+        }
+    </script>
+
+
+    <script type="text/x-kendo-tmpl" id="TemplatePendingContract">
+        <tr>
+            <td width="2%" class="text-center">
+                <span id="spnRowNumber">#:rowcount#</span>
+            </td>
+            <td width="10%" class="text-center">#:ContractName#</td>
+            <td width="20%" class="text-center">
+                #for(var z=0; z < Manufactererlist.length; z++){#
+
+                <ul class="cont-delver-icon">
+                    <li><i class="fa fa-check StatusLiveCheck" aria-hidden="true"></i><a href="http://#:Websiteslist[z]#" title="Vendor 1" target="_blank">  #:Manufactererlist[z]# </a> </li>
+                </ul>
+
+                #}#
+
+                @*<p><a href="http://#:Website#" title="Vendor 1" target="_blank">#:ManuFacturerName#</a></p>*@
+            </td>
+            <td width="18%" class="text-center">
+                @*<div class="comment more">#:ProductList#</div>*@
+                <div><span class="MoreSpan">#:ProductList#</span></div>
+                @*<p><a title="See More">See More...</a></p>*@
+            </td>
+            <td width="12%" class="text-center">#:ContractFrom#</td>
+            <td width="15%" class="text-center">#:ContractStatus#</td>
+            <td width="13%" class="text-center">
+                #if (SurveyId!="0")
+                {#
+                <a onclick="survey('#=SurveyId#', '#=BuilderId#')">#:ActionStatus#</a>
+                #}
+                else{#
+                <strong>#:ActionStatus#</strong>
+                #}#
+            </td>
+            <td width="10%" class="text-center">
+                <div class="edit-buttons">
+                    <a id="a_ContractResource" class="a_ContractResource" title="Upload Resources" style="text-decoration:underline;" onclick="popup('#=ContractId#','#=ResourceCategoryId#', '#=BuilderId#')"><i class="fa fa-server editPreSarvyIcon" aria-hidden="true"></i></a>
+                </div>
+            </td>
+        </tr>
+    </script>
+
+    <script type="text/x-kendo-tmpl" id="TemplateResourceCategory">
+        <tr>
+            <td>
+                <div class="bhoechie-tab-menu">
+                    <div class="list-group">
+                        <a id="p#=ResourceCategoryId#" class="list-group-item  text-left #=css#  pqr" onclick="myFunction('#=ResourceCategoryId#','#=ContractId#')">#:ResourceCategoryName#</a>
+                    </div>
+                </div>
+            </td>
+            <td> <input type="hidden" name="HdnCatId" value="#:ResourceCategoryId#"></td>
+            <td><input type="hidden" name="HdnContractId" value="#:ContractId#"></td>
+            <td><input type="hidden" id="topcatid" name="HdnTopCatId" value="#:CategoryId#"></td>
+        </tr>
+    </script>
+
+    <script type="text/x-kendo-tmpl" id="TemplateResource">
+        #if(ResourceLocation=="Video"){#
+
+        <tr>
+            <td width="20%">
+                <div class="embed-responsive embed-responsive-16by9">
+                    <iframe class="embed-responsive-item" src="https://www.youtube.com/embed/ePbKGoIGAXY"></iframe>
+                </div>
+            </td>
+            <td width="80%">
+                <div class="block-div">
+                    <div class="width62-5 pull-left paddingLeftRight10">
+                        <a class="resurName" onclick="ViewContractResource('#:ResourceId#')">#:ResourceName#</a>
+                    </div>
+                    <div class="width31 pull-right paddingLeft10 text-right"></div>
+                </div>
+                <div class="block-div">
+                    <div class="width62-5 pull-left paddingLeftRight10 resurDetailsText">#:ResourceTitle#</div>
+                    <div class="width31 pull-right paddingLeft10 text-right resurDetailsText"><i>Uploaded #:upload# </i></div>
+                </div>
+                <div class="block-div">
+                    <div class="width62-5 pull-left paddingLeftRight10">
+                        <a title="Download" onclick="ViewContractResource('#:ResourceId#')">Download</a>
+                    </div>
+                    <div class="width31 pull-right paddingLeft10 text-right"></div>
+                </div>
+            </td>
+        </tr>
+
+        #}else{#
+
+        <tr>
+            <td>
+                <div class="pull-left" style="width:3%; margin-top:6px;"><a title="Download" onclick="ViewContractResource('#:ResourceId#')"><i class="fa fa-file-pdf-o editPreSarvyIcon redText" aria-hidden="true"></i></a></div>
+                <div class="width96-5 pull-left">
+                    <div class="block-div">
+                        <div class="width68 pull-left paddingLeftRight10"><a onclick="ViewContractResource('#:ResourceId#')" class="resurName">#:ResourceName#</a></div>
+                        <div class="width27 pull-right paddingLeft10 text-right"></div>
+                    </div>
+                    <div class="block-div">
+                        <div class="width68 pull-left paddingLeftRight10 resurDetailsText">#:ResourceTitle#</div>
+                        <div class="width27 pull-right paddingLeft10 text-right resurDetailsText"><i>Submitted: #:upload#</i></div>
+                    </div>
+                </div>
+            </td>
+        </tr>
+
+        #}#
+    </script>
+    <script src="@Url.Content("~/Scripts/Custom/ContractBuilder.js?v="+@DateTime.Now.ToFileTime().ToString())"></script>
+    <script src="@Url.Content("~/Scripts/Custom/jquery.shorten.1.0.js?v="+@DateTime.Now.ToFileTime().ToString())"></script>
+}
+<style>
+    .k-header {
+        background-color: #102e52;
+        color: #fff;
+        padding: 30px 10px;
+        background-image: none;
+        position: relative;
+        border-radius: 0px;
+    }
+
+    .k-window-titlebar .k-window-actions {
+        right: 25px;
+        background-color: #fff;
+        padding-top: 0px;
+        margin-top: 10px;
+    }
+
+    .k-window-title {
+        font-size: 21px;
+        font-weight: bold;
+        margin: 5px 0 0 17px;
+    }
+
+    #ContractResource {
+        padding: 2px !important;
+    }
+
+    .resourceLibraryPop {
+        margin: 0px;
+    }
+
+    .popupTabs .list-group-item {
+        padding: 25px;
+    }
+</style>

@@ -1,0 +1,42 @@
+﻿@using CBUSA.Domain
+
+@model  CBUSA.Models.MarketControlVM
+
+@if (Model.Flag == 0)
+{
+    <div id="DivCustomProductSearch" class="searchSeconDiv">
+        <input type="text" id="TxtMarketSearch" />
+    </div>
+
+    <div id="DivCustomMarketSelect">
+        <div style="float:left; margin:0px 10px 0px 30%;">
+            @*<input type="checkbox" id="ChkSelectAll" /> <span> Select All</span>*@
+            <a href="javascript:void(0)" id="ChkSelectAll"><span> Select All</span></a>
+        </div>
+        <div style="float:left;">
+            @*<input type="checkbox" id="ChkClearAll" /> <span> Clear All</span>*@
+            <a href="javascript:void(0)" id="ChkClearAll"> <span> Clear All</span></a>
+        </div>
+        <div class="clearfix"></div>
+    </div>
+}
+
+<div>
+    <div id="divMarketContainer">
+        <h5>Markets</h5>
+        <table style="width:100%" class="ShowProductTable">
+            @foreach (var Itemchild in Model.ObjMarket.Where(x => x.RowStatusId == (int) RowActiveStatus.Active))
+            {
+                <tr>
+                    <td style="width:20%" align="center">
+                        <input type="checkbox" name="ChkProductSelect" />
+                        <input type="hidden" value="@Itemchild.MarketId" />
+                    </td>
+                    <td style="width:80%">
+                        <span>@Itemchild.MarketName</span>
+                    </td>
+                </tr>
+            }
+        </table>
+    </div>
+</div>

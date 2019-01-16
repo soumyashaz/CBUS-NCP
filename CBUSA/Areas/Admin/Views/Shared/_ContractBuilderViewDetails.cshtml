@@ -1,0 +1,105 @@
+﻿@model  IEnumerable<CBUSA.Areas.Admin.Models.MarketViewModel>
+
+@{int Flag = 0;}
+
+
+<!-- Start popup -->
+
+<div>
+    <div class="block-div">
+        <div class="table-responsive">
+            <table class="table">
+                <thead class="thead-bg" style="display:inline-block;width:650px;">
+                    <tr style="width:650px">
+                        <th width="200px" class="text-center">Market</th>
+                        <th width="300px" class="text-center">Builder</th>
+                        <th width="150px" class="text-center">Joined on</th>
+                    </tr>
+                </thead>
+                <tbody style="display:inline-block;width:650px;height:300px;overflow:auto">
+                    @foreach (var Item in Model)
+                    {
+                        if (Item.BuildersList.Count() > 0)
+                        {
+                            Flag = 0;
+
+                            foreach (var Itemchild in Item.BuildersList)
+                            {
+                                <tr>
+                                @if (Flag == 0)
+                                {
+                                    <td width="200px" class="text-center">@Item.MarketName</td>
+                                }
+                                else
+                                {
+                                    <td width="200px" class="text-center">&nbsp;</td>
+                                }
+                                    <td width="300px" class="text-center">
+                                        @Itemchild.BuilderName
+                                        <input type="hidden" value="@Itemchild.BuilderId" />
+                                    </td>
+                                    <td width="150px" class="text-center">@Itemchild.JoiningDate</td>
+                                </tr>
+                                Flag = 1;
+                            }
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+        <div class="clearfix"></div>
+        <button type="button" class="btn btn-info" id="downloadbuilderdetials">Download</button>
+    </div>
+</div>
+
+<!-- End popup -->
+@*<div>
+
+        @foreach (var Item in Model)
+        {
+            if (Item.BuildersList.Count() > 0)
+            {
+                Flag = 0;
+
+            <table style="width:100%" class="ShowZoneStateTable">
+                @foreach (var Itemchild in Item.BuildersList)
+                    {
+                    <tr>
+                        @if (Flag == 0)
+                            {
+                            <td style="width:20%" align="center">
+                                <span>@Item.MarketName</span>
+                            </td>
+                            }
+                            else
+                            {
+                            <td style="width:20%" align="center">
+                                <span>&nbsp;</span>
+                            </td>
+                            }
+                        <td style="width:60%">
+                            <span>@Itemchild.BuilderName</span>
+                            <input type="hidden" value="@Itemchild.BuilderId" />
+                        </td>
+                        <td style="width:20%">
+                            <span>@Itemchild.JoiningDate</span>
+                        </td>
+                    </tr>
+                            Flag = 1;
+                    }
+            </table>
+            }
+        }
+
+    </div>
+
+
+    <div class="col-md-6 col-md-offset-6">
+        <button type="button" class="btn btn-info" id="DownloadBuilderDetials">Download</button>
+
+    </div>*@
+
+
+
+
+

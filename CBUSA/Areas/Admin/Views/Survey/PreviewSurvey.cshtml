@@ -1,0 +1,71 @@
+﻿@using CBUSA.Models;
+@model CBUSA.Areas.Admin.Models.PreviewQuestionViewModel
+
+<!DOCTYPE html>
+@{
+    Layout = null;
+}
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>CBUSA</title>
+
+    <link rel="stylesheet" href="@Url.Content("~/Content/css/font-awesome.min.css")" type="text/css">
+    @Styles.Render("~/Content/css/style")
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body>
+    <div class="main-body-wrapper">
+        <div class="container">
+            <h3 class="text-center"><u>PREVIEW SURVEY</u></h3>
+            <div class="row">
+                <div class="color-upper-text margin-top20">@Model.SurveyName</div>
+                <div class="color-border marginbtm20">
+                    <ul class="previewSurveyCol">
+                        @foreach (var Item in Model.ObjQuestion)
+                        {
+                            <li>
+                                @if (Item.QuestionTypeId == (int)CBUSA.Domain.EnumQuestionType.TextBox)
+                                {
+                                    @Html.PreviewTextBoxTypeQuestion(Item.QuestionValue,Item.IsFileNeedtoUpload)
+                                }
+                                else if (Item.QuestionTypeId == (int)CBUSA.Domain.EnumQuestionType.DropList)
+                                {
+                                    @Html.PreviewDropListTypeQuestion(Item.QuestionValue, Item.QuestionDropdownSetting, Item.IsFileNeedtoUpload)
+                                }
+                                else
+                                {
+                                    if (Item.QuestionGridSetting.FirstOrDefault() != null)
+                                    {
+                                        @Html.PreviewGridTypeQuestion(Item.QuestionValue, Item.QuestionGridSetting.FirstOrDefault().QuestionGridSettingHeader)
+                                    }
+                                }
+                            </li>
+                        }
+                    </ul>
+                    <div class="block-div">
+                        <button type="button" class="btn btn-info pull-right" id="BtnPreviewCloseWindow">Close Preview</button>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Jquery Library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="../scripts/bootstrap.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#BtnPreviewCloseWindow").on("click", function () {
+                window.close()
+            });
+        });
+    </script>
+</body>
+</html>

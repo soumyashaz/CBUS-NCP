@@ -1,0 +1,219 @@
+﻿@using Microsoft.AspNet.Identity
+@using CBUSA.Areas.Admin.Models
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title  CBUSA-NCP</title>
+    <link rel="shortcut icon" href="@Url.Content("~/Content/images/favicon.ico")" type="image/x-icon" />
+
+    <link rel="stylesheet" href="@Url.Content("~/Content/css/font-awesome.min.css")" type="text/css">
+    <link href="@Url.Content("~/Content/kendo/2016.2.607/kendo.common.min.css")" rel="stylesheet" type="text/css" />
+    <link href="@Url.Content("~/Content/kendo/2016.2.607/kendo.mobile.all.min.css")" rel="stylesheet" type="text/css" />
+    <link href="@Url.Content("~/Content/kendo/2016.2.607/kendo.dataviz.min.css")" rel="stylesheet" type="text/css" />
+    <link href="@Url.Content("~/Content/kendo/2016.2.607/kendo.default.min.css")" rel="stylesheet" type="text/css" />
+    <link href="@Url.Content("~/Content/kendo/2016.2.607/kendo.dataviz.default.min.css")" rel="stylesheet" type="text/css" />
+
+    @Scripts.Render("~/bundles/modernizr")
+    @Scripts.Render("~/bundles/jquery")
+
+    <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+
+    @Scripts.Render("~/bundles/kendo")
+    @Scripts.Render("~/bundles/kendoOther")
+    @Styles.Render("~/Content/css/style")
+
+    @RenderSection("style", required: false)
+</head>
+<body>
+    <!-- Start Header -->
+    <header class="head-wrapper">
+        <div class="container">
+            <div class="row">
+                @{
+                    string RawUrl = @Request.Url.AbsoluteUri;
+                    int Flag = 0;
+                    var uid = @User.Identity.GetUserId().ToString();
+                    if (ViewBag.IsNcpSurvey != null)
+                        Flag = ViewBag.IsNcpSurvey == true ? 1 : 0;
+                }
+
+                <div class="col-md-4"><a href="#" title="CBUSA"><img class="logo" alt="cbusa" src="@Url.Content("~/Content/Images/Logo.png")" /></a></div>
+                <div class="col-md-8">
+                    <div class="pull-right">
+                        <div class="user-accnt-name">
+                            <ul>
+                                <li><a href="@Url.Action("Manage", "Account", new { Area = "Admin", userId = Encryption.EncodeTo64(uid)}, protocol: Request.Url.Scheme)" title="Change Password">Change Password</a></li>
+                                <li><a href="@Url.Action("Logoff", "Account", new { Area = "Admin" })" title="Log Out">Log Out</a></li>
+                            </ul>
+                        </div>
+                        <div class="head-nav">
+                            <ul>
+                                <li><a href="@Url.Action("Index", "Dashboard", new { Area = "Admin" })" title="Dashboard">Dashboard</a></li>
+                                @if (RawUrl.ToLower().Contains("contract"))
+                                {
+                                    <li data-menu="contract" class="active">
+                                        <a href="#">Contracts</a>
+                                        <ul>
+                                            <li><a href="@Url.Action("Create", "Contract", new { Area = "Admin" })" title="Add Contract">Add Contract</a></li>
+                                            <li><a href="@Url.Action("ManageActiveContracts","Contract", new { Area = "Admin" })" title="Manage Contracts">Manage Contracts</a></li>
+                                            @*<li><a href="@Url.Action("Index","AdminContractCentral", new { Area = "Admin" })" title="Content Administration">Content Administration</a></li>*@
+                                            <li><a href="@Url.Action("ViewBuilderContract","Contract", new { Area = "Admin" })" title="View Builder Contracts">View Builder Contracts</a></li>
+                                        </ul>
+                                    </li>
+                                }
+                                else
+                                {
+                                    <li data-menu="contract">
+                                        <a href="#">Contracts</a>
+                                        <ul>
+                                            <li><a href="@Url.Action("Create", "Contract", new { Area = "Admin" })" title="Add Contract">Add Contract</a></li>
+                                            <li><a href="@Url.Action("ManageActiveContracts","Contract", new { Area = "Admin" })" title="Manage Contracts">Manage Contracts</a></li>
+                                            @*<li><a href="@Url.Action("Index","AdminContractCentral", new { Area = "Admin" })" title="Content Administration">Content Administration</a></li>*@
+                                            <li><a href="@Url.Action("ViewBuilderContract","Contract", new { Area = "Admin" })" title="View Builder Contracts">View Builder Contracts</a></li>
+                                        </ul>
+                                    </li>
+                                }
+
+                                @if (RawUrl.ToLower().Contains("survey"))
+                                {
+                                    if (Flag == 0)
+                                    {
+                                        <li data-menu="survey" class="active">
+                                            <a href="#">Surveys</a>
+                                            <ul>
+                                                <li><a href="@Url.Action("SurveyDetails", "Survey", new { Area = "Admin",SurveyId=0 })" title="Create Surveys">Create Surveys</a></li>
+                                                <li><a href="@Url.Action("ManageSurvey", "Survey", new { Area = "Admin" })" title="Manage Surveys">Manage Surveys</a></li>
+                                            </ul>
+                                        </li>
+                                    }
+                                    else
+                                    {
+                                        <li data-menu="survey">
+                                            <a href="#">Surveys</a>
+                                            <ul>
+                                                <li><a href="@Url.Action("SurveyDetails", "Survey", new { Area = "Admin",SurveyId=0 })" title="Create Surveys">Create Surveys</a></li>
+                                                <li><a href="@Url.Action("ManageSurvey", "Survey", new { Area = "Admin" })" title="Manage Surveys">Manage Surveys</a></li>
+                                            </ul>
+                                        </li>
+                                    }
+                                }
+                                else
+                                {
+                                    <li data-menu="survey">
+                                        <a href="#">Surveys</a>
+                                        <ul>
+                                            <li><a href="@Url.Action("SurveyDetails", "Survey", new { Area = "Admin",SurveyId=0 })" title="Create Surveys">Create Surveys</a></li>
+                                            <li><a href="@Url.Action("ManageSurvey", "Survey", new { Area = "Admin" })" title="Manage Surveys">Manage Surveys</a></li>
+                                        </ul>
+                                    </li>
+                                }
+
+                                @if (RawUrl.ToLower().Contains("ncprebatereport"))
+                                {
+                                    <li data-menu="ncp" class="active">
+                                        <a href="#">Ncp Quarterly Rebate Report</a>
+                                        <ul>
+                                            <li><a href="@Url.Action("ManageReport", "NCPRebateReport", new { Area = "Admin"})" title="Manage NCP rebate reports">Manage NCP rebate reports</a></li>
+                                            <li><a href="@Url.Action("CreateRebateReport", "NCPRebateReport", new { Area = "Admin" })" title="Create rebate reports">Create rebate reports</a></li>
+                                            <li><a href="@Url.Action("Compliance", "NCPRebateReport", new { Area = "Admin" })" title="Compliance calculation">Compliance calculation</a></li>
+                                            <li><a href="@Url.Action("Index", "NonResponderReport", new { Area = "Admin" })" title="Non-Responder Report">Non-Responder Report</a></li>
+                                            <li><a href="@Url.Action("GetReportedDocuments", "Dashboard", new { Area = "Admin" })" title="Download Builder Reported Files">Download Builder Reported Files</a></li>
+                                        </ul>
+                                    </li>
+                                }
+                                else
+                                {
+                                    if (Flag == 1)
+                                    {
+                                        <li data-menu="ncp" class="active">
+                                            <a href="#">Ncp Quarterly Rebate Report</a>
+                                            <ul>
+                                                <li><a href="@Url.Action("ManageReport", "NCPRebateReport", new { Area = "Admin"})" title="Manage NCP rebate reports">Manage NCP rebate reports</a></li>
+                                                <li><a href="@Url.Action("CreateRebateReport", "NCPRebateReport", new { Area = "Admin" })" title="Create rebate reports">Create rebate reports</a></li>
+                                                <li><a href="@Url.Action("Compliance", "NCPRebateReport", new { Area = "Admin" })" title="Compliance calculation">Compliance calculation</a></li>
+                                                <li><a href="@Url.Action("Index", "NonResponderReport", new { Area = "Admin" })" title="Non-Responder Report">Non-Responder Report</a></li>
+                                                <li><a href="@Url.Action("GetReportedDocuments", "Dashboard", new { Area = "Admin" })" title="Download Builder Reported Files">Download Builder Reported Files</a></li>
+                                            </ul>
+                                        </li>
+                                    }
+                                    else
+                                    {
+                                        <li data-menu="ncp">
+                                            <a href="#">Ncp Quarterly Rebate Report</a>
+                                            <ul>
+                                                <li><a href="@Url.Action("ManageReport", "NCPRebateReport", new { Area = "Admin"})" title="Manage NCP rebate reports">Manage NCP rebate reports</a></li>
+                                                <li><a href="@Url.Action("CreateRebateReport", "NCPRebateReport", new { Area = "Admin" })" title="Create rebate reports">Create rebate reports</a></li>
+                                                <li><a href="@Url.Action("Compliance", "NCPRebateReport", new { Area = "Admin" })" title="Compliance calculation">Compliance calculation</a></li>
+                                                <li><a href="@Url.Action("Index", "NonResponderReport", new { Area = "Admin" })" title="Non-Responder Report">Non-Responder Report</a></li>
+                                                <li><a href="@Url.Action("GetReportedDocuments", "Dashboard", new { Area = "Admin" })" title="Download Builder Reported Files">Download Builder Reported Files</a></li>
+                                            </ul>
+                                        </li>
+                                    }
+                                }
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+    <!-- End Header -->
+    <!-- Start Body -->
+    <div class="main-body-wrapper">
+        <div class="container">
+            @RenderBody()
+        </div>
+    </div>
+    <!-- End Body -->
+    <!-- Start Footer -->
+    <footer class="footer-wrapper">
+        <div class="container"></div>
+    </footer>
+    <!-- End Footer -->
+    <!-- Jquery Library -->
+    @(Html.Kendo().Window().Width(400)
+                    .Name("DataUpdateMessage")
+                    .Title("Update Information")
+                    .Content(@<text>
+                        <p>
+
+                        </p>
+                        <p></p>
+                    </text>)
+                                            .Visible(false)
+                                            .Modal(true)
+                                            .Draggable()
+                                            .Resizable()
+                                            .Events(ev => { ev.Close("onCloseSaveMessage"); ev.Open("centerWindowSaveMessage"); })
+    )
+
+    @Scripts.Render("~/bundles/bootstrap")
+    @RenderSection("scripts", required: false)
+    <script type="text/javascript">
+        var ProductUrl = '@Url.Action("ParseProductControl", "Home", new { Area = "" })';
+        var ZoneControlUrl = '@Url.Action("ParseZoneStateControl", "Home", new { Area = "" })';
+
+
+        $(document).ready(function () {
+
+            //$(".head-nav").children().find("li").removeClass('active');
+            //var Url = window.location.href;
+            //if (Url.toLowerCase().indexOf("contract") >= 0) {
+            //    $("li[data-menu='contract']").addClass('active');
+            //}
+            //else if (Url.toLowerCase().indexOf("survey") >= 0) {
+            //    $("li[data-menu='survey']").addClass('active');
+            //}
+            //else if (Url.toLowerCase().indexOf("ncprebatereport") >= 0) {
+            //    $("li[data-menu='ncp']").addClass('active');
+            //}
+
+        });
+
+    </script>
+</body>
+</html>
